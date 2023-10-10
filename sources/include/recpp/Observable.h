@@ -11,6 +11,10 @@ namespace recpp
 	class Observable : public rscpp::Publisher<T>
 	{
 	public:
+		template <typename Function>
+		static Observable<T> create(Function function);
+		template <typename Function>
+		static Observable<T> defer(Function function);
 		static Observable<T> empty();
 		template <typename Exception>
 		static Observable<T> error(Exception &&exception);

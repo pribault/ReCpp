@@ -10,6 +10,25 @@ recpp::Observable<T>::Observable(const SubscribeMethod &subscribeMethod)
 }
 
 template <typename T>
+template <typename Function>
+recpp::Observable<T> recpp::Observable<T>::create(Function function)
+{
+	return recpp::Observable<T>([function](rscpp::Subscriber<T> &subscriber) { function(subscriber); });
+}
+
+template <typename T>
+template <typename Function>
+recpp::Observable<T> recpp::Observable<T>::defer(Function function)
+{
+	return recpp::Observable<T>(
+		[function](rscpp::Subscriber<T> &subscriber)
+		{
+			recpp::Observable<T> result = function();
+			result.subscribe(subscriber);
+		});
+}
+
+template <typename T>
 recpp::Observable<T> recpp::Observable<T>::empty()
 {
 	return recpp::Observable<T>(
@@ -45,7 +64,7 @@ template <typename T>
 recpp::Observable<T> recpp::Observable<T>::just(const T &value)
 {
 	return recpp::Observable<T>(
-		[&value](rscpp::Subscriber<T> &subscriber)
+		[value](rscpp::Subscriber<T> &subscriber)
 		{
 			recpp::Subscription subscription(
 				[&value, &subscriber](size_t count)
