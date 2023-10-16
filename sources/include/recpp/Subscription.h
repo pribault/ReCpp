@@ -1,24 +1,20 @@
 #pragma once
 
+#include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
-
-#include <functional>
 
 namespace recpp
 {
+	template <typename T>
 	class Subscription : public rscpp::Subscription
 	{
 	public:
-		using RequestMethod = std::function<void(size_t)>;
-		using CancelMethod = std::function<void()>;
-
-		Subscription(const RequestMethod &requestMethod, const CancelMethod &cancelMethod);
-
-		void request(size_t count) noexcept override;
-		void cancel() noexcept override;
+		Subscription(const typename rscpp::Subscriber<T> &subscriber, const typename rscpp::Subscription::RequestMethod &requestMethod,
+					 const typename rscpp::Subscription::CancelMethod &cancelMethod);
 
 	protected:
-		RequestMethod m_requestMethod;
-		CancelMethod  m_cancelMethod;
+		rscpp::Subscriber<T> m_subscriber;
 	};
 } // namespace recpp
+
+#include <recpp/Subscription.inl>

@@ -3,8 +3,6 @@
 #include <rscpp/Publisher.h>
 #include <rscpp/Subscriber.h>
 
-#include <functional>
-
 namespace recpp
 {
 	template <typename T>
@@ -20,16 +18,11 @@ namespace recpp
 		static Observable<T> error(Exception &&exception);
 		static Observable<T> just(const T &value);
 
-		void subscribe(rscpp::Subscriber<T> &subscriber) noexcept override;
 		template <typename OnNext, typename OnError, typename OnComplete>
 		void subscribe(OnNext onNext, OnError onError, OnComplete onComplete);
 
 	protected:
-		using SubscribeMethod = std::function<void(rscpp::Subscriber<T> &)>;
-
-		Observable(const SubscribeMethod &subscribeMethod);
-
-		SubscribeMethod m_subscribeMethod;
+		Observable(const typename rscpp::Publisher<T>::SubscribeMethod &subscribeMethod);
 	};
 } // namespace recpp
 
