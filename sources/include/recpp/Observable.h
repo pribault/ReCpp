@@ -17,6 +17,7 @@ namespace recpp
 		template <typename Exception>
 		static Observable<T> error(Exception &&exception);
 		static Observable<T> just(const T &value);
+		static Observable<T> never();
 
 		template <typename OnNext, typename OnError, typename OnComplete>
 		void subscribe(OnNext onNext, OnError onError, OnComplete onComplete);

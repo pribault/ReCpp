@@ -43,8 +43,7 @@ recpp::Observable<T> recpp::Observable<T>::error(Exception &&exception)
 		[exception](const rscpp::Subscriber<T> &subscriber)
 		{
 			recpp::Subscription<T> subscription(
-				subscriber, [exception, &subscriber](size_t count) { subscriber.onError(exception); },
-				[exception, &subscriber]() { subscriber.onError(exception); });
+				subscriber, [exception, &subscriber](size_t count) { subscriber.onError(exception); }, nullptr);
 			subscriber.onSubscribe(subscription);
 		});
 }
@@ -65,7 +64,18 @@ recpp::Observable<T> recpp::Observable<T>::just(const T &value)
 						subscriber.onComplete();
 					}
 				},
-				[&subscriber]() { subscriber.onComplete(); });
+				nullptr);
+			subscriber.onSubscribe(subscription);
+		});
+}
+
+template <typename T>
+recpp::Observable<T> recpp::Observable<T>::never()
+{
+	return recpp::Observable<T>(
+		[](const rscpp::Subscriber<T> &subscriber)
+		{
+			recpp::Subscription<T> subscription(subscriber, nullptr, nullptr);
 			subscriber.onSubscribe(subscription);
 		});
 }

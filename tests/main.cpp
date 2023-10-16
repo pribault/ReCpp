@@ -10,6 +10,7 @@ int main()
 	// Observable<int>::just(42)
 	// Observable<int>::error(std::make_exception_ptr(std::runtime_error("test")))
 	// Observable<int>::empty()
+	// Observable<int>::never()
 	Observable<int>::create(
 		[](const auto &subscriber)
 		{
