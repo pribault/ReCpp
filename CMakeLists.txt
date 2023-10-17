@@ -10,6 +10,4 @@ project(ReCpp
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rscpp/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/sources/include)
 
-set_property(GLOBAL PROPERTY CXX_STANDARD 20)
-
 add_subdirectory(tests)

@@ -12,7 +12,6 @@ namespace recpp
 
 	private:
 		void internalRequest(size_t count) noexcept;
-		void internalCancel() noexcept;
 	};
 } // namespace recpp
 

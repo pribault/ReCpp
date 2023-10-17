@@ -2,7 +2,9 @@
 
 #include <recpp/Subscriber.h>
 #include <recpp/Subscription.h>
+#include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscriptions/EmptySubscription.h>
+#include <recpp/subscriptions/RangeSubscription.h>
 
 template <typename T>
 recpp::Observable<T>::Observable(const typename rscpp::Publisher<T>::SubscribeMethod &subscribeMethod)
@@ -81,8 +83,23 @@ recpp::Observable<T> recpp::Observable<T>::never()
 }
 
 template <typename T>
+template <class I>
+recpp::Observable<T> recpp::Observable<T>::range(I first, I last)
+{
+	return recpp::Observable<T>([first, last](const rscpp::Subscriber<T> &subscriber)
+								{ subscriber.onSubscribe(recpp::RangeSubscription<T, I>(subscriber, first, last)); });
+}
+
+template <typename T>
+template <class R>
+recpp::Observable<T> recpp::Observable<T>::range(R &&range)
+{
+	return recpp::Observable<T>::range(range.begin(), range.end());
+}
+
+template <typename T>
 template <typename OnNext, typename OnError, typename OnComplete>
 void recpp::Observable<T>::subscribe(OnNext onNext, OnError onError, OnComplete onComplete)
 {
-	rscpp::Publisher<T>::subscribe(recpp::Subscriber<T>([](const rscpp::Subscription &subscription) { subscription.request(1); }, onNext, onError, onComplete));
+	rscpp::Publisher<T>::subscribe(recpp::DefaultSubscriber<T>(onNext, onError, onComplete));
 }

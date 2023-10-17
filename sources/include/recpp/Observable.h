@@ -18,6 +18,10 @@ namespace recpp
 		static Observable<T> error(Exception &&exception);
 		static Observable<T> just(const T &value);
 		static Observable<T> never();
+		template <class I>
+		static Observable<T> range(I first, I last);
+		template <class R>
+		static Observable<T> range(R &&range);
 
 		template <typename OnNext, typename OnError, typename OnComplete>
 		void subscribe(OnNext onNext, OnError onError, OnComplete onComplete);
