@@ -16,6 +16,12 @@ namespace recpp
 		{
 			rscpp::Subscription subscription;
 		};
+
+	private:
+		inline void internalOnSubscribe(const rscpp::Subscription &subscription);
+		inline void internalOnNext(const T &value);
+
+		typename rscpp::Subscriber<T>::OnNextMethod m_onNext;
 	};
 } // namespace recpp
 

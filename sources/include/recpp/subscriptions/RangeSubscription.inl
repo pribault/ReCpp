@@ -2,8 +2,8 @@
 
 template <typename T, class I>
 recpp::RangeSubscription<T, I>::RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last)
-	: recpp::Subscription<T>(
-		  subscriber, [this](size_t count) { internalRequest(count); }, nullptr, rscpp::Subscription::StatePtr(new State(first, last)))
+	: Subscription<T>(subscriber, std::bind(&RangeSubscription<T, I>::internalRequest, this, std::placeholders::_1), nullptr,
+					  rscpp::Subscription::StatePtr(new State(first, last)))
 {
 }
 
@@ -15,10 +15,10 @@ void recpp::RangeSubscription<T, I>::internalRequest(size_t count) noexcept
 	{
 		if (state->current == state->last)
 		{
-			recpp::Subscription<T>::m_subscriber.onComplete();
+			Subscription<T>::m_subscriber.onComplete();
 			break;
 		}
 		const auto it = state->current++;
-		recpp::Subscription<T>::m_subscriber.onNext(*it);
+		Subscription<T>::m_subscriber.onNext(*it);
 	}
 }

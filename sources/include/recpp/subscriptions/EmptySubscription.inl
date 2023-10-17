@@ -2,13 +2,12 @@
 
 template <typename T>
 recpp::EmptySubscription<T>::EmptySubscription(const rscpp::Subscriber<T> &subscriber)
-	: recpp::Subscription<T>(
-		  subscriber, [this](size_t count) { internalRequest(count); }, nullptr)
+	: Subscription<T>(subscriber, std::bind(&EmptySubscription<T>::internalRequest, this, std::placeholders::_1), nullptr)
 {
 }
 
 template <typename T>
 void recpp::EmptySubscription<T>::internalRequest(size_t count) noexcept
 {
-	recpp::Subscription<T>::m_subscriber.onComplete();
+	Subscription<T>::m_subscriber.onComplete();
 }

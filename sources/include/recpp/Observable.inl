@@ -16,17 +16,17 @@ template <typename T>
 template <typename Function>
 recpp::Observable<T> recpp::Observable<T>::create(Function function)
 {
-	return recpp::Observable<T>([function](const rscpp::Subscriber<T> &subscriber) { function(subscriber); });
+	return Observable<T>([function](const rscpp::Subscriber<T> &subscriber) { function(subscriber); });
 }
 
 template <typename T>
 template <typename Function>
 recpp::Observable<T> recpp::Observable<T>::defer(Function function)
 {
-	return recpp::Observable<T>(
+	return Observable<T>(
 		[function](const rscpp::Subscriber<T> &subscriber)
 		{
-			recpp::Observable<T> result = function();
+			Observable<T> result = function();
 			result.rscpp::Publisher<T>::subscribe(subscriber);
 		});
 }
@@ -34,17 +34,17 @@ recpp::Observable<T> recpp::Observable<T>::defer(Function function)
 template <typename T>
 recpp::Observable<T> recpp::Observable<T>::empty()
 {
-	return recpp::Observable<T>([](const rscpp::Subscriber<T> &subscriber) { subscriber.onSubscribe(recpp::EmptySubscription<T>(subscriber)); });
+	return Observable<T>([](const rscpp::Subscriber<T> &subscriber) { subscriber.onSubscribe(EmptySubscription<T>(subscriber)); });
 }
 
 template <typename T>
 template <typename Exception>
 recpp::Observable<T> recpp::Observable<T>::error(Exception &&exception)
 {
-	return recpp::Observable<T>(
+	return Observable<T>(
 		[exception](const rscpp::Subscriber<T> &subscriber)
 		{
-			recpp::Subscription<T> subscription(
+			Subscription<T> subscription(
 				subscriber, [exception, &subscriber](size_t count) { subscriber.onError(exception); }, nullptr);
 			subscriber.onSubscribe(subscription);
 		});
@@ -53,10 +53,10 @@ recpp::Observable<T> recpp::Observable<T>::error(Exception &&exception)
 template <typename T>
 recpp::Observable<T> recpp::Observable<T>::just(const T &value)
 {
-	return recpp::Observable<T>(
+	return Observable<T>(
 		[value](const rscpp::Subscriber<T> &subscriber)
 		{
-			recpp::Subscription<T> subscription(
+			Subscription<T> subscription(
 				subscriber,
 				[value, &subscriber](size_t count)
 				{
@@ -74,10 +74,10 @@ recpp::Observable<T> recpp::Observable<T>::just(const T &value)
 template <typename T>
 recpp::Observable<T> recpp::Observable<T>::never()
 {
-	return recpp::Observable<T>(
+	return Observable<T>(
 		[](const rscpp::Subscriber<T> &subscriber)
 		{
-			recpp::Subscription<T> subscription(subscriber, nullptr, nullptr);
+			Subscription<T> subscription(subscriber, nullptr, nullptr);
 			subscriber.onSubscribe(subscription);
 		});
 }
@@ -86,20 +86,20 @@ template <typename T>
 template <class I>
 recpp::Observable<T> recpp::Observable<T>::range(I first, I last)
 {
-	return recpp::Observable<T>([first, last](const rscpp::Subscriber<T> &subscriber)
-								{ subscriber.onSubscribe(recpp::RangeSubscription<T, I>(subscriber, first, last)); });
+	return Observable<T>([first, last](const rscpp::Subscriber<T> &subscriber)
+								{ subscriber.onSubscribe(RangeSubscription<T, I>(subscriber, first, last)); });
 }
 
 template <typename T>
 template <class R>
 recpp::Observable<T> recpp::Observable<T>::range(R &&range)
 {
-	return recpp::Observable<T>::range(range.begin(), range.end());
+	return Observable<T>::range(range.begin(), range.end());
 }
 
 template <typename T>
 template <typename OnNext, typename OnError, typename OnComplete>
 void recpp::Observable<T>::subscribe(OnNext onNext, OnError onError, OnComplete onComplete)
 {
-	rscpp::Publisher<T>::subscribe(recpp::DefaultSubscriber<T>(onNext, onError, onComplete));
+	rscpp::Publisher<T>::subscribe(DefaultSubscriber<T>(onNext, onError, onComplete));
 }
