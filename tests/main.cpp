@@ -1,8 +1,8 @@
-#include <recpp/Observable.h>
+import recpp;
 
-#include <iostream>
-#include <ranges>
-#include <vector>
+import <iostream>;
+import <ranges>;
+import <vector>;
 
 using namespace recpp;
 
