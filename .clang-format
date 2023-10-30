@@ -11,5 +11,5 @@ NamespaceIndentation: All
 FixNamespaceComments: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakConstructorInitializers: BeforeComma
-AllowShortFunctionsOnASingleLine: Inline
+AllowShortFunctionsOnASingleLine: Empty
 AlignConsecutiveDeclarations: Consecutive

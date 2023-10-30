@@ -2,13 +2,22 @@ export module recpp.observables.Observable;
 
 import rscpp;
 
+import recpp.observables.impl.CreateObservable;
+import recpp.observables.impl.DeferObservable;
+import recpp.observables.impl.EmptyObservable;
+import recpp.observables.impl.ErrorObservable;
+import recpp.observables.impl.JustObservable;
+import recpp.observables.impl.NeverObservable;
+import recpp.observables.impl.ProcessedObservable;
+import recpp.observables.impl.RangeObservable;
+import recpp.processors.Map;
 import recpp.subscribers.DefaultSubscriber;
-import recpp.subscribers.Subscriber;
 import recpp.subscriptions.EmptySubscription;
-import recpp.subscriptions.RangeSubscription;
-import recpp.subscriptions.Subscription;
+
+import <functional>;
 
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
@@ -16,74 +25,47 @@ export namespace recpp
 	class Observable : public Publisher<T>
 	{
 	public:
-		template <typename Function>
-		static Observable<T> create(Function function)
+		Observable(const shared_ptr<Publisher<T>> &dd)
+			: Publisher<T>(dd)
 		{
-			return Observable<T>([function](const auto &subscriber) { function(subscriber); });
 		}
 
-		template <typename Function>
-		static Observable<T> defer(Function function)
+		template <typename F>
+		static Observable<T> create(F function)
 		{
-			return Observable<T>(
-				[function](const auto &subscriber)
-				{
-					Observable<T> result = function();
-					result.Publisher<T>::subscribe(subscriber);
-				});
+			return Observable<T>(shared_ptr<Publisher<T>>(new CreateObservable<T, F>(function)));
+		}
+
+		template <typename F>
+		static Observable<T> defer(F function)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new DeferObservable<T, F>(function)));
 		}
 
 		static Observable<T> empty()
 		{
-			return Observable<T>([](const auto &subscriber) { subscriber.onSubscribe(EmptySubscription<T>(subscriber)); });
+			return Observable<T>(shared_ptr<Publisher<T>>(new EmptyObservable<T>()));
 		}
 
-		template <typename Exception>
-		static Observable<T> error(Exception &&exception)
+		static Observable<T> error(const exception_ptr &error)
 		{
-			return Observable<T>(
-				[exception](const auto &subscriber)
-				{
-					Subscription<T> subscription(
-						subscriber, [exception, &subscriber](size_t count) { subscriber.onError(exception); }, nullptr);
-					subscriber.onSubscribe(subscription);
-				});
+			return Observable<T>(shared_ptr<Publisher<T>>(new ErrorObservable<T>(error)));
 		}
 
 		static Observable<T> just(const T &value)
 		{
-			return Observable<T>(
-				[value](const auto &subscriber)
-				{
-					Subscription<T> subscription(
-						subscriber,
-						[value, &subscriber](size_t count)
-						{
-							if (count)
-							{
-								subscriber.onNext(value);
-								subscriber.onComplete();
-							}
-						},
-						nullptr);
-					subscriber.onSubscribe(subscription);
-				});
+			return Observable<T>(shared_ptr<Publisher<T>>(new JustObservable<T>(value)));
 		}
 
 		static Observable<T> never()
 		{
-			return Observable<T>(
-				[](const auto &subscriber)
-				{
-					Subscription<T> subscription(subscriber, nullptr, nullptr);
-					subscriber.onSubscribe(subscription);
-				});
+			return Observable<T>(shared_ptr<Publisher<T>>(new NeverObservable<T>()));
 		}
 
 		template <class I>
 		static Observable<T> range(I first, I last)
 		{
-			return Observable<T>([first, last](const auto &subscriber) { subscriber.onSubscribe(RangeSubscription<T, I>(subscriber, first, last)); });
+			return Observable<T>(shared_ptr<Publisher<T>>(new RangeObservable<T, I>(first, last)));
 		}
 
 		template <class R>
@@ -95,13 +77,20 @@ export namespace recpp
 		template <typename OnNext, typename OnError, typename OnComplete>
 		void subscribe(OnNext onNext, OnError onError, OnComplete onComplete)
 		{
-			Publisher<T>::subscribe(DefaultSubscriber<T>(onNext, onError, onComplete));
+			auto subscriber = DefaultSubscriber<T>(onNext, onError, onComplete);
+			Publisher<T>::subscribe(subscriber);
 		}
 
-	protected:
-		Observable(const typename Publisher<T>::SubscribeMethod &subscribeMethod)
-			: Publisher<T>(subscribeMethod)
+		template <typename R>
+		Observable<R> operator|(const Processor<T, R> &processor)
 		{
+			return Observable<R>(shared_ptr<Publisher<R>>(new ProcessedObservable<T, R>(processor)));
+		}
+
+		template <typename R>
+		Observable<R> map(auto method)
+		{
+			return *this | Map<T, R>(*this, method);
 		}
 	};
 } // namespace recpp

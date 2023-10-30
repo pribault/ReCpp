@@ -3,19 +3,23 @@ import recpp;
 import <iostream>;
 import <ranges>;
 import <vector>;
+import <string>;
+
+import recpp.processors.Map;
 
 using namespace recpp;
+using namespace std;
 
 int main()
 {
-	const std::vector<int> values({1, 2, 3});
+	const vector<int> values({1, 2, 3});
 	// Observable<int>::defer([]() { return Observable<int>::just(66); })
 	// Observable<int>::just(42)
-	// Observable<int>::error(std::make_exception_ptr(std::runtime_error("test")))
+	// Observable<int>::error(make_exception_ptr(runtime_error("test")))
 	// Observable<int>::empty()
 	// Observable<int>::never()
 	// Observable<int>::create(
-	// 	[](const auto &subscriber)
+	// 	[](auto &subscriber)
 	// 	{
 	// 		subscriber.onNext(1);
 	// 		subscriber.onNext(2);
@@ -23,18 +27,20 @@ int main()
 	// 		subscriber.onComplete();
 	// 	})
 	// Observable<int>::range(values.begin(), values.end())
-	Observable<int>::range(values).subscribe([](int value) { std::cout << "value=" << value << std::endl; },
-											 [](const std::exception_ptr &e)
-											 {
-												 try
-												 {
-													 std::rethrow_exception(e);
-												 }
-												 catch (const std::exception &exception)
-												 {
-													 std::cerr << "error: " << exception.what() << std::endl;
-												 }
-											 },
-											 []() { std::cout << "completed!" << std::endl; });
+	Observable<int>::range(values)
+		.map<int>([](int value) { return value + 2; })
+		.subscribe([](int value) { cout << "value=" << value << endl; },
+				   [](const exception_ptr &e)
+				   {
+					   try
+					   {
+						   rethrow_exception(e);
+					   }
+					   catch (const exception &exception)
+					   {
+						   cerr << "error: " << exception.what() << endl;
+					   }
+				   },
+				   []() { cout << "completed!" << endl; });
 	return 0;
 }

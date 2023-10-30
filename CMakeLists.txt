@@ -17,13 +17,29 @@ target_sources(ReCpp
 	PUBLIC
 		FILE_SET CXX_MODULES FILES
 			${CMAKE_CURRENT_SOURCE_DIR}/src/ReCpp.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/CreateObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/DeferObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/EmptyObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/ErrorObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/JustObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/NeverObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/ProcessedObservable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/RangeObservable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/Observable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/MapPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Map.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/Subscriber.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/EmptySubscriptionPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/ForwardSubscriptionPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/JustSubscriptionPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/NeverSubscriptionPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/RangeSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/EmptySubscription.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/ForwardSubscription.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/JustSubscription.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/NeverSubscription.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/RangeSubscription.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/Subscription.cpp
 )
 
 target_link_libraries(ReCpp PRIVATE RsCpp)

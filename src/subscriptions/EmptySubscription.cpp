@@ -1,22 +1,21 @@
 export module recpp.subscriptions.EmptySubscription;
 
-import recpp.subscriptions.Subscription;
+import recpp.subscriptions.impl.EmptySubscriptionPrivate;
 import rscpp.Subscriber;
+import rscpp.Subscription;
 
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
 	template <typename T>
-	class EmptySubscription : public recpp::Subscription<T>
+	class EmptySubscription : public Subscription
 	{
 	public:
 		EmptySubscription(const Subscriber<T> &subscriber)
-			: Subscription<T>(subscriber, std::bind(&EmptySubscription<T>::internalRequest, this, std::placeholders::_1), nullptr)
+			: Subscription(shared_ptr<Subscription>(new EmptySubscriptionPrivate(subscriber)))
 		{
 		}
-
-	private:
-		void internalRequest(size_t count) noexcept { Subscription<T>::m_subscriber.onComplete(); }
 	};
 } // namespace recpp
