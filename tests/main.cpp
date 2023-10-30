@@ -29,6 +29,7 @@ int main()
 	// Observable<int>::range(values.begin(), values.end())
 	Observable<int>::range(values)
 		.map<int>([](int value) { return value + 2; })
+		.filter<int>([](int value) { return value % 2 == 1; })
 		.subscribe([](int value) { cout << "value=" << value << endl; },
 				   [](const exception_ptr &e)
 				   {

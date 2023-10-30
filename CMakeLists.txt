@@ -26,7 +26,9 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/ProcessedObservable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/RangeObservable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/Observable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FilterPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/MapPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Filter.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Map.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp

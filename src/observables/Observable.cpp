@@ -10,6 +10,7 @@ import recpp.observables.impl.JustObservable;
 import recpp.observables.impl.NeverObservable;
 import recpp.observables.impl.ProcessedObservable;
 import recpp.observables.impl.RangeObservable;
+import recpp.processors.Filter;
 import recpp.processors.Map;
 import recpp.subscribers.DefaultSubscriber;
 import recpp.subscriptions.EmptySubscription;
@@ -80,6 +81,12 @@ export namespace recpp
 		Observable<R> operator|(const Processor<T, R> &processor)
 		{
 			return Observable<R>(shared_ptr<Publisher<R>>(new ProcessedObservable<T, R>(processor)));
+		}
+
+		template <typename R>
+		Observable<R> filter(auto method)
+		{
+			return *this | Filter<T, R>(*this, method);
 		}
 
 		template <typename R>
