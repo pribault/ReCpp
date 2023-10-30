@@ -1,7 +1,6 @@
 export module recpp.processors.Filter;
 
 import recpp.processors.impl.FilterPrivate;
-import recpp.subscriptions.ForwardSubscription;
 import rscpp.Processor;
 
 import <memory>;

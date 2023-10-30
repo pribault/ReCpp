@@ -28,7 +28,6 @@ export namespace recpp
 
 		void onSubscribe(Subscription &subscription) override
 		{
-			m_subscription = subscription;
 			auto forwardSubscription = ForwardSubscription(subscription);
 			m_subscriber.onSubscribe(forwardSubscription);
 		}
@@ -36,7 +35,6 @@ export namespace recpp
 		void onNext(const T &value) override
 		{
 			m_subscriber.onNext(m_method(value));
-			m_subscription.request(1);
 		}
 
 		void onError(const exception_ptr &error) override
@@ -63,7 +61,6 @@ export namespace recpp
 	private:
 		Processor<T, R>					   m_parent;
 		Publisher<T>					   m_publisher;
-		Subscription					   m_subscription;
 		Subscriber<R>					   m_subscriber;
 		function<R(const T & /* value */)> m_method;
 	};

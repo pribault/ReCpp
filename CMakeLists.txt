@@ -33,11 +33,13 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/EmptySubscriptionPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/FilterSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/ForwardSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/JustSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/NeverSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/RangeSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/EmptySubscription.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/FilterSubscription.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/ForwardSubscription.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/JustSubscription.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/NeverSubscription.cpp

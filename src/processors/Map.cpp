@@ -1,7 +1,6 @@
 export module recpp.processors.Map;
 
 import recpp.processors.impl.MapPrivate;
-import recpp.subscriptions.ForwardSubscription;
 import rscpp.Processor;
 
 import <memory>;

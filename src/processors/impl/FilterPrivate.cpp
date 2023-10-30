@@ -1,6 +1,6 @@
 export module recpp.processors.impl.FilterPrivate;
 
-import recpp.subscriptions.ForwardSubscription;
+import recpp.subscriptions.FilterSubscription;
 import rscpp.Processor;
 import rscpp.Publisher;
 import rscpp.Subscriber;
@@ -28,16 +28,18 @@ export namespace recpp
 
 		void onSubscribe(Subscription &subscription) override
 		{
-			m_subscription = subscription;
-			auto forwardSubscription = ForwardSubscription(subscription);
-			m_subscriber.onSubscribe(forwardSubscription);
+			auto filterSubscription = FilterSubscription(subscription);
+			m_subscriptions.push_back(filterSubscription);
+			m_subscriber.onSubscribe(filterSubscription);
 		}
 
 		void onNext(const T &value) override
 		{
-			if (m_method(value))
+			bool filtered = !m_method(value);
+			if (!filtered)
 				m_subscriber.onNext(value);
-			m_subscription.request(1);
+			for (auto &subscription : m_subscriptions)
+				subscription.onNext(filtered);
 		}
 
 		void onError(const exception_ptr &error) override
@@ -64,7 +66,7 @@ export namespace recpp
 	private:
 		Processor<T, R>					   m_parent;
 		Publisher<T>					   m_publisher;
-		Subscription					   m_subscription;
+		std::vector<FilterSubscription>	   m_subscriptions;
 		Subscriber<R>					   m_subscriber;
 		function<R(const T & /* value */)> m_method;
 	};
