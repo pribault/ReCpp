@@ -28,13 +28,20 @@ export namespace recpp
 		void onSubscribe(Subscription &subscription) override
 		{
 			m_subscription = subscription;
+			m_remaining = numeric_limits<size_t>::max();
 			m_subscription.request(numeric_limits<size_t>::max());
 		}
 
 		void onNext(const T &value) override
 		{
+			m_remaining--;
 			if (m_onNextMethod)
 				m_onNextMethod(value);
+			if (!m_remaining)
+			{
+				m_remaining = numeric_limits<size_t>::max();
+				m_subscription.request(numeric_limits<size_t>::max());
+			}
 		}
 
 		void onError(const exception_ptr &error) override
@@ -54,5 +61,6 @@ export namespace recpp
 		function<void(const T & /* value */)>			  m_onNextMethod;
 		function<void(const exception_ptr & /* error */)> m_onErrorMethod;
 		function<void()>								  m_onCompleteMethod;
+		size_t											  m_remaining = 0;
 	};
 } // namespace recpp
