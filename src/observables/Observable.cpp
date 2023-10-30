@@ -25,11 +25,6 @@ export namespace recpp
 	class Observable : public Publisher<T>
 	{
 	public:
-		Observable(const shared_ptr<Publisher<T>> &dd)
-			: Publisher<T>(dd)
-		{
-		}
-
 		template <typename F>
 		static Observable<T> create(F function)
 		{
@@ -91,6 +86,12 @@ export namespace recpp
 		Observable<R> map(auto method)
 		{
 			return *this | Map<T, R>(*this, method);
+		}
+
+	protected:
+		Observable(const shared_ptr<Publisher<T>> &dd)
+			: Publisher<T>(dd)
+		{
 		}
 	};
 } // namespace recpp
