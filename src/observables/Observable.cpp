@@ -8,11 +8,11 @@ import recpp.observables.impl.EmptyObservable;
 import recpp.observables.impl.ErrorObservable;
 import recpp.observables.impl.JustObservable;
 import recpp.observables.impl.NeverObservable;
-import recpp.observables.impl.ProcessedObservable;
 import recpp.observables.impl.RangeObservable;
 import recpp.processors.Filter;
 import recpp.processors.FlatMap;
 import recpp.processors.Map;
+import recpp.processors.Tap;
 import recpp.subscribers.DefaultSubscriber;
 import recpp.subscriptions.EmptySubscription;
 
@@ -81,28 +81,52 @@ export namespace recpp
 			Publisher<T>::subscribe(subscriber);
 		}
 
-		template <typename R>
-		Observable<R> operator|(const Processor<T, R> &processor)
+		template <typename R, typename M>
+		Observable<R> filter(M method)
 		{
-			return Observable<R>(shared_ptr<Publisher<R>>(new ProcessedObservable<T, R>(processor)));
+			return Observable<R>(shared_ptr<Publisher<R>>(new Filter<T, R>(*this, method)));
 		}
 
-		template <typename R>
-		Observable<R> filter(auto method)
+		template <typename R, typename M>
+		Observable<R> map(M method)
 		{
-			return *this | Filter<T, R>(*this, method);
+			return Observable<R>(shared_ptr<Publisher<R>>(new Map<T, R>(*this, method)));
 		}
 
-		template <typename R>
-		Observable<R> map(auto method)
+		template <typename R, typename M>
+		Observable<R> flatMap(M method)
 		{
-			return *this | Map<T, R>(*this, method);
+			return Observable<R>(shared_ptr<Publisher<R>>(new FlatMap<T, R>(*this, method)));
 		}
 
-		template <typename R>
-		Observable<R> flatMap(auto method)
+		template <typename C>
+		Observable<T> doOnComplete(C method)
 		{
-			return *this | FlatMap<T, R>(*this, method);
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, nullptr, method)));
+		}
+
+		template <typename E>
+		Observable<T> doOnError(E method)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, nullptr)));
+		}
+
+		template <typename N>
+		Observable<T> doOnNext(N method)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, method, nullptr, nullptr)));
+		}
+
+		template <typename T>
+		Observable<T> doOnTerminate(T method)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, method)));
+		}
+
+		template <typename N, typename E, typename C>
+		Observable<T> tap(N onNextMethod, E onErrorMethod, C onCompleteMethod)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
 		}
 
 	protected:
