@@ -22,7 +22,7 @@ export namespace recpp
 		{
 			for (size_t i = 0; i < count; i++)
 			{
-				if (m_completed)
+				if (m_completed || m_canceled)
 					break;
 				if (m_current == m_last)
 				{
@@ -37,6 +37,7 @@ export namespace recpp
 
 		void cancel() override
 		{
+			m_canceled = true;
 			m_subscriber.onComplete();
 		}
 
@@ -45,5 +46,6 @@ export namespace recpp
 		I			  m_current;
 		I			  m_last;
 		bool		  m_completed = false;
+		bool		  m_canceled = false;
 	};
 } // namespace recpp
