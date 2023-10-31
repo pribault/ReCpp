@@ -30,7 +30,13 @@ int main()
 	Observable<int>::range(values)
 		.map<int>([](int value) { return value + 2; })
 		.filter<int>([](int value) { return value % 2 == 1; })
-		.subscribe([](int value) { cout << "value=" << value << endl; },
+		.flatMap<string>([&values](int value)
+						 { return Observable<int>::range(values).map<string>([value](int value2) { return to_string(value) + "x" + to_string(value2); }); })
+		// .flatMap<string>([](int value)
+		// {
+		// 	return Observable<string>::never();
+		// })
+		.subscribe([](auto value) { cout << "value=" << value << endl; },
 				   [](const exception_ptr &e)
 				   {
 					   try

@@ -11,6 +11,7 @@ import recpp.observables.impl.NeverObservable;
 import recpp.observables.impl.ProcessedObservable;
 import recpp.observables.impl.RangeObservable;
 import recpp.processors.Filter;
+import recpp.processors.FlatMap;
 import recpp.processors.Map;
 import recpp.subscribers.DefaultSubscriber;
 import recpp.subscriptions.EmptySubscription;
@@ -25,6 +26,9 @@ export namespace recpp
 	template <typename T>
 	class Observable : public Publisher<T>
 	{
+		template <typename R>
+		friend class Observable;
+
 	public:
 		template <typename F>
 		static Observable<T> create(F function)
@@ -93,6 +97,12 @@ export namespace recpp
 		Observable<R> map(auto method)
 		{
 			return *this | Map<T, R>(*this, method);
+		}
+
+		template <typename R>
+		Observable<R> flatMap(auto method)
+		{
+			return *this | FlatMap<T, R>(*this, method);
 		}
 
 	protected:
