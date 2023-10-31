@@ -1,4 +1,4 @@
-export module recpp.observables.impl.ErrorObservable;
+export module recpp.publishers.impl.ErrorPublisher;
 
 import recpp.subscriptions.EmptySubscription;
 import rscpp;
@@ -9,10 +9,10 @@ using namespace std;
 export namespace recpp
 {
 	template <typename T>
-	class ErrorObservable : public Publisher<T>
+	class ErrorPublisher : public Publisher<T>
 	{
 	public:
-		ErrorObservable(const exception_ptr &error)
+		ErrorPublisher(const exception_ptr &error)
 			: m_error(error)
 		{
 		}

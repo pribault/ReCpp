@@ -1,4 +1,4 @@
-export module recpp.observables.impl.JustObservable;
+export module recpp.publishers.impl.JustPublisher;
 
 import rscpp;
 import recpp.subscriptions.JustSubscription;
@@ -8,10 +8,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T>
-	class JustObservable : public Publisher<T>
+	class JustPublisher : public Publisher<T>
 	{
 	public:
-		JustObservable(const T &value)
+		JustPublisher(const T &value)
 			: m_value(value)
 		{
 		}

@@ -1,3 +1,3 @@
 export module recpp;
 
-export import recpp.observables.Observable;
+export import recpp.publishers.Observable;

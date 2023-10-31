@@ -17,14 +17,6 @@ target_sources(ReCpp
 	PUBLIC
 		FILE_SET CXX_MODULES FILES
 			${CMAKE_CURRENT_SOURCE_DIR}/src/ReCpp.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/CreateObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/DeferObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/EmptyObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/ErrorObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/JustObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/NeverObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/impl/RangeObservable.cpp
-			${CMAKE_CURRENT_SOURCE_DIR}/src/observables/Observable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FilterPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FlatMapPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/MapPrivate.cpp
@@ -33,6 +25,14 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/FlatMap.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Map.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Tap.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/CreatePublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/DeferPublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/EmptyPublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/ErrorPublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/JustPublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/NeverPublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/RangePublisher.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/Observable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/EmptySubscriptionPrivate.cpp

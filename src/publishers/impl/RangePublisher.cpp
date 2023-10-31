@@ -1,4 +1,4 @@
-export module recpp.observables.impl.RangeObservable;
+export module recpp.publishers.impl.RangePublisher;
 
 import rscpp;
 import recpp.subscriptions.RangeSubscription;
@@ -8,10 +8,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T, class I>
-	class RangeObservable : public Publisher<T>
+	class RangePublisher : public Publisher<T>
 	{
 	public:
-		RangeObservable(I first, I last)
+		RangePublisher(I first, I last)
 			: m_first(first)
 			, m_last(last)
 		{

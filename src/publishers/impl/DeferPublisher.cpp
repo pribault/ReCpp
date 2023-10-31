@@ -1,4 +1,4 @@
-export module recpp.observables.impl.DeferObservable;
+export module recpp.publishers.impl.DeferPublisher;
 
 import rscpp;
 
@@ -7,10 +7,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T, typename F>
-	class DeferObservable : public Publisher<T>
+	class DeferPublisher : public Publisher<T>
 	{
 	public:
-		DeferObservable(F function)
+		DeferPublisher(F function)
 			: m_function(function)
 		{
 		}

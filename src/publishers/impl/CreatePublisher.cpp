@@ -1,4 +1,4 @@
-export module recpp.observables.impl.CreateObservable;
+export module recpp.publishers.impl.CreatePublisher;
 
 import rscpp;
 
@@ -7,10 +7,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T, typename F>
-	class CreateObservable : public Publisher<T>
+	class CreatePublisher : public Publisher<T>
 	{
 	public:
-		CreateObservable(F function)
+		CreatePublisher(F function)
 			: m_function(function)
 		{
 		}

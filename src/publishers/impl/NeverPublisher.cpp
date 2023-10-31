@@ -1,4 +1,4 @@
-export module recpp.observables.impl.NeverObservable;
+export module recpp.publishers.impl.NeverPublisher;
 
 import recpp.subscriptions.NeverSubscription;
 import rscpp;
@@ -8,10 +8,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T>
-	class NeverObservable : public Publisher<T>
+	class NeverPublisher : public Publisher<T>
 	{
 	public:
-		NeverObservable() {}
+		NeverPublisher() {}
 
 		void subscribe(Subscriber<T> &subscriber) override
 		{

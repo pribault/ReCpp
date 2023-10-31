@@ -1,4 +1,4 @@
-export module recpp.observables.impl.EmptyObservable;
+export module recpp.publishers.impl.EmptyPublisher;
 
 import recpp.subscriptions.EmptySubscription;
 import rscpp;
@@ -8,10 +8,10 @@ using namespace rscpp;
 export namespace recpp
 {
 	template <typename T>
-	class EmptyObservable : public Publisher<T>
+	class EmptyPublisher : public Publisher<T>
 	{
 	public:
-		EmptyObservable() {}
+		EmptyPublisher() {}
 
 		void subscribe(Subscriber<T> &subscriber) override
 		{

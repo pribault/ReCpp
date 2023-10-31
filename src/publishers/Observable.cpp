@@ -1,14 +1,14 @@
-export module recpp.observables.Observable;
+export module recpp.publishers.Observable;
 
 import rscpp;
 
-import recpp.observables.impl.CreateObservable;
-import recpp.observables.impl.DeferObservable;
-import recpp.observables.impl.EmptyObservable;
-import recpp.observables.impl.ErrorObservable;
-import recpp.observables.impl.JustObservable;
-import recpp.observables.impl.NeverObservable;
-import recpp.observables.impl.RangeObservable;
+import recpp.publishers.impl.CreatePublisher;
+import recpp.publishers.impl.DeferPublisher;
+import recpp.publishers.impl.EmptyPublisher;
+import recpp.publishers.impl.ErrorPublisher;
+import recpp.publishers.impl.JustPublisher;
+import recpp.publishers.impl.NeverPublisher;
+import recpp.publishers.impl.RangePublisher;
 import recpp.processors.Filter;
 import recpp.processors.FlatMap;
 import recpp.processors.Map;
@@ -33,39 +33,39 @@ export namespace recpp
 		template <typename F>
 		static Observable<T> create(F function)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new CreateObservable<T, F>(function)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new CreatePublisher<T, F>(function)));
 		}
 
 		template <typename F>
 		static Observable<T> defer(F function)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new DeferObservable<T, F>(function)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T, F>(function)));
 		}
 
 		static Observable<T> empty()
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new EmptyObservable<T>()));
+			return Observable<T>(shared_ptr<Publisher<T>>(new EmptyPublisher<T>()));
 		}
 
 		static Observable<T> error(const exception_ptr &error)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new ErrorObservable<T>(error)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new ErrorPublisher<T>(error)));
 		}
 
 		static Observable<T> just(const T &value)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new JustObservable<T>(value)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new JustPublisher<T>(value)));
 		}
 
 		static Observable<T> never()
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new NeverObservable<T>()));
+			return Observable<T>(shared_ptr<Publisher<T>>(new NeverPublisher<T>()));
 		}
 
 		template <class I>
 		static Observable<T> range(I first, I last)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new RangeObservable<T, I>(first, last)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new RangePublisher<T, I>(first, last)));
 		}
 
 		template <class R>
