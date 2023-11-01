@@ -20,16 +20,25 @@ export namespace recpp
 
 		void onNext(const T &value)
 		{
-			m_subscriber.onNext(value);
-			m_subscriber.onComplete();
+			if (!m_ended)
+			{
+				m_ended = true;
+				m_subscriber.onNext(value);
+				m_subscriber.onComplete();
+			}
 		}
 
 		void onError(const exception_ptr &error)
 		{
-			m_subscriber.onError(error);
+			if (!m_ended)
+			{
+				m_ended = true;
+				m_subscriber.onError(error);
+			}
 		}
 
 	private:
 		Subscriber<T> m_subscriber;
+		bool		  m_ended = false;
 	};
 } // namespace recpp
