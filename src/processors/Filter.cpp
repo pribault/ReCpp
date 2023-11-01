@@ -9,13 +9,13 @@ using namespace rscpp;
 
 export namespace recpp
 {
-	template <typename T, typename R>
-	class Filter : public Processor<T, R>
+	template <typename T>
+	class Filter : public Processor<T, T>
 	{
 	public:
 		template <typename M>
 		explicit Filter(const Publisher<T> &publisher, M method)
-			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FilterPrivate<T, R>(*this, publisher, method)))
+			: Processor<T, T>(shared_ptr<Processor<T, T>>(new FilterPrivate<T>(*this, publisher, method)))
 		{
 		}
 	};

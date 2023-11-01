@@ -33,16 +33,18 @@ export namespace recpp
 		friend class Observable;
 
 	public:
-		template <typename F>
-		static Observable<T> create(F function)
+		using OnNextMethod = function<void(const T & /* value */)>;
+		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
+		using OnCompleteMethod = function<void()>;
+
+		static Observable<T> create(const function<void(Subscriber<T> & /* subscriber */)> &function)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new CreatePublisher<T, F>(function)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new CreatePublisher<T>(function)));
 		}
 
-		template <typename F>
-		static Observable<T> defer(F function)
+		static Observable<T> defer(const function<Observable<T>()> &function)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T, F>(function)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T>(function)));
 		}
 
 		static Observable<T> empty()
@@ -77,57 +79,50 @@ export namespace recpp
 			return Observable<T>::range(range.begin(), range.end());
 		}
 
-		template <typename OnNext, typename OnError, typename OnComplete>
-		void subscribe(OnNext onNext, OnError onError, OnComplete onComplete)
+		void subscribe(const OnNextMethod &onNext, const OnErrorMethod &onError, const OnCompleteMethod &onComplete)
 		{
 			auto subscriber = DefaultSubscriber<T>(onNext, onError, onComplete);
 			Publisher<T>::subscribe(subscriber);
 		}
 
-		template <typename R, typename M>
-		Observable<R> filter(M method)
+		Observable<T> filter(const function<bool(const T & /* value */)> &method)
 		{
-			return Observable<R>(shared_ptr<Publisher<R>>(new Filter<T, R>(*this, method)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new Filter<T>(*this, method)));
 		}
 
-		template <typename R, typename M>
-		Observable<R> map(M method)
+		template <typename R>
+		Observable<R> map(const function<R(const T & /* value */)> &method)
 		{
 			return Observable<R>(shared_ptr<Publisher<R>>(new Map<T, R>(*this, method)));
 		}
 
-		template <typename R, typename M>
-		Observable<R> flatMap(M method)
+		template <typename R>
+		Observable<R> flatMap(const function<Observable<R>(const T & /* value */)> &method)
 		{
 			return Observable<R>(shared_ptr<Publisher<R>>(new FlatMap<T, R>(*this, method)));
 		}
 
-		template <typename C>
-		Observable<T> doOnComplete(C method)
+		Observable<T> doOnComplete(const OnCompleteMethod &method)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, nullptr, method)));
 		}
 
-		template <typename E>
-		Observable<T> doOnError(E method)
+		Observable<T> doOnError(const OnErrorMethod &method)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, nullptr)));
 		}
 
-		template <typename N>
-		Observable<T> doOnNext(N method)
+		Observable<T> doOnNext(const OnNextMethod &method)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, method, nullptr, nullptr)));
 		}
 
-		template <typename M>
-		Observable<T> doOnTerminate(M method)
+		Observable<T> doOnTerminate(const OnCompleteMethod &method)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, method)));
 		}
 
-		template <typename N, typename E, typename C>
-		Observable<T> tap(N onNextMethod, E onErrorMethod, C onCompleteMethod)
+		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
 		}

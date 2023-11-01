@@ -42,6 +42,7 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/NeverPublisher.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/impl/RangePublisher.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/Observable.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/Single.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/EmptySubscriptionPrivate.cpp

@@ -15,12 +15,12 @@ using namespace std;
 
 export namespace recpp
 {
-	template <typename T, typename R>
-	class FilterPrivate : public Processor<T, R>
+	template <typename T>
+	class FilterPrivate : public Processor<T, T>
 	{
 	public:
 		template <typename M>
-		explicit FilterPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+		explicit FilterPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, M method)
 			: m_parent(parent)
 			, m_publisher(publisher)
 			, m_method(method)
@@ -53,17 +53,17 @@ export namespace recpp
 			m_subscriber.onComplete();
 		}
 
-		void subscribe(Subscriber<R> &subscriber) override
+		void subscribe(Subscriber<T> &subscriber) override
 		{
 			m_subscriber = subscriber;
 			m_publisher.subscribe(m_parent);
 		}
 
 	private:
-		Processor<T, R>					  &m_parent;
-		Publisher<T>					   m_publisher;
-		std::vector<FilterSubscription>	   m_subscriptions;
-		Subscriber<R>					   m_subscriber;
-		function<R(const T & /* value */)> m_method;
+		Processor<T, T>						 &m_parent;
+		Publisher<T>						  m_publisher;
+		std::vector<FilterSubscription>		  m_subscriptions;
+		Subscriber<T>						  m_subscriber;
+		function<bool(const T & /* value */)> m_method;
 	};
 } // namespace recpp
