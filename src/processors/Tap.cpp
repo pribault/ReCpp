@@ -15,9 +15,8 @@ export namespace recpp
 	public:
 		template <typename N, typename E, typename C>
 		explicit Tap(const Publisher<T> &publisher, N onNextMethod, E onErrorMethod, C onCompleteMethod)
-			: Processor<T, T>(shared_ptr<Processor<T, T>>(new TapPrivate<T>(publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
+			: Processor<T, T>(shared_ptr<Processor<T, T>>(new TapPrivate<T>(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
 		{
-			static_cast<TapPrivate<T> *>(Publisher<T>::d_ptr.get())->setParent(*this);
 		}
 	};
 } // namespace recpp

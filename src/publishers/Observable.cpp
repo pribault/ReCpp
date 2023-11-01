@@ -2,6 +2,7 @@ export module recpp.publishers.Observable;
 
 import rscpp;
 
+import recpp.async.Scheduler;
 import recpp.publishers.impl.CreatePublisher;
 import recpp.publishers.impl.DeferPublisher;
 import recpp.publishers.impl.EmptyPublisher;
@@ -12,6 +13,8 @@ import recpp.publishers.impl.RangePublisher;
 import recpp.processors.Filter;
 import recpp.processors.FlatMap;
 import recpp.processors.Map;
+import recpp.processors.ObserveOn;
+import recpp.processors.SubscribeOn;
 import recpp.processors.Tap;
 import recpp.subscribers.DefaultSubscriber;
 import recpp.subscriptions.EmptySubscription;
@@ -117,8 +120,8 @@ export namespace recpp
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, method, nullptr, nullptr)));
 		}
 
-		template <typename T>
-		Observable<T> doOnTerminate(T method)
+		template <typename M>
+		Observable<T> doOnTerminate(M method)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, method)));
 		}
@@ -127,6 +130,16 @@ export namespace recpp
 		Observable<T> tap(N onNextMethod, E onErrorMethod, C onCompleteMethod)
 		{
 			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
+		}
+
+		Observable<T> observeOn(Scheduler &scheduler)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new ObserveOn<T>(*this, scheduler)));
+		}
+
+		Observable<T> subscribeOn(Scheduler &scheduler)
+		{
+			return Observable<T>(shared_ptr<Publisher<T>>(new SubscribeOn<T>(*this, scheduler)));
 		}
 
 	protected:

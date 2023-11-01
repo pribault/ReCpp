@@ -1,5 +1,7 @@
-export module recpp.processors.impl.MapPrivate;
+export module recpp.processors.impl.SubscribeOnPrivate;
 
+import recpp.async.Schedulable;
+import recpp.async.Scheduler;
 import recpp.subscriptions.ForwardSubscription;
 import rscpp.Processor;
 import rscpp.Publisher;
@@ -7,23 +9,20 @@ import rscpp.Subscriber;
 import rscpp.Subscription;
 
 import <exception>;
-import <functional>;
-import <memory>;
 
 using namespace rscpp;
 using namespace std;
 
 export namespace recpp
 {
-	template <typename T, typename R>
-	class MapPrivate : public Processor<T, R>
+	template <typename T>
+	class SubscribeOnPrivate : public Processor<T, T>
 	{
 	public:
-		template <typename M>
-		explicit MapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+		explicit SubscribeOnPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, Scheduler &scheduler)
 			: m_parent(parent)
 			, m_publisher(publisher)
-			, m_method(method)
+			, m_scheduler(scheduler)
 		{
 		}
 
@@ -35,7 +34,7 @@ export namespace recpp
 
 		void onNext(const T &value) override
 		{
-			m_subscriber.onNext(m_method(value));
+			m_subscriber.onNext(value);
 		}
 
 		void onError(const exception_ptr &error) override
@@ -48,16 +47,18 @@ export namespace recpp
 			m_subscriber.onComplete();
 		}
 
-		void subscribe(Subscriber<R> &subscriber) override
+		void subscribe(Subscriber<T> &subscriber) override
 		{
 			m_subscriber = subscriber;
-			m_publisher.subscribe(m_parent);
+			auto publisher = m_publisher;
+			auto parent = m_parent;
+			m_scheduler.schedule(Schedulable([publisher, parent]() mutable { publisher.subscribe(parent); }));
 		}
 
 	private:
-		Processor<T, R>					  &m_parent;
-		Publisher<T>					   m_publisher;
-		Subscriber<R>					   m_subscriber;
-		function<R(const T & /* value */)> m_method;
+		Processor<T, T> &m_parent;
+		Publisher<T>	 m_publisher;
+		Subscriber<T>	 m_subscriber;
+		Scheduler		&m_scheduler;
 	};
 } // namespace recpp

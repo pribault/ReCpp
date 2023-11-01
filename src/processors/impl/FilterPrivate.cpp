@@ -20,8 +20,9 @@ export namespace recpp
 	{
 	public:
 		template <typename M>
-		explicit FilterPrivate(const Publisher<T> &publisher, M method)
-			: m_publisher(publisher)
+		explicit FilterPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+			: m_parent(parent)
+			, m_publisher(publisher)
 			, m_method(method)
 		{
 		}
@@ -58,13 +59,8 @@ export namespace recpp
 			m_publisher.subscribe(m_parent);
 		}
 
-		void setParent(const Processor<T, R> &parent)
-		{
-			m_parent = parent;
-		}
-
 	private:
-		Processor<T, R>					   m_parent;
+		Processor<T, R>					  &m_parent;
 		Publisher<T>					   m_publisher;
 		std::vector<FilterSubscription>	   m_subscriptions;
 		Subscriber<R>					   m_subscriber;

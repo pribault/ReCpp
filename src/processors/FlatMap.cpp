@@ -15,9 +15,8 @@ export namespace recpp
 	public:
 		template <typename M>
 		explicit FlatMap(const Publisher<T> &publisher, M method)
-			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FlatMapPrivate<T, R>(publisher, method)))
+			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FlatMapPrivate<T, R>(*this, publisher, method)))
 		{
-			static_cast<FlatMapPrivate<T, R> *>(Publisher<R>::d_ptr.get())->setParent(*this);
 		}
 	};
 } // namespace recpp

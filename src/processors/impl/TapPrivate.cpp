@@ -20,8 +20,9 @@ export namespace recpp
 	{
 	public:
 		template <typename N, typename E, typename C>
-		explicit TapPrivate(const Publisher<T> &publisher, N onNextMethod, E onErrorMethod, C onCompleteMethod)
-			: m_publisher(publisher)
+		explicit TapPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, N onNextMethod, E onErrorMethod, C onCompleteMethod)
+			: m_parent(parent)
+			, m_publisher(publisher)
 			, m_onNextMethod(onNextMethod)
 			, m_onErrorMethod(onErrorMethod)
 			, m_onCompleteMethod(onCompleteMethod)
@@ -61,13 +62,8 @@ export namespace recpp
 			m_publisher.subscribe(m_parent);
 		}
 
-		void setParent(const Processor<T, T> &parent)
-		{
-			m_parent = parent;
-		}
-
 	private:
-		Processor<T, T>									  m_parent;
+		Processor<T, T>									 &m_parent;
 		Publisher<T>									  m_publisher;
 		Subscriber<T>									  m_subscriber;
 		function<void(const T & /* value */)>			  m_onNextMethod;

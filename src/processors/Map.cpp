@@ -15,9 +15,8 @@ export namespace recpp
 	public:
 		template <typename M>
 		explicit Map(const Publisher<T> &publisher, M method)
-			: Processor<T, R>(shared_ptr<Processor<T, R>>(new MapPrivate<T, R>(publisher, method)))
+			: Processor<T, R>(shared_ptr<Processor<T, R>>(new MapPrivate<T, R>(*this, publisher, method)))
 		{
-			static_cast<MapPrivate<T, R> *>(Publisher<R>::d_ptr.get())->setParent(*this);
 		}
 	};
 } // namespace recpp

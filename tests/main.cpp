@@ -2,16 +2,22 @@ import recpp;
 
 import <iostream>;
 import <ranges>;
-import <vector>;
 import <string>;
+import <thread>;
+import <vector>;
 
-import recpp.processors.Map;
+import recpp.async.Schedulable;
+import recpp.async.ThreadPool;
 
 using namespace recpp;
 using namespace std;
 
 int main()
 {
+	ThreadPool pool(4);
+
+	cout << "[" << this_thread::get_id() << "] Hello from main thread!" << endl;
+
 	const vector<int> values({1, 2, 3});
 	// Observable<int>::defer([]() { return Observable<int>::just(66); })
 	// Observable<int>::just(42)
@@ -28,16 +34,18 @@ int main()
 	// 	})
 	// Observable<int>::range(values.begin(), values.end())
 	Observable<int>::range(values)
-		.map<int>([](int value) { return value + 2; })
-		.doOnNext([](int value) { cout << "doOnNext: " << value << endl; })
-		.filter<int>([](int value) { return value % 2 == 1; })
-		.flatMap<string>([&values](int value)
-						 { return Observable<int>::range(values).map<string>([value](int value2) { return to_string(value) + "x" + to_string(value2); }); })
+		// .map<int>([](int value) { return value + 2; })
+		.doOnNext([](int value) { cout << "[" << this_thread::get_id() << "] doOnNext: " << value << endl; })
+		// .filter<int>([](int value) { return value % 2 == 1; })
+		// .flatMap<string>([&values](int value)
+		// 				 { return Observable<int>::range(values).map<string>([value](int value2) { return to_string(value) + "x" + to_string(value2); }); })
 		// .flatMap<string>([](int value)
 		// {
 		// 	return Observable<string>::never();
 		// })
-		.subscribe([](auto value) { cout << "value=" << value << endl; },
+		// .subscribeOn(pool)
+		.observeOn(pool)
+		.subscribe([](auto value) { cout << "[" << this_thread::get_id() << "] value=" << value << endl; },
 				   [](const exception_ptr &e)
 				   {
 					   try
@@ -46,9 +54,12 @@ int main()
 					   }
 					   catch (const exception &exception)
 					   {
-						   cerr << "error: " << exception.what() << endl;
+						   cerr << "[" << this_thread::get_id() << "] error: " << exception.what() << endl;
 					   }
 				   },
-				   []() { cout << "completed!" << endl; });
+				   []() { cout << "[" << this_thread::get_id() << "] completed!" << endl; });
+
+	this_thread::sleep_for(chrono::seconds(2));
+
 	return 0;
 }

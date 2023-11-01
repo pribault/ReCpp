@@ -21,8 +21,9 @@ export namespace recpp
 	{
 	public:
 		template <typename M>
-		explicit FlatMapPrivate(const Publisher<T> &publisher, M method)
-			: m_publisher(publisher)
+		explicit FlatMapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+			: m_parent(parent)
+			, m_publisher(publisher)
 			, m_method(method)
 		{
 		}
@@ -66,13 +67,8 @@ export namespace recpp
 			m_publisher.subscribe(m_parent);
 		}
 
-		void setParent(const Processor<T, R> &parent)
-		{
-			m_parent = parent;
-		}
-
 	private:
-		Processor<T, R>								  m_parent;
+		Processor<T, R>								 &m_parent;
 		Publisher<T>								  m_publisher;
 		Subscriber<R>								  m_subscriber;
 		function<Publisher<R>(const T & /* value */)> m_method;

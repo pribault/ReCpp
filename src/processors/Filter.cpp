@@ -15,9 +15,8 @@ export namespace recpp
 	public:
 		template <typename M>
 		explicit Filter(const Publisher<T> &publisher, M method)
-			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FilterPrivate<T, R>(publisher, method)))
+			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FilterPrivate<T, R>(*this, publisher, method)))
 		{
-			static_cast<FilterPrivate<T, R> *>(Publisher<R>::d_ptr.get())->setParent(*this);
 		}
 	};
 } // namespace recpp
