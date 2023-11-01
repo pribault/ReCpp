@@ -14,6 +14,7 @@ import recpp.processors.ObserveOn;
 import recpp.processors.SubscribeOn;
 import recpp.processors.Tap;
 import recpp.subscribers.DefaultSubscriber;
+import recpp.subscribers.SingleSubscriber;
 
 import <functional>;
 
@@ -33,9 +34,9 @@ export namespace recpp
 		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
 		using OnCompleteMethod = function<void()>;
 
-		static Single<T> create(const function<void(Subscriber<T> & /* subscriber */)> &function)
+		static Single<T> create(const function<void(SingleSubscriber<T> &)> &method)
 		{
-			return Single<T>(shared_ptr<Publisher<T>>(new CreatePublisher<T>(function)));
+			return Single<T>(shared_ptr<Publisher<T>>(new CreatePublisher<T, SingleSubscriber<T>>(method)));
 		}
 
 		static Single<T> defer(const function<Single<T>()> &function)

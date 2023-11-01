@@ -2,25 +2,31 @@ export module recpp.publishers.impl.CreatePublisher;
 
 import rscpp;
 
+import <functional>;
+
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
-	template <typename T, typename F>
+	template <typename T, typename S>
 	class CreatePublisher : public Publisher<T>
 	{
 	public:
-		CreatePublisher(F function)
-			: m_function(function)
+		using CreateMethod = function<void(S & /* subscriber */)>;
+
+		CreatePublisher(const CreateMethod &method)
+			: m_method(method)
 		{
 		}
 
 		void subscribe(Subscriber<T> &subscriber) override
 		{
-			m_function(subscriber);
+			auto s = S(subscriber);
+			m_method(s);
 		}
 
 	private:
-		F m_function;
+		CreateMethod m_method;
 	};
 } // namespace recpp

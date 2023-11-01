@@ -45,6 +45,8 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/publishers/Single.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/impl/DefaultSubscriberPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/DefaultSubscriber.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/ObservableSubscriber.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/subscribers/SingleSubscriber.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/EmptySubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/FilterSubscriptionPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/subscriptions/impl/ForwardSubscriptionPrivate.cpp
