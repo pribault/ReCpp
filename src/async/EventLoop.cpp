@@ -17,7 +17,7 @@ export namespace recpp
 
 		void run()
 		{
-			while (!m_stop.load())
+			while (!m_stop)
 			{
 				auto schedulable = m_queue.blockingPop();
 				if (schedulable)
@@ -29,7 +29,7 @@ export namespace recpp
 		{
 			const auto start = Clock::now();
 
-			while (!m_stop.load())
+			while (!m_stop)
 			{
 				const auto now = Clock::now();
 				const auto diff = now - start;

@@ -23,6 +23,7 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/Scheduler.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/ThreadPool.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/ThreadPoolWorker.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/async/WorkerThread.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/AndThenPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FilterPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FlatMapPrivate.cpp
