@@ -17,6 +17,7 @@ target_sources(ReCpp
 	PUBLIC
 		FILE_SET CXX_MODULES FILES
 			${CMAKE_CURRENT_SOURCE_DIR}/src/ReCpp.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/async/EventLoop.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/Schedulable.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/SchedulableQueue.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/Scheduler.cpp
