@@ -20,8 +20,7 @@ export namespace recpp
 	class FlatMapPrivate : public Processor<T, R>
 	{
 	public:
-		template <typename M>
-		explicit FlatMapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+		explicit FlatMapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, const function<Publisher<R>(const T & /* value */)> &method)
 			: m_parent(parent)
 			, m_publisher(publisher)
 			, m_method(method)

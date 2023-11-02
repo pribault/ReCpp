@@ -3,9 +3,11 @@ export module recpp.processors.Map;
 import recpp.processors.impl.MapPrivate;
 import rscpp.Processor;
 
+import <functional>;
 import <memory>;
 
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
@@ -13,8 +15,7 @@ export namespace recpp
 	class Map : public Processor<T, R>
 	{
 	public:
-		template <typename M>
-		explicit Map(const Publisher<T> &publisher, M method)
+		explicit Map(const Publisher<T> &publisher, const function<R(const T & /* value */)> &method)
 			: Processor<T, R>(shared_ptr<Processor<T, R>>(new MapPrivate<T, R>(*this, publisher, method)))
 		{
 		}

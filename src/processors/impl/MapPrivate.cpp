@@ -19,8 +19,7 @@ export namespace recpp
 	class MapPrivate : public Processor<T, R>
 	{
 	public:
-		template <typename M>
-		explicit MapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, M method)
+		explicit MapPrivate(Processor<T, R> &parent, const Publisher<T> &publisher, const function<R(const T & /* value */)> &method)
 			: m_parent(parent)
 			, m_publisher(publisher)
 			, m_method(method)

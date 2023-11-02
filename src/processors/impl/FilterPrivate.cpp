@@ -19,8 +19,7 @@ export namespace recpp
 	class FilterPrivate : public Processor<T, T>
 	{
 	public:
-		template <typename M>
-		explicit FilterPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, M method)
+		explicit FilterPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, const function<bool(const T & /* value */)> &method)
 			: m_parent(parent)
 			, m_publisher(publisher)
 			, m_method(method)

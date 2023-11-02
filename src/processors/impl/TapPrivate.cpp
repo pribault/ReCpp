@@ -19,8 +19,12 @@ export namespace recpp
 	class TapPrivate : public Processor<T, T>
 	{
 	public:
-		template <typename N, typename E, typename C>
-		explicit TapPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, N onNextMethod, E onErrorMethod, C onCompleteMethod)
+		using OnNextMethod = function<void(const T & /* value */)>;
+		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
+		using OnCompleteMethod = function<void()>;
+
+		explicit TapPrivate(Processor<T, T> &parent, const Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+							const OnCompleteMethod &onCompleteMethod)
 			: m_parent(parent)
 			, m_publisher(publisher)
 			, m_onNextMethod(onNextMethod)

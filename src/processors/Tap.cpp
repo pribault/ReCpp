@@ -3,9 +3,11 @@ export module recpp.processors.Tap;
 import recpp.processors.impl.TapPrivate;
 import rscpp.Processor;
 
+import <functional>;
 import <memory>;
 
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
@@ -13,8 +15,12 @@ export namespace recpp
 	class Tap : public Processor<T, T>
 	{
 	public:
-		template <typename N, typename E, typename C>
-		explicit Tap(const Publisher<T> &publisher, N onNextMethod, E onErrorMethod, C onCompleteMethod)
+		using OnNextMethod = function<void(const T & /* value */)>;
+		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
+		using OnCompleteMethod = function<void()>;
+
+		explicit Tap(const Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+					 const OnCompleteMethod &onCompleteMethod)
 			: Processor<T, T>(shared_ptr<Processor<T, T>>(new TapPrivate<T>(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
 		{
 		}

@@ -30,7 +30,7 @@ export namespace recpp
 		friend class Single;
 
 	public:
-		using OnNextMethod = function<void(const T & /* value */)>;
+		using OnSuccessMethod = function<void(const T & /* value */)>;
 		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
 		using OnCompleteMethod = function<void()>;
 
@@ -41,7 +41,7 @@ export namespace recpp
 
 		static Single<T> defer(const function<Single<T>()> &function)
 		{
-			return Single<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T>(function)));
+			return Single<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T, Single<T>>(function)));
 		}
 
 		static Single<T> error(const exception_ptr &error)
@@ -59,9 +59,9 @@ export namespace recpp
 			return Single<T>(shared_ptr<Publisher<T>>(new NeverPublisher<T>()));
 		}
 
-		void subscribe(const OnNextMethod &onNext, const OnErrorMethod &onError, const OnCompleteMethod &onComplete)
+		void subscribe(const OnSuccessMethod &onSuccess, const OnErrorMethod &onError)
 		{
-			auto subscriber = DefaultSubscriber<T>(onNext, onError, onComplete);
+			auto subscriber = DefaultSubscriber<T>(onSuccess, onError, nullptr);
 			Publisher<T>::subscribe(subscriber);
 		}
 
@@ -77,29 +77,25 @@ export namespace recpp
 			return Single<R>(shared_ptr<Publisher<R>>(new FlatMap<T, R>(*this, method)));
 		}
 
-		Single<T> doOnComplete(const OnCompleteMethod &method)
-		{
-			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, nullptr, method)));
-		}
-
 		Single<T> doOnError(const OnErrorMethod &method)
 		{
 			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, nullptr)));
 		}
 
-		Single<T> doOnNext(const OnNextMethod &method)
+		Single<T> doOnSuccess(const OnSuccessMethod &method)
 		{
 			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, method, nullptr, nullptr)));
 		}
 
 		Single<T> doOnTerminate(const OnCompleteMethod &method)
 		{
-			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, method)));
+			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(
+				*this, nullptr, [method](const exception_ptr &) { method(); }, method)));
 		}
 
-		Single<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+		Single<T> tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod)
 		{
-			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
+			return Single<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, onSuccessMethod, onErrorMethod, nullptr)));
 		}
 
 		Single<T> observeOn(Scheduler &scheduler)

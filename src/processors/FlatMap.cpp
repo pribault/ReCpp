@@ -3,9 +3,11 @@ export module recpp.processors.FlatMap;
 import recpp.processors.impl.FlatMapPrivate;
 import rscpp.Processor;
 
+import <functional>;
 import <memory>;
 
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
@@ -13,8 +15,7 @@ export namespace recpp
 	class FlatMap : public Processor<T, R>
 	{
 	public:
-		template <typename M>
-		explicit FlatMap(const Publisher<T> &publisher, M method)
+		explicit FlatMap(const Publisher<T> &publisher, const function<Publisher<R>(const T & /* value */)> &method)
 			: Processor<T, R>(shared_ptr<Processor<T, R>>(new FlatMapPrivate<T, R>(*this, publisher, method)))
 		{
 		}

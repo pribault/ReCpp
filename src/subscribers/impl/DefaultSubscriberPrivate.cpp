@@ -17,8 +17,11 @@ export namespace recpp
 	class DefaultSubscriberPrivate : public Subscriber<T>
 	{
 	public:
-		template <typename N, typename E, typename C>
-		explicit DefaultSubscriberPrivate(N onNextMethod, E onErrorMethod, C onCompleteMethod)
+		using OnNextMethod = function<void(const T & /* value */)>;
+		using OnErrorMethod = function<void(const exception_ptr & /* error */)>;
+		using OnCompleteMethod = function<void()>;
+
+		explicit DefaultSubscriberPrivate(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 			: m_onNextMethod(onNextMethod)
 			, m_onErrorMethod(onErrorMethod)
 			, m_onCompleteMethod(onCompleteMethod)

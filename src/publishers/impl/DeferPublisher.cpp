@@ -2,15 +2,18 @@ export module recpp.publishers.impl.DeferPublisher;
 
 import rscpp;
 
+import <functional>;
+
 using namespace rscpp;
+using namespace std;
 
 export namespace recpp
 {
-	template <typename T, typename F>
+	template <typename T, typename P>
 	class DeferPublisher : public Publisher<T>
 	{
 	public:
-		DeferPublisher(F function)
+		DeferPublisher(const function<P()> &function)
 			: m_function(function)
 		{
 		}
@@ -21,6 +24,6 @@ export namespace recpp
 		}
 
 	private:
-		F m_function;
+		function<P()> m_function;
 	};
 } // namespace recpp

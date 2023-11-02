@@ -45,7 +45,7 @@ export namespace recpp
 
 		static Observable<T> defer(const function<Observable<T>()> &function)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T>(function)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new DeferPublisher<T, Observable<T>>(function)));
 		}
 
 		static Observable<T> empty()
@@ -120,7 +120,8 @@ export namespace recpp
 
 		Observable<T> doOnTerminate(const OnCompleteMethod &method)
 		{
-			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(*this, nullptr, method, method)));
+			return Observable<T>(shared_ptr<Publisher<T>>(new Tap<T>(
+				*this, nullptr, [method](const exception_ptr &) { method(); }, method)));
 		}
 
 		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
