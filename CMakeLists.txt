@@ -22,12 +22,14 @@ target_sources(ReCpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/Scheduler.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/ThreadPool.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/async/ThreadPoolWorker.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/AndThenPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FilterPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/FlatMapPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/MapPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/ObserveOnPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/SubscribeOnPrivate.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/impl/TapPrivate.cpp
+			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/AndThen.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Filter.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/FlatMap.cpp
 			${CMAKE_CURRENT_SOURCE_DIR}/src/processors/Map.cpp

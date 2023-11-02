@@ -6,7 +6,6 @@ import rscpp.Subscription;
 import <exception>;
 import <functional>;
 import <limits>;
-import <memory>;
 
 using namespace rscpp;
 using namespace std;
@@ -32,7 +31,7 @@ export namespace recpp
 		{
 			m_subscription = subscription;
 			m_remaining = numeric_limits<size_t>::max();
-			m_subscription.request(numeric_limits<size_t>::max());
+			m_subscription.request(m_remaining);
 		}
 
 		void onNext(const T &value) override
@@ -43,7 +42,7 @@ export namespace recpp
 			if (!m_remaining)
 			{
 				m_remaining = numeric_limits<size_t>::max();
-				m_subscription.request(numeric_limits<size_t>::max());
+				m_subscription.request(m_remaining);
 			}
 		}
 

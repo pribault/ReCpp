@@ -8,6 +8,7 @@ import recpp.publishers.impl.DeferPublisher;
 import recpp.publishers.impl.EmptyPublisher;
 import recpp.publishers.impl.ErrorPublisher;
 import recpp.publishers.impl.NeverPublisher;
+import recpp.processors.AndThen;
 import recpp.processors.ObserveOn;
 import recpp.processors.SubscribeOn;
 import recpp.processors.Tap;
@@ -87,6 +88,11 @@ export namespace recpp
 		Completable subscribeOn(Scheduler &scheduler)
 		{
 			return Completable(shared_ptr<Publisher<int>>(new SubscribeOn<int>(*this, scheduler)));
+		}
+
+		Completable andThen(const Completable &completable)
+		{
+			return Completable(shared_ptr<Publisher<int>>(new AndThen<int, int>(*this, completable)));
 		}
 
 	protected:

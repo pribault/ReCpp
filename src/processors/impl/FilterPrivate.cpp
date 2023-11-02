@@ -8,7 +8,6 @@ import rscpp.Subscription;
 
 import <exception>;
 import <functional>;
-import <memory>;
 
 using namespace rscpp;
 using namespace std;
