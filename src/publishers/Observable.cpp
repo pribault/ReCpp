@@ -18,7 +18,6 @@ import recpp.processors.SubscribeOn;
 import recpp.processors.Tap;
 import recpp.subscribers.DefaultSubscriber;
 import recpp.subscribers.ObservableSubscriber;
-import recpp.subscriptions.EmptySubscription;
 
 import <functional>;
 
