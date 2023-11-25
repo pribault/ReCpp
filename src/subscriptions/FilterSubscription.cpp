@@ -1,26 +1,44 @@
-export module recpp.subscriptions.FilterSubscription;
+#include "recpp/subscriptions/FilterSubscription.h"
 
-import recpp.subscriptions.impl.FilterSubscriptionPrivate;
-import rscpp.Subscription;
-
-import <memory>;
-
+using namespace recpp;
 using namespace rscpp;
 using namespace std;
 
-export namespace recpp
+FilterSubscription::FilterSubscription(const Subscription &subscription)
+	: Subscription(shared_ptr<Subscription>(new Impl(subscription)))
 {
-	class FilterSubscription : public Subscription
-	{
-	public:
-		FilterSubscription(const Subscription &subscription)
-			: Subscription(shared_ptr<Subscription>(new FilterSubscriptionPrivate(subscription)))
-		{
-		}
+}
 
-		void onNext(bool filtered)
-		{
-			static_cast<FilterSubscriptionPrivate *>(d_ptr.get())->onNext(filtered);
-		}
-	};
-} // namespace recpp
+void FilterSubscription::onNext(bool filtered)
+{
+	static_cast<Impl *>(d_ptr.get())->onNext(filtered);
+}
+
+FilterSubscription::Impl::Impl(const Subscription &subscription)
+	: m_subscription(subscription)
+{
+}
+
+void FilterSubscription::Impl::request(size_t count)
+{
+	m_requested += count;
+	m_waiting += count;
+	m_subscription.request(count);
+}
+
+void FilterSubscription::Impl::cancel()
+{
+	m_subscription.cancel();
+}
+
+void FilterSubscription::Impl::onNext(bool filtered)
+{
+	m_waiting--;
+	if (!filtered)
+		m_requested--;
+	if (!m_waiting && m_requested)
+	{
+		m_waiting = m_requested;
+		m_subscription.request(m_waiting);
+	}
+}

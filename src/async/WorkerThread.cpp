@@ -1,50 +1,31 @@
-export module recpp.async.WorkerThread;
+#include "recpp/async/WorkerThread.h"
 
-import recpp.async.Scheduler;
-
-import <atomic>;
-import <thread>;
-
+using namespace recpp;
 using namespace std;
 
-export namespace recpp
+WorkerThread::WorkerThread()
+	: m_thread(&WorkerThread::run, this)
 {
-	class WorkerThread : public Scheduler
+}
+
+WorkerThread::~WorkerThread()
+{
+	stop();
+}
+
+void WorkerThread::stop()
+{
+	m_stop = true;
+	m_queue.stop();
+	m_queue.notifyAll();
+}
+
+void WorkerThread::run()
+{
+	while (!m_stop)
 	{
-	public:
-		using Clock = Scheduler::Clock;
-		using Duration = Scheduler::Duration;
-		using TimePoint = Scheduler::TimePoint;
-
-		WorkerThread()
-			: m_thread(&WorkerThread::run, this)
-		{
-		}
-
-		~WorkerThread()
-		{
-			stop();
-		}
-
-		void stop()
-		{
-			m_stop = true;
-			m_queue.stop();
-			m_queue.notifyAll();
-		}
-
-	private:
-		void run()
-		{
-			while (!m_stop)
-			{
-				auto schedulable = m_queue.blockingPop();
-				if (schedulable)
-					schedulable.value()();
-			}
-		}
-
-		jthread		m_thread;
-		atomic_bool m_stop = false;
-	};
-} // namespace recpp
+		auto schedulable = m_queue.blockingPop();
+		if (schedulable)
+			schedulable.value()();
+	}
+}

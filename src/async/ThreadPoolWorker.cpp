@@ -1,47 +1,34 @@
-export module recpp.async.ThreadPoolWorker;
+#include "recpp/async/ThreadPoolWorker.h"
 
-import recpp.async.SchedulableQueue;
+#include "recpp/async/SchedulableQueue.h"
 
-import <atomic>;
-import <thread>;
-
+using namespace recpp;
 using namespace std;
 
-export namespace recpp
+ThreadPoolWorker::ThreadPoolWorker(SchedulableQueue &queue)
+	: m_queue(queue)
+	, m_thread(&ThreadPoolWorker::run, this)
+	, m_stop(false)
 {
-	class ThreadPoolWorker
+}
+
+ThreadPoolWorker::~ThreadPoolWorker()
+{
+	stop();
+	m_thread.join();
+}
+
+void ThreadPoolWorker::stop()
+{
+	m_stop = true;
+}
+
+void ThreadPoolWorker::run()
+{
+	while (!m_stop)
 	{
-	public:
-		explicit ThreadPoolWorker(SchedulableQueue &queue)
-			: m_queue(queue)
-			, m_thread(&ThreadPoolWorker::run, this)
-			, m_stop(false)
-		{
-		}
-
-		~ThreadPoolWorker()
-		{
-			stop();
-		}
-
-		void stop()
-		{
-			m_stop = true;
-		}
-
-	private:
-		void run()
-		{
-			while (!m_stop)
-			{
-				auto schedulable = m_queue.blockingPop();
-				if (schedulable)
-					schedulable.value()();
-			}
-		}
-
-		SchedulableQueue &m_queue;
-		jthread			  m_thread;
-		atomic<bool>	  m_stop;
-	};
-} // namespace recpp
+		auto schedulable = m_queue.blockingPop();
+		if (schedulable)
+			schedulable.value()();
+	}
+}

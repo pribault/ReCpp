@@ -1,43 +1,24 @@
-export module recpp.subscribers.CompletableSubscriber;
+#include "recpp/subscribers/CompletableSubscriber.h"
 
-import rscpp.Subscriber;
-
-import <exception>;
-
-using namespace rscpp;
-using namespace std;
-
-export namespace recpp
+recpp::CompletableSubscriber::CompletableSubscriber(const rscpp::Subscriber<int> &subscriber)
+	: m_subscriber(subscriber)
 {
-	template <typename T>
-	class CompletableSubscriber
+}
+
+void recpp::CompletableSubscriber::onError(const std::exception_ptr &error)
+{
+	if (!m_ended)
 	{
-	public:
-		CompletableSubscriber(const Subscriber<T> &subscriber)
-			: m_subscriber(subscriber)
-		{
-		}
+		m_ended = true;
+		m_subscriber.onError(error);
+	}
+}
 
-		void onError(const exception_ptr &error)
-		{
-			if (!m_ended)
-			{
-				m_ended = true;
-				m_subscriber.onError(error);
-			}
-		}
-
-		void onComplete()
-		{
-			if (!m_ended)
-			{
-				m_ended = true;
-				m_subscriber.onComplete();
-			}
-		}
-
-	private:
-		Subscriber<T> m_subscriber;
-		bool		  m_ended = false;
-	};
-} // namespace recpp
+void recpp::CompletableSubscriber::onComplete()
+{
+	if (!m_ended)
+	{
+		m_ended = true;
+		m_subscriber.onComplete();
+	}
+}

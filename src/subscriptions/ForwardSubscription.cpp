@@ -1,21 +1,25 @@
-export module recpp.subscriptions.ForwardSubscription;
+#include "recpp/subscriptions/ForwardSubscription.h"
 
-import recpp.subscriptions.impl.ForwardSubscriptionPrivate;
-import rscpp.Subscription;
-
-import <memory>;
-
+using namespace recpp;
 using namespace rscpp;
 using namespace std;
 
-export namespace recpp
+ForwardSubscription::ForwardSubscription(const Subscription &subscription)
+	: Subscription(shared_ptr<Subscription>(new Impl(subscription)))
 {
-	class ForwardSubscription : public Subscription
-	{
-	public:
-		ForwardSubscription(const Subscription &subscription)
-			: Subscription(shared_ptr<Subscription>(new ForwardSubscriptionPrivate(subscription)))
-		{
-		}
-	};
-} // namespace recpp
+}
+
+ForwardSubscription::Impl::Impl(const Subscription &subscription)
+	: m_subscription(subscription)
+{
+}
+
+void ForwardSubscription::Impl::request(size_t count)
+{
+	m_subscription.request(count);
+}
+
+void ForwardSubscription::Impl::cancel()
+{
+	m_subscription.cancel();
+}

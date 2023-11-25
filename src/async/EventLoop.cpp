@@ -1,57 +1,40 @@
-export module recpp.async.EventLoop;
+#include "recpp/async/EventLoop.h"
 
-import recpp.async.Scheduler;
-
-import <atomic>;
-
+using namespace recpp;
 using namespace std;
 
-export namespace recpp
+void EventLoop::run()
 {
-	class EventLoop : public Scheduler
+	while (!m_stop)
 	{
-	public:
-		using Clock = Scheduler::Clock;
-		using Duration = Scheduler::Duration;
-		using TimePoint = Scheduler::TimePoint;
+		auto schedulable = m_queue.blockingPop();
+		if (schedulable)
+			schedulable.value()();
+	}
+}
 
-		void run()
-		{
-			while (!m_stop)
-			{
-				auto schedulable = m_queue.blockingPop();
-				if (schedulable)
-					schedulable.value()();
-			}
-		}
+void EventLoop::runFor(const Duration &duration)
+{
+	const auto start = Clock::now();
 
-		void runFor(const Duration &duration)
-		{
-			const auto start = Clock::now();
+	while (!m_stop)
+	{
+		const auto now = Clock::now();
+		const auto diff = now - start;
+		if (diff >= duration)
+			break;
 
-			while (!m_stop)
-			{
-				const auto now = Clock::now();
-				const auto diff = now - start;
-				if (diff >= duration)
-					break;
+		auto schedulable = m_queue.pop(duration - diff);
+		if (!schedulable)
+			break;
 
-				auto schedulable = m_queue.pop(duration - diff);
-				if (!schedulable)
-					break;
+		schedulable.value()();
+	}
+}
 
-				schedulable.value()();
-			}
-		}
-
-		void stop()
-		{
-			m_stop = true;
-			m_queue.stop();
-			m_queue.notifyAll();
-		}
-
-	private:
-		atomic_bool m_stop = false;
-	};
-} // namespace recpp
+void EventLoop::stop()
+{
+	m_stop = true;
+	m_queue.stop();
+	m_queue.notifyAll();
+}

@@ -1,33 +1,19 @@
-export module recpp.async.Scheduler;
+#include "recpp/async/Scheduler.h"
 
-import recpp.async.Schedulable;
-import recpp.async.SchedulableQueue;
-
+using namespace recpp;
 using namespace std;
 
-export namespace recpp
+void Scheduler::schedule(const Schedulable &schedulable)
 {
-	class Scheduler
-	{
-	public:
-		using Clock = SchedulableQueue::Clock;
-		using Duration = SchedulableQueue::Duration;
-		using TimePoint = SchedulableQueue::TimePoint;
+	schedule(Clock::now(), schedulable);
+}
 
-		void schedule(const Schedulable &schedulable)
-		{
-			schedule(Clock::now(), schedulable);
-		}
-		void schedule(const TimePoint &timepoint, const Schedulable &schedulable)
-		{
-			m_queue.push(timepoint, schedulable);
-		}
-		void schedule(const Duration &duration, const Schedulable &schedulable)
-		{
-			schedule(Clock::now() + duration, schedulable);
-		}
+void Scheduler::schedule(const TimePoint &timepoint, const Schedulable &schedulable)
+{
+	m_queue.push(timepoint, schedulable);
+}
 
-	protected:
-		SchedulableQueue m_queue;
-	};
-} // namespace recpp
+void Scheduler::schedule(const Duration &duration, const Schedulable &schedulable)
+{
+	schedule(Clock::now() + duration, schedulable);
+}

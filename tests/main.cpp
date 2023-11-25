@@ -1,13 +1,14 @@
-import recpp;
+#include <recpp/async/Schedulable.h>
+#include <recpp/async/ThreadPool.h>
+#include <recpp/rx/Maybe.h>
+#include <recpp/rx/Observable.h>
+#include <recpp/rx/Single.h>
 
-import <iostream>;
-import <ranges>;
-import <string>;
-import <thread>;
-import <vector>;
-
-import recpp.async.Schedulable;
-import recpp.async.ThreadPool;
+#include <iostream>
+#include <ranges>
+#include <string>
+#include <thread>
+#include <vector>
 
 using namespace recpp;
 using namespace std;
@@ -34,16 +35,17 @@ int main()
 	// 	})
 	// Observable<int>::range(values.begin(), values.end())
 	Observable<int>::range(values)
-		// .map<int>([](int value) { return value + 2; })
+	// Maybe<int>::just(42)
 		.doOnNext([](int value) { cout << "[" << this_thread::get_id() << "] doOnNext: " << value << endl; })
-		// .filter<int>([](int value) { return value % 2 == 1; })
+		.map<int>([](int value) { return value + 2; })
+		// .filter([](int value) { return value % 2 == 1; })
 		// .flatMap<string>([&values](int value)
 		// 				 { return Observable<int>::range(values).map<string>([value](int value2) { return to_string(value) + "x" + to_string(value2); }); })
 		// .flatMap<string>([](int value)
 		// {
 		// 	return Observable<string>::never();
 		// })
-		// .subscribeOn(pool)
+		.subscribeOn(pool)
 		.observeOn(pool)
 		.subscribe([](auto value) { cout << "[" << this_thread::get_id() << "] value=" << value << endl; },
 				   [](const exception_ptr &e)

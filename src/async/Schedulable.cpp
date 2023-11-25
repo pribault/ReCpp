@@ -1,32 +1,20 @@
-export module recpp.async.Schedulable;
+#include "recpp/async/Schedulable.h"
 
-import <functional>;
-
+using namespace recpp;
 using namespace std;
 
-export namespace recpp
+Schedulable::Schedulable(const function<void(void)> &function)
+	: m_task(function)
 {
-	class Schedulable
-	{
-	public:
-		Schedulable(const function<void(void)> &function)
-			: m_task(function)
-		{
-		}
+}
 
-		void operator()()
-		{
-			if (m_task && !m_canceled)
-				m_task();
-		}
+void Schedulable::operator()()
+{
+	if (m_task && !m_canceled)
+		m_task();
+}
 
-		void cancel()
-		{
-			m_canceled = true;
-		}
-
-	private:
-		function<void(void)> m_task;
-		bool				 m_canceled = false;
-	};
-} // namespace recpp
+void Schedulable::cancel()
+{
+	m_canceled = true;
+}

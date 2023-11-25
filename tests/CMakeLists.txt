@@ -1,12 +1,18 @@
+cmake_minimum_required(VERSION 3.8)
 
-add_executable(ReCpp-test)
-
-set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 20)
-
-target_sources(ReCpp-test
-	PUBLIC
-		FILE_SET CXX_MODULES FILES
-			${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+project(ReCpp-test
+	VERSION			0.0.0
+	DESCRIPTION		"ReCpp test"
+	HOMEPAGE_URL	"https://github.com/pribault/ReCpp"
+	LANGUAGES		CXX
 )
 
-target_link_libraries(ReCpp-test ReCpp)
+set(SOURCES
+	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+)
+
+add_executable(ReCpp-test ${SOURCES})
+
+set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 17)
+
+target_link_libraries(ReCpp-test ReCpp RsCpp)
