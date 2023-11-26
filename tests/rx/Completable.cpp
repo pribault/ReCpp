@@ -6,6 +6,11 @@
 using namespace recpp;
 using namespace std;
 
+namespace
+{
+	constexpr auto sleepDuration = chrono::milliseconds(10);
+}
+
 TEST(Completable, complete)
 {
 	bool completed = false;
@@ -182,7 +187,7 @@ TEST(Completable, doOnTerminate)
 						.subscribe());
 	EXPECT_TRUE(terminated);
 
-	EXPECT_NO_THROW(Completable::never().doOnTerminate([]() { throw runtime_error("terminate handler called"); }).subscribe());
+	EXPECT_NO_THROW(Completable::never().doOnTerminate([]() { throw runtime_error("termination handler called"); }).subscribe());
 }
 
 TEST(Completable, tap)
@@ -244,7 +249,7 @@ TEST(Completable, observeOn)
 					testFailed = true;
 			},
 			[&testFailed](const auto &exception) { testFailed = true; });
-	this_thread::sleep_for(chrono::milliseconds(2));
+	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
 
@@ -267,7 +272,7 @@ TEST(Completable, observeOn)
 					   if (this_thread::get_id() != workerThreadId)
 						   testFailed = true;
 				   });
-	this_thread::sleep_for(chrono::milliseconds(2));
+	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
 }
@@ -298,7 +303,7 @@ TEST(Completable, subscribeOn)
 					testFailed = true;
 			},
 			[&testFailed](const auto &exception) { testFailed = true; });
-	this_thread::sleep_for(chrono::milliseconds(2));
+	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
 
@@ -321,7 +326,7 @@ TEST(Completable, subscribeOn)
 					   if (this_thread::get_id() != workerThreadId)
 						   testFailed = true;
 				   });
-	this_thread::sleep_for(chrono::milliseconds(2));
+	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
 }
