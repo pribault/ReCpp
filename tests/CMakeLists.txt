@@ -18,6 +18,7 @@ project(ReCpp-test
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Completable.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/rx/Single.cpp
 )
 
 add_executable(ReCpp-test ${SOURCES})
