@@ -1,5 +1,6 @@
 #pragma once
 
+#include <recpp/subscribers/SingleSubscriber.h>
 #include <rscpp/Publisher.h>
 
 #include <functional>
@@ -31,7 +32,7 @@ namespace recpp
 
 		static Single<T> never();
 
-		void subscribe(const OnSuccessMethod &onSuccess, const OnErrorMethod &onError);
+		void subscribe(const OnSuccessMethod &onSuccess = nullptr, const OnErrorMethod &onError = nullptr);
 
 		template <typename R>
 		Single<R> map(const std::function<R(const T & /* value */)> &method);

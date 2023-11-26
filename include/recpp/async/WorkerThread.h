@@ -16,6 +16,8 @@ namespace recpp
 
 		void stop();
 
+		std::thread::id threadId() const;
+
 	private:
 		void run();
 

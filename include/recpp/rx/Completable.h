@@ -1,5 +1,6 @@
 #pragma once
 
+#include <recpp/subscribers/CompletableSubscriber.h>
 #include <rscpp/Publisher.h>
 
 #include <functional>
@@ -25,7 +26,7 @@ namespace recpp
 
 		static Completable never();
 
-		void subscribe(const OnCompleteMethod &onComplete, const OnErrorMethod &onError);
+		void subscribe(const OnCompleteMethod &onComplete = nullptr, const OnErrorMethod &onError = nullptr);
 
 		Completable doOnComplete(const OnCompleteMethod &method);
 

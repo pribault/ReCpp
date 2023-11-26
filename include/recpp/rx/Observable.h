@@ -1,5 +1,6 @@
 #pragma once
 
+#include <recpp/subscribers/ObservableSubscriber.h>
 #include <rscpp/Publisher.h>
 
 #include <functional>
@@ -38,7 +39,7 @@ namespace recpp
 		template <class R>
 		static Observable<T> range(R &&range);
 
-		void subscribe(const OnNextMethod &onNext, const OnErrorMethod &onError, const OnCompleteMethod &onComplete);
+		void subscribe(const OnNextMethod &onNext = nullptr, const OnErrorMethod &onError = nullptr, const OnCompleteMethod &onComplete = nullptr);
 
 		Observable<T> filter(const std::function<bool(const T & /* value */)> &method);
 

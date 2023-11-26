@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 
+include(FetchContent)
+
 project(ReCpp
 	VERSION			0.0.0
 	DESCRIPTION		"Reactive Extensions for C++"

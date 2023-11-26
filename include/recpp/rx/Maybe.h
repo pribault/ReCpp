@@ -1,5 +1,6 @@
 #pragma once
 
+#include <recpp/subscribers/MaybeSubscriber.h>
 #include <rscpp/Publisher.h>
 
 #include <functional>
@@ -33,7 +34,7 @@ namespace recpp
 
 		static Maybe<T> never();
 
-		void subscribe(const OnNextMethod &onNext, const OnErrorMethod &onError, const OnCompleteMethod &onComplete);
+		void subscribe(const OnNextMethod &onNext = nullptr, const OnErrorMethod &onError = nullptr, const OnCompleteMethod &onComplete = nullptr);
 
 		template <typename R>
 		Maybe<R> map(const std::function<R(const T & /* value */)> &method);

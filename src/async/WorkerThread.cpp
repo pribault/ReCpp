@@ -11,6 +11,7 @@ WorkerThread::WorkerThread()
 WorkerThread::~WorkerThread()
 {
 	stop();
+	m_thread.join();
 }
 
 void WorkerThread::stop()
@@ -18,6 +19,11 @@ void WorkerThread::stop()
 	m_stop = true;
 	m_queue.stop();
 	m_queue.notifyAll();
+}
+
+thread::id WorkerThread::threadId() const
+{
+	return m_thread.get_id();
 }
 
 void WorkerThread::run()
