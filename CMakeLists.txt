@@ -2,14 +2,19 @@ cmake_minimum_required(VERSION 3.8)
 
 include(FetchContent)
 
+FetchContent_Declare(
+	RsCpp
+	GIT_REPOSITORY	https://github.com/pribault/RsCpp.git
+	GIT_TAG			2c16b1533453586282a06f00c2313a95a4d33ba2
+)
+FetchContent_MakeAvailable(RsCpp)
+
 project(ReCpp
 	VERSION			0.0.0
 	DESCRIPTION		"Reactive Extensions for C++"
 	HOMEPAGE_URL	"https://github.com/pribault/ReCpp"
 	LANGUAGES		CXX
 )
-
-add_subdirectory(rscpp)
 
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/EventLoop.h
