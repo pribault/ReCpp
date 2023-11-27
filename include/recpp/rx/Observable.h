@@ -64,7 +64,7 @@ namespace recpp
 		Observable<T> subscribeOn(Scheduler &scheduler);
 
 	protected:
-		Observable(const std::shared_ptr<Publisher<T>> &dd);
+		Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp
 

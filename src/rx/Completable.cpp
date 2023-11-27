@@ -45,7 +45,7 @@ Completable Completable::defer(const function<Completable()> &function)
 void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, const Completable::OnErrorMethod &onError)
 {
 	auto subscriber = DefaultSubscriber<int>(nullptr, onError, onComplete);
-	Publisher<int>::subscribe(subscriber);
+	rscpp::Publisher<int>::subscribe(subscriber);
 }
 
 Completable Completable::doOnComplete(const Completable::OnCompleteMethod &method)
@@ -85,6 +85,6 @@ Completable Completable::andThen(const Completable &completable)
 }
 
 Completable::Completable(const shared_ptr<Publisher<int>> &dd)
-	: Publisher<int>(dd)
+	: rscpp::Publisher<int>(dd)
 {
 }

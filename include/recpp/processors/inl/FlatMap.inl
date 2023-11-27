@@ -31,7 +31,7 @@ void recpp::FlatMap<T, R>::Impl::onNext(const T &value)
 	auto result = m_method(value);
 	m_runningPublishers++;
 	auto subscriber =
-		DefaultSubscriber<R>([this](const R &value) { m_subscriber.onNext(value); }, [this](const exception_ptr &error) { m_subscriber.onError(error); },
+		DefaultSubscriber<R>([this](const R &value) { m_subscriber.onNext(value); }, [this](const std::exception_ptr &error) { m_subscriber.onError(error); },
 							 [this]()
 							 {
 								 m_runningPublishers--;

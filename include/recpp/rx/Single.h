@@ -53,7 +53,7 @@ namespace recpp
 		Single<T> subscribeOn(Scheduler &scheduler);
 
 	protected:
-		Single(const std::shared_ptr<Publisher<T>> &dd);
+		Single(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp
 

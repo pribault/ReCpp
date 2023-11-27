@@ -104,6 +104,6 @@ recpp::Single<T> recpp::Single<T>::subscribeOn(Scheduler &scheduler)
 
 template <typename T>
 recpp::Single<T>::Single(const std::shared_ptr<rscpp::Publisher<T>> &dd)
-	: Publisher<T>(dd)
+	: rscpp::Publisher<T>(dd)
 {
 }

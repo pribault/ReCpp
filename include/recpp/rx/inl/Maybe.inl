@@ -94,7 +94,7 @@ template <typename T>
 recpp::Maybe<T> recpp::Maybe<T>::doOnTerminate(const OnCompleteMethod &method)
 {
 	return Maybe<T>(std::shared_ptr<rscpp::Publisher<T>>(new Tap<T>(
-		*this, nullptr, [method](const exception_ptr &) { method(); }, method)));
+		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method)));
 }
 
 template <typename T>
