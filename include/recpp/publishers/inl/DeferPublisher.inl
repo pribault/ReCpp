@@ -9,5 +9,5 @@ recpp::DeferPublisher<T, P>::DeferPublisher(const std::function<P()> &function)
 template <typename T, typename P>
 void recpp::DeferPublisher<T, P>::subscribe(rscpp::Subscriber<T> &subscriber)
 {
-	m_function().rscpp::Publisher<T>::subscribe(subscriber);
+	m_function().rscpp::template Publisher<T>::subscribe(subscriber);
 }
