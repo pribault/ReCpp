@@ -100,4 +100,5 @@ target_link_libraries(ReCpp PRIVATE RsCpp)
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 
+include(CTest)
 add_subdirectory(tests)
