@@ -49,6 +49,8 @@ namespace recpp
 
 		Observable<T> filter(const std::function<bool(const T & /* value */)> &method);
 
+		Completable ignoreElements();
+
 		template <typename R>
 		Observable<R> map(const std::function<R(const T & /* value */)> &method);
 

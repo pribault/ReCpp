@@ -27,6 +27,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AndThen.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Map.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ObserveOn.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/SubscribeOn.h
@@ -34,6 +35,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AndThen.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Map.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ObserveOn.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/SubscribeOn.inl

@@ -46,6 +46,8 @@ namespace recpp
 		template <typename R>
 		Single<R> flatMap(const std::function<Single<R>(const T & /* value */)> &method);
 
+		Completable ignoreElement();
+
 		Single<T> doOnError(const OnErrorMethod &method);
 
 		Single<T> doOnSuccess(const OnSuccessMethod &method);

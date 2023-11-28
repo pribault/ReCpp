@@ -18,6 +18,13 @@ namespace recpp
 
 	class Completable : public rscpp::Publisher<int>
 	{
+		template <typename T>
+		friend class Maybe;
+		template <typename T>
+		friend class Observable;
+		template <typename T>
+		friend class Single;
+
 	public:
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 		using OnCompleteMethod = std::function<void()>;

@@ -1,16 +1,18 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/FlatMap.h>
+#include <recpp/processors/IgnoreElements.h>
+#include <recpp/processors/Map.h>
+#include <recpp/processors/ObserveOn.h>
+#include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
-#include <recpp/processors/FlatMap.h>
-#include <recpp/processors/Map.h>
-#include <recpp/processors/ObserveOn.h>
-#include <recpp/processors/SubscribeOn.h>
-#include <recpp/processors/Tap.h>
+#include <recpp/rx/Completable.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/SingleSubscriber.h>
 
@@ -63,6 +65,12 @@ template <typename R>
 recpp::Single<R> recpp::Single<T>::flatMap(const std::function<Single<R>(const T & /* value */)> &method)
 {
 	return Single<R>(std::shared_ptr<rscpp::Publisher<R>>(new FlatMap<T, R>(*this, method)));
+}
+
+template <typename T>
+recpp::Completable recpp::Single<T>::ignoreElement()
+{
+	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::IgnoreElements<int, int>(*this)));
 }
 
 template <typename T>

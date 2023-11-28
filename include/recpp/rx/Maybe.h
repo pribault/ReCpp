@@ -48,6 +48,8 @@ namespace recpp
 		template <typename R>
 		Maybe<R> flatMap(const std::function<Maybe<R>(const T & /* value */)> &method);
 
+		Completable ignoreElement();
+
 		Maybe<T> doOnComplete(const OnCompleteMethod &method);
 
 		Maybe<T> doOnError(const OnErrorMethod &method);

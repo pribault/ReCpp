@@ -211,6 +211,31 @@ TEST(Single, flatMap)
 								   [&errored](const auto &exception) { throw runtime_error("error handler called"); }));
 }
 
+TEST(Single, ignoreElement)
+{
+	bool succeeded = false;
+	bool completed = false;
+	EXPECT_NO_THROW(Single<int>::just(defaultValue)
+						.doOnSuccess(
+							[&succeeded](const auto value)
+							{
+								if (succeeded)
+									throw runtime_error("success handler called twice");
+								succeeded = true;
+							})
+						.ignoreElement()
+						.subscribe(
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_TRUE(succeeded);
+	EXPECT_TRUE(completed);
+}
+
 TEST(Single, doOnError)
 {
 	bool errored = false;

@@ -3,6 +3,7 @@
 #include <recpp/async/Scheduler.h>
 #include <recpp/processors/Filter.h>
 #include <recpp/processors/FlatMap.h>
+#include <recpp/processors/IgnoreElements.h>
 #include <recpp/processors/Map.h>
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/SubscribeOn.h>
@@ -14,6 +15,7 @@
 #include <recpp/publishers/JustPublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/publishers/RangePublisher.h>
+#include <recpp/rx/Completable.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/ObservableSubscriber.h>
 
@@ -78,6 +80,12 @@ template <typename T>
 recpp::Observable<T> recpp::Observable<T>::filter(const std::function<bool(const T & /* value */)> &method)
 {
 	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new Filter<T>(*this, method)));
+}
+
+template <typename T>
+recpp::Completable recpp::Observable<T>::ignoreElements()
+{
+	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::IgnoreElements<int, int>(*this)));
 }
 
 template <typename T>

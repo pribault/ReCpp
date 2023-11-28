@@ -1,17 +1,19 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/FlatMap.h>
+#include <recpp/processors/IgnoreElements.h>
+#include <recpp/processors/Map.h>
+#include <recpp/processors/ObserveOn.h>
+#include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
-#include <recpp/processors/FlatMap.h>
-#include <recpp/processors/Map.h>
-#include <recpp/processors/ObserveOn.h>
-#include <recpp/processors/SubscribeOn.h>
-#include <recpp/processors/Tap.h>
+#include <recpp/rx/Completable.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/MaybeSubscriber.h>
 
@@ -70,6 +72,12 @@ template <typename R>
 recpp::Maybe<R> recpp::Maybe<T>::flatMap(const std::function<Maybe<R>(const T & /* value */)> &method)
 {
 	return Maybe<R>(std::shared_ptr<rscpp::Publisher<R>>(new FlatMap<T, R>(*this, method)));
+}
+
+template <typename T>
+recpp::Completable recpp::Maybe<T>::ignoreElement()
+{
+	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::IgnoreElements<int, int>(*this)));
 }
 
 template <typename T>
