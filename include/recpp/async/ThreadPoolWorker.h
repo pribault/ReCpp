@@ -3,7 +3,7 @@
 #include <atomic>
 #include <thread>
 
-namespace recpp
+namespace recpp::async
 {
 	class SchedulableQueue;
 
@@ -23,4 +23,4 @@ namespace recpp
 		std::thread		  m_thread;
 		std::atomic<bool> m_stop;
 	};
-} // namespace recpp
+} // namespace recpp::async

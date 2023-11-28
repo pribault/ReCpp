@@ -13,6 +13,7 @@
 #include <iostream>
 
 using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 namespace

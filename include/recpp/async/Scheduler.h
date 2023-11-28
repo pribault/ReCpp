@@ -2,7 +2,7 @@
 
 #include <recpp/async/SchedulableQueue.h>
 
-namespace recpp
+namespace recpp::async
 {
 	class Schedulable;
 
@@ -22,4 +22,4 @@ namespace recpp
 	protected:
 		SchedulableQueue m_queue;
 	};
-} // namespace recpp
+} // namespace recpp::async

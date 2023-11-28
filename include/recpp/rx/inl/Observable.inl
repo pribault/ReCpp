@@ -134,13 +134,13 @@ recpp::Observable<T> recpp::Observable<T>::tap(const OnNextMethod &onNextMethod,
 }
 
 template <typename T>
-recpp::Observable<T> recpp::Observable<T>::observeOn(Scheduler &scheduler)
+recpp::Observable<T> recpp::Observable<T>::observeOn(async::Scheduler &scheduler)
 {
 	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new ObserveOn<T>(*this, scheduler)));
 }
 
 template <typename T>
-recpp::Observable<T> recpp::Observable<T>::subscribeOn(Scheduler &scheduler)
+recpp::Observable<T> recpp::Observable<T>::subscribeOn(async::Scheduler &scheduler)
 {
 	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new SubscribeOn<T>(*this, scheduler)));
 }

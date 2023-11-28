@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 void SchedulableQueue::push(const TimePoint &timePoint, const Schedulable &schedulable)

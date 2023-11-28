@@ -1,6 +1,6 @@
 #include "recpp/async/Scheduler.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 void Scheduler::schedule(const Schedulable &schedulable)

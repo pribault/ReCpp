@@ -1,6 +1,6 @@
 #include "recpp/async/WorkerThread.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 WorkerThread::WorkerThread()

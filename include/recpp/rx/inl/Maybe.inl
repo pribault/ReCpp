@@ -112,13 +112,13 @@ recpp::Maybe<T> recpp::Maybe<T>::tap(const OnNextMethod &onNextMethod, const OnE
 }
 
 template <typename T>
-recpp::Maybe<T> recpp::Maybe<T>::observeOn(Scheduler &scheduler)
+recpp::Maybe<T> recpp::Maybe<T>::observeOn(async::Scheduler &scheduler)
 {
 	return Maybe<T>(std::shared_ptr<rscpp::Publisher<T>>(new ObserveOn<T>(*this, scheduler)));
 }
 
 template <typename T>
-recpp::Maybe<T> recpp::Maybe<T>::subscribeOn(Scheduler &scheduler)
+recpp::Maybe<T> recpp::Maybe<T>::subscribeOn(async::Scheduler &scheduler)
 {
 	return Maybe<T>(std::shared_ptr<rscpp::Publisher<T>>(new SubscribeOn<T>(*this, scheduler)));
 }

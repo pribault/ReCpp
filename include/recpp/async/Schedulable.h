@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::async
 {
 	class Schedulable
 	{
@@ -17,4 +17,4 @@ namespace recpp
 		std::function<void(void)> m_task;
 		bool					  m_canceled = false;
 	};
-} // namespace recpp
+} // namespace recpp::async

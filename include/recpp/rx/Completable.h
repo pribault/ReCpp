@@ -7,6 +7,11 @@
 
 namespace recpp
 {
+	namespace async
+	{
+		class Scheduler;
+	}
+
 	template <typename T>
 	class Maybe;
 	template <typename T>
@@ -14,7 +19,6 @@ namespace recpp
 	template <typename T>
 	class Single;
 	class CompletableSubscriber;
-	class Scheduler;
 
 	class Completable : public rscpp::Publisher<int>
 	{
@@ -49,9 +53,9 @@ namespace recpp
 
 		Completable tap(const OnCompleteMethod &onCompleteMethod, const OnErrorMethod &onErrorMethod);
 
-		Completable observeOn(recpp::Scheduler &scheduler);
+		Completable observeOn(recpp::async::Scheduler &scheduler);
 
-		Completable subscribeOn(recpp::Scheduler &scheduler);
+		Completable subscribeOn(recpp::async::Scheduler &scheduler);
 
 		Completable andThen(const Completable &completable);
 

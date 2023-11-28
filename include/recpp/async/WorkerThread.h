@@ -5,7 +5,7 @@
 #include <atomic>
 #include <thread>
 
-namespace recpp
+namespace recpp::async
 {
 	class WorkerThread : public Scheduler
 	{
@@ -24,4 +24,4 @@ namespace recpp
 		std::thread		 m_thread;
 		std::atomic_bool m_stop = false;
 	};
-} // namespace recpp
+} // namespace recpp::async

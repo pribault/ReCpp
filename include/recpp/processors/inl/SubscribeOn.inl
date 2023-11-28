@@ -5,13 +5,13 @@
 #include <recpp/subscriptions/ForwardSubscription.h>
 
 template <typename T>
-recpp::SubscribeOn<T>::SubscribeOn(const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler)
+recpp::SubscribeOn<T>::SubscribeOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler)
 	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, scheduler)))
 {
 }
 
 template <typename T>
-recpp::SubscribeOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler)
+recpp::SubscribeOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler)
 	: m_parent(parent)
 	, m_publisher(publisher)
 	, m_scheduler(scheduler)

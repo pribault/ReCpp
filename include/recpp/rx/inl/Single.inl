@@ -99,13 +99,13 @@ recpp::Single<T> recpp::Single<T>::tap(const OnSuccessMethod &onSuccessMethod, c
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::observeOn(Scheduler &scheduler)
+recpp::Single<T> recpp::Single<T>::observeOn(async::Scheduler &scheduler)
 {
 	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new ObserveOn<T>(*this, scheduler)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::subscribeOn(Scheduler &scheduler)
+recpp::Single<T> recpp::Single<T>::subscribeOn(async::Scheduler &scheduler)
 {
 	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new SubscribeOn<T>(*this, scheduler)));
 }

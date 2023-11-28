@@ -2,7 +2,7 @@
 
 #include "recpp/async/ThreadPoolWorker.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 ThreadPool::ThreadPool(size_t threadCount)

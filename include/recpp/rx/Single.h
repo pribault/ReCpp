@@ -7,6 +7,11 @@
 
 namespace recpp
 {
+	namespace async
+	{
+		class Scheduler;
+	}
+
 	class Completable;
 	template <typename T>
 	class Maybe;
@@ -14,7 +19,6 @@ namespace recpp
 	class Observable;
 	template <typename T>
 	class SingleSubscriber;
-	class Scheduler;
 
 	template <typename T>
 	class Single : public rscpp::Publisher<T>
@@ -56,9 +60,9 @@ namespace recpp
 
 		Single<T> tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod);
 
-		Single<T> observeOn(Scheduler &scheduler);
+		Single<T> observeOn(async::Scheduler &scheduler);
 
-		Single<T> subscribeOn(Scheduler &scheduler);
+		Single<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
 		Single(const std::shared_ptr<rscpp::Publisher<T>> &dd);

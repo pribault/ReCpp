@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 
-namespace recpp
+namespace recpp::async
 {
 	class ThreadPoolWorker;
 
@@ -21,4 +21,4 @@ namespace recpp
 	private:
 		std::vector<std::unique_ptr<ThreadPoolWorker>> m_workers;
 	};
-} // namespace recpp
+} // namespace recpp::async

@@ -14,6 +14,7 @@
 #include <recpp/subscribers/DefaultSubscriber.h>
 
 using namespace recpp;
+using namespace recpp::async;
 using namespace rscpp;
 using namespace std;
 
