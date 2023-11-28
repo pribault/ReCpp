@@ -1,7 +1,12 @@
+// gtest
 #include <gtest/gtest.h>
-#include <iostream>
+
+// recpp
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Maybe.h>
+
+// stl
+#include <iostream>
 
 using namespace recpp;
 using namespace std;

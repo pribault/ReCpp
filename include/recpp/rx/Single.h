@@ -7,6 +7,11 @@
 
 namespace recpp
 {
+	class Completable;
+	template <typename T>
+	class Maybe;
+	template <typename T>
+	class Observable;
 	template <typename T>
 	class SingleSubscriber;
 	class Scheduler;
@@ -16,6 +21,7 @@ namespace recpp
 	{
 		template <typename R>
 		friend class Single;
+		friend class Completable;
 
 	public:
 		using OnSuccessMethod = std::function<void(const T & /* value */)>;

@@ -1,8 +1,13 @@
-#include <array>
+// gtest
 #include <gtest/gtest.h>
-#include <iostream>
+
+// recpp
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Observable.h>
+
+// stl
+#include <array>
+#include <iostream>
 
 using namespace recpp;
 using namespace std;
