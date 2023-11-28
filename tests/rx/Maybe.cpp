@@ -1,7 +1,12 @@
+// gtest
 #include <gtest/gtest.h>
-#include <iostream>
+
+// recpp
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Maybe.h>
+
+// stl
+#include <iostream>
 
 using namespace recpp;
 using namespace std;
@@ -88,8 +93,30 @@ TEST(Maybe, create)
 
 TEST(Maybe, defer)
 {
+	bool completed = false;
+	bool succeeded = false;
+	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::just(defaultValue); })
+						.subscribe(
+							[&succeeded](const auto value)
+							{
+								if (succeeded)
+									throw runtime_error("success handler called twice");
+								if (value != defaultValue)
+									throw runtime_error("invalid value");
+								succeeded = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(completed);
+	EXPECT_TRUE(succeeded);
+
 	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
+	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!"))); })
 						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
 								   [&errored](const auto &exception)
 								   {
@@ -99,6 +126,23 @@ TEST(Maybe, defer)
 								   },
 								   []() { throw runtime_error("completion handler called"); }));
 	EXPECT_TRUE(errored);
+
+	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::never(); })
+						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
+								   [](const auto &exception) { throw runtime_error("error handler called"); },
+								   []() { throw runtime_error("completion handler called"); }));
+
+	completed = false;
+	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::empty(); })
+						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
+								   [](const auto &exception) { throw runtime_error("error handler called"); },
+								   [&completed]()
+								   {
+									   if (completed)
+										   throw runtime_error("completion handler called twice");
+									   completed = true;
+								   }));
+	EXPECT_TRUE(completed);
 }
 
 TEST(Maybe, empty)

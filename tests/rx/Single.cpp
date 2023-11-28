@@ -1,14 +1,19 @@
+// gtest
 #include <gtest/gtest.h>
-#include <iostream>
+
+// recpp
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Single.h>
+
+// stl
+#include <iostream>
 
 using namespace recpp;
 using namespace std;
 
 namespace
 {
-	constexpr int defaultValue = 42;
+	constexpr int  defaultValue = 42;
 	constexpr auto sleepDuration = chrono::milliseconds(10);
 } // namespace
 

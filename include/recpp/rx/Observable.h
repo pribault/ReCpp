@@ -7,6 +7,11 @@
 
 namespace recpp
 {
+	class Completable;
+	template <typename T>
+	class Maybe;
+	template <typename T>
+	class Single;
 	template <typename T>
 	class ObservableSubscriber;
 
@@ -15,6 +20,7 @@ namespace recpp
 	{
 		template <typename R>
 		friend class Observable;
+		friend class Completable;
 
 	public:
 		using OnNextMethod = std::function<void(const T & /* value */)>;
@@ -64,7 +70,7 @@ namespace recpp
 		Observable<T> subscribeOn(Scheduler &scheduler);
 
 	protected:
-		Observable(const std::shared_ptr<Publisher<T>> &dd);
+		Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp
 

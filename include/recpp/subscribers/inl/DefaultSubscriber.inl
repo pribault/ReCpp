@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits>
+
 template <typename T>
 recpp::DefaultSubscriber<T>::DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 	: rscpp::Subscriber<T>(std::shared_ptr<rscpp::Subscriber<T>>(new Impl(onNextMethod, onErrorMethod, onCompleteMethod)))

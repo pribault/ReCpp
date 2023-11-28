@@ -10,7 +10,7 @@ namespace recpp
 	template <typename T>
 	class DefaultSubscriber : public rscpp::Subscriber<T>
 	{
-		class Impl : public Subscriber<T>
+		class Impl : public rscpp::Subscriber<T>
 		{
 		public:
 			using OnNextMethod = std::function<void(const T & /* value */)>;

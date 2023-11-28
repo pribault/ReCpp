@@ -1,11 +1,14 @@
 #include "recpp/subscribers/CompletableSubscriber.h"
 
-recpp::CompletableSubscriber::CompletableSubscriber(const rscpp::Subscriber<int> &subscriber)
+using namespace rscpp;
+using namespace std;
+
+recpp::CompletableSubscriber::CompletableSubscriber(const Subscriber<int> &subscriber)
 	: m_subscriber(subscriber)
 {
 }
 
-void recpp::CompletableSubscriber::onError(const std::exception_ptr &error)
+void recpp::CompletableSubscriber::onError(const exception_ptr &error)
 {
 	if (!m_ended)
 	{

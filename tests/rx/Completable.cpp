@@ -1,15 +1,26 @@
+// gtest
 #include <gtest/gtest.h>
-#include <iostream>
+
+// recpp
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Completable.h>
+#include <recpp/rx/Maybe.h>
+#include <recpp/rx/Observable.h>
+#include <recpp/rx/Single.h>
+
+// stl
+#include <array>
+#include <iostream>
 
 using namespace recpp;
 using namespace std;
 
 namespace
 {
-	constexpr auto sleepDuration = chrono::milliseconds(10);
-}
+	constexpr auto				 sleepDuration = chrono::milliseconds(10);
+	constexpr int				 defaultValue = 42;
+	constexpr std::array<int, 3> defaultValues({1, 2, 3});
+} // namespace
 
 TEST(Completable, complete)
 {
@@ -423,4 +434,65 @@ TEST(Completable, andThen)
 				}))
 			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
 	EXPECT_TRUE(deferCalled);
+
+	bool succeeded = false;
+	completed = false;
+	EXPECT_NO_THROW(Completable::complete()
+						.andThen(Maybe<float>::just(defaultValue))
+						.subscribe(
+							[&succeeded](const auto value)
+							{
+								if (succeeded)
+									throw runtime_error("success handler called twice");
+								if (value != defaultValue)
+									throw runtime_error("invalid value");
+								succeeded = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("success handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(succeeded);
+	EXPECT_TRUE(completed);
+
+	succeeded = false;
+	EXPECT_NO_THROW(Completable::complete()
+						.andThen(Single<float>::just(defaultValue))
+						.subscribe(
+							[&succeeded](const auto value)
+							{
+								if (succeeded)
+									throw runtime_error("success handler called twice");
+								if (value != defaultValue)
+									throw runtime_error("invalid value");
+								succeeded = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_TRUE(succeeded);
+
+	size_t valuesCount = 0;
+	completed = false;
+	EXPECT_NO_THROW(Completable::complete()
+						.andThen(Observable<int>::range(defaultValues))
+						.subscribe(
+							[&valuesCount](const auto value)
+							{
+								if (valuesCount >= defaultValues.size())
+									throw runtime_error("too much values forwarded");
+								const auto expectedValue = defaultValues[valuesCount++];
+								if (value != expectedValue)
+									throw runtime_error("unexpected value");
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("success handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(completed);
+	EXPECT_EQ(valuesCount, defaultValues.size());
 }
