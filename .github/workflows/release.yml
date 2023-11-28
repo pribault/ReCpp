@@ -19,7 +19,7 @@ jobs:
       run: sudo apt-get install -y doxygen
 
     - name: Generate documentation
-      run: doxygen resources/doxygen/Doxyfile
+      run: mkdir -p build; doxygen resources/doxygen/Doxyfile
 
     - name: Deploy documentation
       uses: JamesIves/github-pages-deploy-action@v4.3.3
