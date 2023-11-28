@@ -5,6 +5,7 @@
 #include <recpp/subscriptions/FilterSubscription.h>
 
 #include <functional>
+#include <vector>
 
 namespace recpp
 {

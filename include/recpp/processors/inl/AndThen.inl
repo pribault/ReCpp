@@ -1,5 +1,7 @@
 #pragma once
 
+#include <limits>
+
 template <typename T, typename R>
 recpp::AndThen<T, R>::AndThen(const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest)
 	: rscpp::Processor<T, R>(std::shared_ptr<rscpp::Processor<T, R>>(new Impl(*this, source, dest)))
