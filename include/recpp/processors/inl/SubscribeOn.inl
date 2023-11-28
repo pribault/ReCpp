@@ -49,5 +49,5 @@ void recpp::SubscribeOn<T>::Impl::subscribe(rscpp::Subscriber<T> &subscriber)
 	m_subscriber = subscriber;
 	auto publisher = m_publisher;
 	auto parent = m_parent;
-	m_scheduler.schedule(Schedulable([publisher, parent]() mutable { publisher.subscribe(parent); }));
+	m_scheduler.schedule(async::Schedulable([publisher, parent]() mutable { publisher.subscribe(parent); }));
 }

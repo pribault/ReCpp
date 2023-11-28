@@ -29,21 +29,21 @@ template <typename T>
 void recpp::ObserveOn<T>::Impl::onNext(const T &value)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber, value]() mutable { subscriber.onNext(value); }));
+	m_scheduler.schedule(async::Schedulable([subscriber, value]() mutable { subscriber.onNext(value); }));
 }
 
 template <typename T>
 void recpp::ObserveOn<T>::Impl::onError(const std::exception_ptr &error)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber, error]() mutable { subscriber.onError(error); }));
+	m_scheduler.schedule(async::Schedulable([subscriber, error]() mutable { subscriber.onError(error); }));
 }
 
 template <typename T>
 void recpp::ObserveOn<T>::Impl::onComplete()
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber]() mutable { subscriber.onComplete(); }));
+	m_scheduler.schedule(async::Schedulable([subscriber]() mutable { subscriber.onComplete(); }));
 }
 
 template <typename T>
