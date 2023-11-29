@@ -2,6 +2,8 @@
 
 #include "recpp/async/ThreadPoolWorker.h"
 
+#include <thread>
+
 using namespace recpp::async;
 using namespace std;
 
@@ -17,4 +19,9 @@ ThreadPool::~ThreadPool()
 	for (auto &worker : m_workers)
 		worker->stop();
 	m_queue.notifyAll();
+}
+
+size_t ThreadPool::size() const
+{
+	return m_workers.size();
 }

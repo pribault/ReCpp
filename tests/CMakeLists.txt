@@ -17,6 +17,7 @@ project(ReCpp-test
 
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/async/ThreadPool.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Completable.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Maybe.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Observable.cpp
