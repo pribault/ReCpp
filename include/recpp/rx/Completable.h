@@ -5,20 +5,24 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::async
 {
-	namespace async
-	{
-		class Scheduler;
-	}
+	class Scheduler;
+}
 
+namespace recpp::subscriber
+{
+	class CompletableSubscriber;
+}
+
+namespace recpp::rx
+{
 	template <typename T>
 	class Maybe;
 	template <typename T>
 	class Observable;
 	template <typename T>
 	class Single;
-	class CompletableSubscriber;
 
 	class Completable : public rscpp::Publisher<int>
 	{
@@ -35,7 +39,7 @@ namespace recpp
 
 		static Completable complete();
 
-		static Completable create(const std::function<void(CompletableSubscriber &)> &method);
+		static Completable create(const std::function<void(recpp::subscribers::CompletableSubscriber &)> &method);
 
 		static Completable defer(const std::function<Completable()> &function);
 
@@ -53,9 +57,9 @@ namespace recpp
 
 		Completable tap(const OnCompleteMethod &onCompleteMethod, const OnErrorMethod &onErrorMethod);
 
-		Completable observeOn(recpp::async::Scheduler &scheduler);
+		Completable observeOn(async::Scheduler &scheduler);
 
-		Completable subscribeOn(recpp::async::Scheduler &scheduler);
+		Completable subscribeOn(async::Scheduler &scheduler);
 
 		Completable andThen(const Completable &completable);
 
@@ -71,6 +75,6 @@ namespace recpp
 	protected:
 		Completable(const std::shared_ptr<rscpp::Publisher<int>> &dd);
 	};
-} // namespace recpp
+} // namespace recpp::rx
 
 #include <recpp/rx/inl/Completable.inl>

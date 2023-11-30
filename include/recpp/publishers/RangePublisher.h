@@ -2,7 +2,7 @@
 
 #include <rscpp/Publisher.h>
 
-namespace recpp
+namespace recpp::publishers
 {
 	template <typename T, class I>
 	class RangePublisher : public rscpp::Publisher<T>
@@ -16,6 +16,6 @@ namespace recpp
 		I m_first;
 		I m_last;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/RangePublisher.inl>

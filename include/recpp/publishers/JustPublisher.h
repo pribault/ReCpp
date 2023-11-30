@@ -2,7 +2,7 @@
 
 #include <rscpp/Publisher.h>
 
-namespace recpp
+namespace recpp::publishers
 {
 	template <typename T>
 	class JustPublisher : public rscpp::Publisher<T>
@@ -15,6 +15,6 @@ namespace recpp
 	private:
 		T m_value;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/JustPublisher.inl>

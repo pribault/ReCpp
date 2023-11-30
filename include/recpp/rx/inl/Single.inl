@@ -17,101 +17,101 @@
 #include <recpp/subscribers/SingleSubscriber.h>
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::create(const std::function<void(SingleSubscriber<T> &)> &method)
+recpp::rx::Single<T> recpp::rx::Single<T>::create(const std::function<void(recpp::subscribers::SingleSubscriber<T> &)> &method)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new CreatePublisher<T, SingleSubscriber<T>>(method)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::CreatePublisher<T, recpp::subscribers::SingleSubscriber<T>>(method)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::defer(const std::function<Single<T>()> &function)
+recpp::rx::Single<T> recpp::rx::Single<T>::defer(const std::function<Single<T>()> &function)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new DeferPublisher<T, Single<T>>(function)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::DeferPublisher<T, Single<T>>(function)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::error(const std::exception_ptr &error)
+recpp::rx::Single<T> recpp::rx::Single<T>::error(const std::exception_ptr &error)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new ErrorPublisher<T>(error)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::ErrorPublisher<T>(error)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::just(const T &value)
+recpp::rx::Single<T> recpp::rx::Single<T>::just(const T &value)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new JustPublisher<T>(value)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::JustPublisher<T>(value)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::never()
+recpp::rx::Single<T> recpp::rx::Single<T>::never()
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new NeverPublisher<T>()));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::NeverPublisher<T>()));
 }
 
 template <typename T>
-void recpp::Single<T>::subscribe(const OnSuccessMethod &onSuccess, const OnErrorMethod &onError)
+void recpp::rx::Single<T>::subscribe(const OnSuccessMethod &onSuccess, const OnErrorMethod &onError)
 {
-	auto subscriber = DefaultSubscriber<T>(onSuccess, onError, nullptr);
+	auto subscriber = recpp::subscribers::DefaultSubscriber<T>(onSuccess, onError, nullptr);
 	rscpp::Publisher<T>::subscribe(subscriber);
 }
 
 template <typename T>
 template <typename R>
-recpp::Single<R> recpp::Single<T>::map(const std::function<R(const T & /* value */)> &method)
+recpp::rx::Single<R> recpp::rx::Single<T>::map(const std::function<R(const T & /* value */)> &method)
 {
-	return Single<R>(std::shared_ptr<rscpp::Publisher<R>>(new Map<T, R>(*this, method)));
+	return Single<R>(std::shared_ptr<rscpp::Publisher<R>>(new processors::Map<T, R>(*this, method)));
 }
 
 template <typename T>
 template <typename R>
-recpp::Single<R> recpp::Single<T>::flatMap(const std::function<Single<R>(const T & /* value */)> &method)
+recpp::rx::Single<R> recpp::rx::Single<T>::flatMap(const std::function<Single<R>(const T & /* value */)> &method)
 {
-	return Single<R>(std::shared_ptr<rscpp::Publisher<R>>(new FlatMap<T, R>(*this, method)));
+	return Single<R>(std::shared_ptr<rscpp::Publisher<R>>(new processors::FlatMap<T, R>(*this, method)));
 }
 
 template <typename T>
-recpp::Completable recpp::Single<T>::ignoreElement()
+recpp::rx::Completable recpp::rx::Single<T>::ignoreElement()
 {
-	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::IgnoreElements<int, int>(*this)));
+	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new processors::IgnoreElements<int, int>(*this)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::doOnError(const OnErrorMethod &method)
+recpp::rx::Single<T> recpp::rx::Single<T>::doOnError(const OnErrorMethod &method)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new Tap<T>(*this, nullptr, method, nullptr)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, nullptr, method, nullptr)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::doOnSuccess(const OnSuccessMethod &method)
+recpp::rx::Single<T> recpp::rx::Single<T>::doOnSuccess(const OnSuccessMethod &method)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new Tap<T>(*this, method, nullptr, nullptr)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, method, nullptr, nullptr)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::doOnTerminate(const OnCompleteMethod &method)
+recpp::rx::Single<T> recpp::rx::Single<T>::doOnTerminate(const OnCompleteMethod &method)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new Tap<T>(
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(
 		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod)
+recpp::rx::Single<T> recpp::rx::Single<T>::tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new Tap<T>(*this, onSuccessMethod, onErrorMethod, nullptr)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, onSuccessMethod, onErrorMethod, nullptr)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::observeOn(async::Scheduler &scheduler)
+recpp::rx::Single<T> recpp::rx::Single<T>::observeOn(recpp::async::Scheduler &scheduler)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new ObserveOn<T>(*this, scheduler)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::ObserveOn<T>(*this, scheduler)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Single<T>::subscribeOn(async::Scheduler &scheduler)
+recpp::rx::Single<T> recpp::rx::Single<T>::subscribeOn(recpp::async::Scheduler &scheduler)
 {
-	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new SubscribeOn<T>(*this, scheduler)));
+	return Single<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::SubscribeOn<T>(*this, scheduler)));
 }
 
 template <typename T>
-recpp::Single<T>::Single(const std::shared_ptr<rscpp::Publisher<T>> &dd)
+recpp::rx::Single<T>::Single(const std::shared_ptr<rscpp::Publisher<T>> &dd)
 	: rscpp::Publisher<T>(dd)
 {
 }

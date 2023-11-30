@@ -1,6 +1,6 @@
 #include "recpp/subscriptions/ForwardSubscription.h"
 
-using namespace recpp;
+using namespace recpp::subscriptions;
 using namespace rscpp;
 using namespace std;
 

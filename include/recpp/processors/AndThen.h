@@ -3,7 +3,7 @@
 #include <rscpp/Processor.h>
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T, typename R>
 	class AndThen : public rscpp::Processor<T, R>
@@ -35,6 +35,6 @@ namespace recpp
 	public:
 		explicit AndThen(const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/AndThen.inl>

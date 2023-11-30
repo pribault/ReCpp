@@ -2,7 +2,7 @@
 
 #include <rscpp/Processor.h>
 
-namespace recpp
+namespace recpp::processors
 {
 	namespace async
 	{
@@ -37,6 +37,6 @@ namespace recpp
 	public:
 		explicit SubscribeOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/SubscribeOn.inl>

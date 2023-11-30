@@ -3,7 +3,7 @@
 #include <rscpp/Processor.h>
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T, typename R>
 	class IgnoreElements : public rscpp::Processor<T, R>
@@ -34,6 +34,6 @@ namespace recpp
 	public:
 		explicit IgnoreElements(const rscpp::Publisher<T> &source);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/IgnoreElements.inl>

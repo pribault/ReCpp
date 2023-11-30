@@ -3,13 +3,13 @@
 #include <recpp/subscriptions/ForwardSubscription.h>
 
 template <typename T>
-recpp::Tap<T>::Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+recpp::processors::Tap<T>::Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
 {
 }
 
 template <typename T>
-recpp::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+recpp::processors::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 		   const OnCompleteMethod &onCompleteMethod)
 	: m_parent(parent)
 	, m_publisher(publisher)
@@ -20,14 +20,14 @@ recpp::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher
 }
 
 template <typename T>
-void recpp::Tap<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
+void recpp::processors::Tap<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = ForwardSubscription(subscription);
+	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
 	m_subscriber.onSubscribe(forwardSubscription);
 }
 
 template <typename T>
-void recpp::Tap<T>::Impl::onNext(const T &value)
+void recpp::processors::Tap<T>::Impl::onNext(const T &value)
 {
 	if (m_onNextMethod)
 		m_onNextMethod(value);
@@ -35,7 +35,7 @@ void recpp::Tap<T>::Impl::onNext(const T &value)
 }
 
 template <typename T>
-void recpp::Tap<T>::Impl::onError(const std::exception_ptr &error)
+void recpp::processors::Tap<T>::Impl::onError(const std::exception_ptr &error)
 {
 	if (m_onErrorMethod)
 		m_onErrorMethod(error);
@@ -43,7 +43,7 @@ void recpp::Tap<T>::Impl::onError(const std::exception_ptr &error)
 }
 
 template <typename T>
-void recpp::Tap<T>::Impl::onComplete()
+void recpp::processors::Tap<T>::Impl::onComplete()
 {
 	if (m_onCompleteMethod)
 		m_onCompleteMethod();
@@ -51,7 +51,7 @@ void recpp::Tap<T>::Impl::onComplete()
 }
 
 template <typename T>
-void recpp::Tap<T>::Impl::subscribe(rscpp::Subscriber<T> &subscriber)
+void recpp::processors::Tap<T>::Impl::subscribe(rscpp::Subscriber<T> &subscriber)
 {
 	m_subscriber = subscriber;
 	m_publisher.subscribe(m_parent);

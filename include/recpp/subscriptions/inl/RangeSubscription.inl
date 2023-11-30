@@ -1,13 +1,13 @@
 #pragma once
 
 template <typename T, class I>
-recpp::RangeSubscription<T, I>::RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last)
+recpp::subscriptions::RangeSubscription<T, I>::RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last)
 	: rscpp::Subscription(std::shared_ptr<rscpp::Subscription>(new Impl(subscriber, first, last)))
 {
 }
 
 template <typename T, class I>
-recpp::RangeSubscription<T, I>::Impl::Impl(const rscpp::Subscriber<T> &subscriber, I first, I last)
+recpp::subscriptions::RangeSubscription<T, I>::Impl::Impl(const rscpp::Subscriber<T> &subscriber, I first, I last)
 	: m_subscriber(subscriber)
 	, m_current(first)
 	, m_last(last)
@@ -15,7 +15,7 @@ recpp::RangeSubscription<T, I>::Impl::Impl(const rscpp::Subscriber<T> &subscribe
 }
 
 template <typename T, class I>
-void recpp::RangeSubscription<T, I>::Impl::request(size_t count)
+void recpp::subscriptions::RangeSubscription<T, I>::Impl::request(size_t count)
 {
 	for (size_t i = 0; i < count; i++)
 	{
@@ -33,7 +33,7 @@ void recpp::RangeSubscription<T, I>::Impl::request(size_t count)
 }
 
 template <typename T, class I>
-void recpp::RangeSubscription<T, I>::Impl::cancel()
+void recpp::subscriptions::RangeSubscription<T, I>::Impl::cancel()
 {
 	m_canceled = true;
 	m_subscriber.onComplete();

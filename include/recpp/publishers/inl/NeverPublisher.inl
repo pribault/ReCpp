@@ -4,11 +4,11 @@
 #include <rscpp/Subscriber.h>
 
 template <typename T>
-recpp::NeverPublisher<T>::NeverPublisher() = default;
+recpp::publishers::NeverPublisher<T>::NeverPublisher() = default;
 
 template <typename T>
-void recpp::NeverPublisher<T>::subscribe(rscpp::Subscriber<T> &subscriber)
+void recpp::publishers::NeverPublisher<T>::subscribe(rscpp::Subscriber<T> &subscriber)
 {
-	auto subscription = NeverSubscription<T>(subscriber);
+	auto subscription = recpp::subscriptions::NeverSubscription<T>(subscriber);
 	subscriber.onSubscribe(subscription);
 }

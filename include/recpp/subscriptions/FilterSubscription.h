@@ -2,7 +2,7 @@
 
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::subscriptions
 {
 	class FilterSubscription : public rscpp::Subscription
 	{
@@ -28,4 +28,4 @@ namespace recpp
 
 		void onNext(bool filtered);
 	};
-} // namespace recpp
+} // namespace recpp::subscriptions

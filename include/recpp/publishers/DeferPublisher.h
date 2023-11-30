@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::publishers
 {
 	template <typename T, typename P>
 	class DeferPublisher : public rscpp::Publisher<T>
@@ -17,6 +17,6 @@ namespace recpp
 	private:
 		std::function<P()> m_function;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/DeferPublisher.inl>

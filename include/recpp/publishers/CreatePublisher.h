@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::publishers
 {
 	template <typename T, typename S>
 	class CreatePublisher : public rscpp::Publisher<T>
@@ -19,6 +19,6 @@ namespace recpp
 	private:
 		CreateMethod m_method;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/CreatePublisher.inl>

@@ -3,12 +3,12 @@
 using namespace rscpp;
 using namespace std;
 
-recpp::CompletableSubscriber::CompletableSubscriber(const Subscriber<int> &subscriber)
+recpp::subscribers::CompletableSubscriber::CompletableSubscriber(const Subscriber<int> &subscriber)
 	: m_subscriber(subscriber)
 {
 }
 
-void recpp::CompletableSubscriber::onError(const exception_ptr &error)
+void recpp::subscribers::CompletableSubscriber::onError(const exception_ptr &error)
 {
 	if (!m_ended)
 	{
@@ -17,7 +17,7 @@ void recpp::CompletableSubscriber::onError(const exception_ptr &error)
 	}
 }
 
-void recpp::CompletableSubscriber::onComplete()
+void recpp::subscribers::CompletableSubscriber::onComplete()
 {
 	if (!m_ended)
 	{

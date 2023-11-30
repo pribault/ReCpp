@@ -5,20 +5,24 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::async
 {
-	namespace async
-	{
-		class Scheduler;
-	}
+	class Scheduler;
+}
 
+namespace recpp::subscribers
+{
+	template <typename T>
+	class SingleSubscriber;
+}
+
+namespace recpp::rx
+{
 	class Completable;
 	template <typename T>
 	class Maybe;
 	template <typename T>
 	class Observable;
-	template <typename T>
-	class SingleSubscriber;
 
 	template <typename T>
 	class Single : public rscpp::Publisher<T>
@@ -32,7 +36,7 @@ namespace recpp
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 		using OnCompleteMethod = std::function<void()>;
 
-		static Single<T> create(const std::function<void(SingleSubscriber<T> &)> &method);
+		static Single<T> create(const std::function<void(recpp::subscribers::SingleSubscriber<T> &)> &method);
 
 		static Single<T> defer(const std::function<Single<T>()> &function);
 
@@ -67,6 +71,6 @@ namespace recpp
 	protected:
 		Single(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
-} // namespace recpp
+} // namespace recpp::rx
 
 #include <recpp/rx/inl/Single.inl>

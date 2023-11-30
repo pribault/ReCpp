@@ -7,7 +7,7 @@
 #include <functional>
 #include <vector>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T>
 	class Filter : public rscpp::Processor<T, T>
@@ -28,16 +28,16 @@ namespace recpp
 			void subscribe(rscpp::Subscriber<T> &subscriber) override;
 
 		private:
-			rscpp::Processor<T, T>					  &m_parent;
-			rscpp::Publisher<T>						   m_publisher;
-			std::vector<recpp::FilterSubscription>	   m_subscriptions;
-			rscpp::Subscriber<T>					   m_subscriber;
-			std::function<bool(const T & /* value */)> m_method;
+			rscpp::Processor<T, T>								 &m_parent;
+			rscpp::Publisher<T>									  m_publisher;
+			std::vector<recpp::subscriptions::FilterSubscription> m_subscriptions;
+			rscpp::Subscriber<T>								  m_subscriber;
+			std::function<bool(const T & /* value */)>			  m_method;
 		};
 
 	public:
 		explicit Filter(const rscpp::Publisher<T> &publisher, const std::function<bool(const T & /* value */)> &method);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/Filter.inl>

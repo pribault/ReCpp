@@ -3,20 +3,20 @@
 #include <limits>
 
 template <typename T, typename R>
-recpp::IgnoreElements<T, R>::IgnoreElements(const rscpp::Publisher<T> &source)
+recpp::processors::IgnoreElements<T, R>::IgnoreElements(const rscpp::Publisher<T> &source)
 	: rscpp::Processor<T, R>(std::shared_ptr<rscpp::Processor<T, R>>(new Impl(*this, source)))
 {
 }
 
 template <typename T, typename R>
-recpp::IgnoreElements<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &source)
+recpp::processors::IgnoreElements<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &source)
 	: m_parent(parent)
 	, m_source(source)
 {
 }
 
 template <typename T, typename R>
-void recpp::IgnoreElements<T, R>::Impl::onSubscribe(rscpp::Subscription &subscription)
+void recpp::processors::IgnoreElements<T, R>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
 	m_subscription = subscription;
 	m_remaining = std::numeric_limits<size_t>::max();
@@ -24,7 +24,7 @@ void recpp::IgnoreElements<T, R>::Impl::onSubscribe(rscpp::Subscription &subscri
 }
 
 template <typename T, typename R>
-void recpp::IgnoreElements<T, R>::Impl::onNext(const T &)
+void recpp::processors::IgnoreElements<T, R>::Impl::onNext(const T &)
 {
 	m_remaining--;
 	if (!m_remaining)
@@ -35,19 +35,19 @@ void recpp::IgnoreElements<T, R>::Impl::onNext(const T &)
 }
 
 template <typename T, typename R>
-void recpp::IgnoreElements<T, R>::Impl::onError(const std::exception_ptr &error)
+void recpp::processors::IgnoreElements<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
 }
 
 template <typename T, typename R>
-void recpp::IgnoreElements<T, R>::Impl::onComplete()
+void recpp::processors::IgnoreElements<T, R>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
 }
 
 template <typename T, typename R>
-void recpp::IgnoreElements<T, R>::Impl::subscribe(rscpp::Subscriber<R> &subscriber)
+void recpp::processors::IgnoreElements<T, R>::Impl::subscribe(rscpp::Subscriber<R> &subscriber)
 {
 	m_subscriber = subscriber;
 	m_source.subscribe(m_parent);

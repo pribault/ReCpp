@@ -5,20 +5,24 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::async
 {
-	namespace async
-	{
-		class Scheduler;
-	}
+	class Scheduler;
+}
 
+namespace recpp::subscribers
+{
+	template <typename T>
+	class MaybeSubscriber;
+}
+
+namespace recpp::rx
+{
 	class Completable;
 	template <typename T>
 	class Observable;
 	template <typename T>
 	class Single;
-	template <typename T>
-	class MaybeSubscriber;
 
 	template <typename T>
 	class Maybe : public rscpp::Publisher<T>
@@ -32,7 +36,7 @@ namespace recpp
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 		using OnCompleteMethod = std::function<void()>;
 
-		static Maybe<T> create(const std::function<void(recpp::MaybeSubscriber<T> &)> &method);
+		static Maybe<T> create(const std::function<void(recpp::subscribers::MaybeSubscriber<T> &)> &method);
 
 		static Maybe<T> defer(const std::function<Maybe<T>()> &function);
 
@@ -64,13 +68,13 @@ namespace recpp
 
 		Maybe<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
-		Maybe<T> observeOn(recpp::async::Scheduler &scheduler);
+		Maybe<T> observeOn(async::Scheduler &scheduler);
 
-		Maybe<T> subscribeOn(recpp::async::Scheduler &scheduler);
+		Maybe<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
 		Maybe(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
-} // namespace recpp
+} // namespace recpp::rx
 
 #include <recpp/rx/inl/Maybe.inl>
