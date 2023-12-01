@@ -20,7 +20,7 @@ This library, powered by the [RsCpp](https://github.com/pribault/RsCpp) implemen
 
 ## Installation
 
-You want to integrate ReCpp to your project ? Check our [installation guide](https://github.com/pribault/ReCpp/blob/develop/INSTALL)
+You want to integrate ReCpp to your project ? Check our [installation guide](https://github.com/pribault/ReCpp/blob/develop/INSTALL.md)
 
 # License
 
