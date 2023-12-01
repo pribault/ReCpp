@@ -84,6 +84,12 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
 
+    - name: Check compliance with coding standard
+      uses: jidicula/clang-format-action@v4.11.0
+      with:
+        clang-format-version: '13'
+        check-path: '.'
+
   genDoc:
     name: generate-documentation
     runs-on: ubuntu-latest
