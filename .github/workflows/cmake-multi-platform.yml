@@ -84,6 +84,30 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }}
 
+  clangFormat:
+    name: clang-format-check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'include'
+          - 'src'
+          - 'tests'
+          - 'rscpp'
+      fail-fast: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+
+    - name: Check compliance with coding standard
+      uses: jidicula/clang-format-action@v4.11.0
+      with:
+        clang-format-version: '17'
+        check-path: ${{ matrix.path }}
+
   genDoc:
     name: generate-documentation
     runs-on: ubuntu-latest
