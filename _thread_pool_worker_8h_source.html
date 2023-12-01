@@ -92,29 +92,29 @@ $(document).ready(function(){initNavTree('_thread_pool_worker_8h_source.html',''
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;atomic&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>recpp</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>recpp::async</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>SchedulableQueue;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1_thread_pool_worker.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1_thread_pool_worker.html">ThreadPoolWorker</a></div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1_thread_pool_worker.html">ThreadPoolWorker</a>(<a class="code" href="classrecpp_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;queue);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a>(<a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;queue);</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ~<a class="code" href="classrecpp_1_1_thread_pool_worker.html">ThreadPoolWorker</a>();</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ~<a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a>();</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> stop();</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">void</span> run();</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="classrecpp_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;m_queue;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;m_queue;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        std::thread       m_thread;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::atomic&lt;bool&gt; m_stop;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;} <span class="comment">// namespace recpp</span></div>
-<div class="ttc" id="aclassrecpp_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1_schedulable_queue.html">recpp::SchedulableQueue</a></div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:15</div></div>
-<div class="ttc" id="aclassrecpp_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1_thread_pool_worker.html">recpp::ThreadPoolWorker</a></div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:11</div></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable_queue.html">recpp::async::SchedulableQueue</a></div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:15</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html">recpp::async::ThreadPoolWorker</a></div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

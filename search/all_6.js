@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['map_16',['Map',['../classrecpp_1_1_map.html',1,'recpp']]],
-  ['maybe_17',['Maybe',['../classrecpp_1_1_maybe.html',1,'recpp']]],
-  ['maybesubscriber_18',['MaybeSubscriber',['../classrecpp_1_1_maybe_subscriber.html',1,'recpp']]]
+  ['justpublisher_15',['JustPublisher',['../classrecpp_1_1publishers_1_1_just_publisher.html',1,'recpp::publishers']]],
+  ['justsubscription_16',['JustSubscription',['../classrecpp_1_1subscriptions_1_1_just_subscription.html',1,'recpp::subscriptions']]]
 ];

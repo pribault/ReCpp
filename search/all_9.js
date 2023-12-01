@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['rangepublisher_24',['RangePublisher',['../classrecpp_1_1_range_publisher.html',1,'recpp']]],
-  ['rangesubscription_25',['RangeSubscription',['../classrecpp_1_1_range_subscription.html',1,'recpp']]]
+  ['observable_22',['Observable',['../classrecpp_1_1rx_1_1_observable.html',1,'recpp::rx']]],
+  ['observablesubscriber_23',['ObservableSubscriber',['../classrecpp_1_1subscribers_1_1_observable_subscriber.html',1,'recpp::subscribers']]],
+  ['observeon_24',['ObserveOn',['../classrecpp_1_1processors_1_1_observe_on.html',1,'recpp::processors']]],
+  ['overview_25',['Overview',['../index.html',1,'']]]
 ];

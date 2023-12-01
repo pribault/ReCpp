@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['tap_32',['Tap',['../classrecpp_1_1_tap.html',1,'recpp']]],
-  ['threadpool_33',['ThreadPool',['../classrecpp_1_1_thread_pool.html',1,'recpp']]],
-  ['threadpoolworker_34',['ThreadPoolWorker',['../classrecpp_1_1_thread_pool_worker.html',1,'recpp']]]
+  ['rangepublisher_31',['RangePublisher',['../classrecpp_1_1publishers_1_1_range_publisher.html',1,'recpp::publishers']]],
+  ['rangesubscription_32',['RangeSubscription',['../classrecpp_1_1subscriptions_1_1_range_subscription.html',1,'recpp::subscriptions']]]
 ];

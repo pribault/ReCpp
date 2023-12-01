@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['justpublisher_50',['JustPublisher',['../classrecpp_1_1_just_publisher.html',1,'recpp']]],
-  ['justsubscription_51',['JustSubscription',['../classrecpp_1_1_just_subscription.html',1,'recpp']]]
+  ['ignoreelements_61',['IgnoreElements',['../classrecpp_1_1processors_1_1_ignore_elements.html',1,'recpp::processors']]]
 ];

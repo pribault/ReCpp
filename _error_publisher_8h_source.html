@@ -93,23 +93,25 @@ $(document).ready(function(){initNavTree('_error_publisher_8h_source.html',''); 
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;exception&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>recpp</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>recpp::publishers</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1_error_publisher.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1_error_publisher.html">ErrorPublisher</a> : <span class="keyword">public</span> rscpp::Publisher&lt;T&gt;</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1publishers_1_1_error_publisher.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1publishers_1_1_error_publisher.html">ErrorPublisher</a> : <span class="keyword">public</span> <a class="code" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt;T&gt;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classrecpp_1_1_error_publisher.html">ErrorPublisher</a>(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classrecpp_1_1publishers_1_1_error_publisher.html">ErrorPublisher</a>(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> subscribe(rscpp::Subscriber&lt;T&gt; &amp;subscriber) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> subscribe(<a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        std::exception_ptr m_error;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    };</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">// namespace recpp</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">// namespace recpp::publishers</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;recpp/publishers/inl/ErrorPublisher.inl&gt;</span></div>
-<div class="ttc" id="aclassrecpp_1_1_error_publisher_html"><div class="ttname"><a href="classrecpp_1_1_error_publisher.html">recpp::ErrorPublisher</a></div><div class="ttdef"><b>Definition:</b> ErrorPublisher.h:11</div></div>
+<div class="ttc" id="aclassrecpp_1_1publishers_1_1_error_publisher_html"><div class="ttname"><a href="classrecpp_1_1publishers_1_1_error_publisher.html">recpp::publishers::ErrorPublisher</a></div><div class="ttdef"><b>Definition:</b> ErrorPublisher.h:11</div></div>
+<div class="ttc" id="aclassrscpp_1_1_publisher_html"><div class="ttname"><a href="classrscpp_1_1_publisher.html">rscpp::Publisher</a></div><div class="ttdef"><b>Definition:</b> Publisher.h:12</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdef"><b>Definition:</b> Subscriber.h:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

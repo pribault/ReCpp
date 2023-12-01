@@ -92,28 +92,31 @@ $(document).ready(function(){initNavTree('_thread_pool_8h_source.html',''); init
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;recpp/async/Scheduler.h&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>recpp</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">class </span>ThreadPoolWorker;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classrecpp_1_1_thread_pool.html">   12</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1_thread_pool.html">ThreadPool</a> : <span class="keyword">public</span> <a class="code" href="classrecpp_1_1_scheduler.html">Scheduler</a></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classrecpp_1_1_thread_pool_worker.html">ThreadPoolWorker</a>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1_thread_pool.html">ThreadPool</a>(<span class="keywordtype">size_t</span> threadCount);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        ~<a class="code" href="classrecpp_1_1_thread_pool.html">ThreadPool</a>();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        std::vector&lt;std::unique_ptr&lt;ThreadPoolWorker&gt;&gt; m_workers;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    };</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;} <span class="comment">// namespace recpp</span></div>
-<div class="ttc" id="aclassrecpp_1_1_scheduler_html"><div class="ttname"><a href="classrecpp_1_1_scheduler.html">recpp::Scheduler</a></div><div class="ttdef"><b>Definition:</b> Scheduler.h:10</div></div>
-<div class="ttc" id="aclassrecpp_1_1_thread_pool_html"><div class="ttname"><a href="classrecpp_1_1_thread_pool.html">recpp::ThreadPool</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.h:13</div></div>
-<div class="ttc" id="aclassrecpp_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1_thread_pool_worker.html">recpp::ThreadPoolWorker</a></div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:11</div></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;thread&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>recpp::async</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">class </span>ThreadPoolWorker;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool.html">   13</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_thread_pool.html">ThreadPool</a> : <span class="keyword">public</span> <a class="code" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1async_1_1_thread_pool.html">ThreadPool</a>(<span class="keywordtype">size_t</span> threadCount = std::thread::hardware_concurrency());</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        ~<a class="code" href="classrecpp_1_1async_1_1_thread_pool.html">ThreadPool</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">size_t</span> size() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        std::vector&lt;std::unique_ptr&lt;ThreadPoolWorker&gt;&gt; m_workers;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    };</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_scheduler_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></div><div class="ttdef"><b>Definition:</b> Scheduler.h:10</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool.html">recpp::async::ThreadPool</a></div><div class="ttdef"><b>Definition:</b> ThreadPool.h:14</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html">recpp::async::ThreadPoolWorker</a></div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

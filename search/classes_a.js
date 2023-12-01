@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['schedulable_62',['Schedulable',['../classrecpp_1_1_schedulable.html',1,'recpp']]],
-  ['schedulablequeue_63',['SchedulableQueue',['../classrecpp_1_1_schedulable_queue.html',1,'recpp']]],
-  ['scheduler_64',['Scheduler',['../classrecpp_1_1_scheduler.html',1,'recpp']]],
-  ['single_65',['Single',['../classrecpp_1_1_single.html',1,'recpp']]],
-  ['singlesubscriber_66',['SingleSubscriber',['../classrecpp_1_1_single_subscriber.html',1,'recpp']]],
-  ['subscribeon_67',['SubscribeOn',['../classrecpp_1_1_subscribe_on.html',1,'recpp']]]
+  ['processor_72',['Processor',['../classrscpp_1_1_processor.html',1,'rscpp']]],
+  ['processor_3c_20t_2c_20t_20_3e_73',['Processor&lt; T, T &gt;',['../classrscpp_1_1_processor.html',1,'rscpp']]],
+  ['publisher_74',['Publisher',['../classrscpp_1_1_publisher.html',1,'rscpp']]],
+  ['publisher_3c_20int_20_3e_75',['Publisher&lt; int &gt;',['../classrscpp_1_1_publisher.html',1,'rscpp']]],
+  ['publisher_3c_20r_20_3e_76',['Publisher&lt; R &gt;',['../classrscpp_1_1_publisher.html',1,'rscpp']]]
 ];

@@ -98,16 +98,16 @@ $(document).ready(function(){initNavTree('_schedulable_queue_8h_source.html','')
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;mutex&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;optional&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>recpp</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>recpp::async</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classrecpp_1_1_schedulable_queue.html">   14</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1_schedulable_queue.html">SchedulableQueue</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable_queue.html">   14</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">using</span> Clock = std::chrono::steady_clock;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">using</span> Duration = Clock::duration;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">using</span> TimePoint = Clock::time_point;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> push(<span class="keyword">const</span> TimePoint &amp;timePoint, <span class="keyword">const</span> <a class="code" href="classrecpp_1_1_schedulable.html">Schedulable</a> &amp;schedulable);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> push(<span class="keyword">const</span> TimePoint &amp;timePoint, <span class="keyword">const</span> <a class="code" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        std::optional&lt;Schedulable&gt; pop(<span class="keyword">const</span> Duration &amp;duration);</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
@@ -130,9 +130,9 @@ $(document).ready(function(){initNavTree('_schedulable_queue_8h_source.html','')
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        std::condition_variable               m_cv;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        std::atomic_bool                      m_stop = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    };</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace recpp</span></div>
-<div class="ttc" id="aclassrecpp_1_1_schedulable_html"><div class="ttname"><a href="classrecpp_1_1_schedulable.html">recpp::Schedulable</a></div><div class="ttdef"><b>Definition:</b> Schedulable.h:8</div></div>
-<div class="ttc" id="aclassrecpp_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1_schedulable_queue.html">recpp::SchedulableQueue</a></div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:15</div></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html">recpp::async::Schedulable</a></div><div class="ttdef"><b>Definition:</b> Schedulable.h:8</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable_queue.html">recpp::async::SchedulableQueue</a></div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

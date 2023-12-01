@@ -25,6 +25,14 @@
 var NAVTREE =
 [
   [ "ReCpp", "index.html", [
+    [ "Overview", "index.html", [
+      [ "Features", "index.html#autotoc_md1", null ],
+      [ "Getting started", "index.html#autotoc_md2", [
+        [ "Installation", "index.html#autotoc_md3", null ]
+      ] ],
+      [ "License", "index.html#autotoc_md4", null ],
+      [ "Contributing", "index.html#autotoc_md5", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -38,7 +46,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_and_then_8h_source.html"
+"_and_then_8h_source.html",
+"classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
