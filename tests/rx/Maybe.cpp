@@ -8,7 +8,8 @@
 // stl
 #include <iostream>
 
-using namespace recpp;
+using namespace recpp::async;
+using namespace recpp::rx;
 using namespace std;
 
 namespace
@@ -326,6 +327,31 @@ TEST(Maybe, flatMap)
 						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
 								   [&errored](const auto &exception) { throw runtime_error("error handler called"); },
 								   []() { throw runtime_error("completion handler called"); }));
+}
+
+TEST(Maybe, ignoreElement)
+{
+	bool succeeded = false;
+	bool completed = false;
+	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
+						.doOnNext(
+							[&succeeded](const auto value)
+							{
+								if (succeeded)
+									throw runtime_error("success handler called twice");
+								succeeded = true;
+							})
+						.ignoreElement()
+						.subscribe(
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_TRUE(succeeded);
+	EXPECT_TRUE(completed);
 }
 
 TEST(Maybe, doOnComplete)

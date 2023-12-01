@@ -5,7 +5,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::subscribers
 {
 	template <typename T>
 	class DefaultSubscriber : public rscpp::Subscriber<T>
@@ -42,6 +42,6 @@ namespace recpp
 
 		explicit DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 	};
-} // namespace recpp
+} // namespace recpp::subscribers
 
 #include <recpp/subscribers/inl/DefaultSubscriber.inl>

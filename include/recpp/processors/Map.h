@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T, typename R>
 	class Map : public rscpp::Processor<T, R>
@@ -34,6 +34,6 @@ namespace recpp
 	public:
 		explicit Map(const rscpp::Publisher<T> &publisher, const std::function<R(const T & /* value */)> &method);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/Map.inl>

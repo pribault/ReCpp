@@ -3,7 +3,7 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::subscriptions
 {
 	template <typename T>
 	class JustSubscription : public rscpp::Subscription
@@ -26,6 +26,6 @@ namespace recpp
 	public:
 		JustSubscription(const rscpp::Subscriber<T> &subscriber, const T &value);
 	};
-} // namespace recpp
+} // namespace recpp::subscriptions
 
 #include <recpp/subscriptions/inl/JustSubscription.inl>

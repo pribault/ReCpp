@@ -5,13 +5,13 @@
 #include <recpp/subscriptions/ForwardSubscription.h>
 
 template <typename T>
-recpp::ObserveOn<T>::ObserveOn(const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler)
+recpp::processors::ObserveOn<T>::ObserveOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler)
 	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, scheduler)))
 {
 }
 
 template <typename T>
-recpp::ObserveOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler)
+recpp::processors::ObserveOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler)
 	: m_parent(parent)
 	, m_publisher(publisher)
 	, m_scheduler(scheduler)
@@ -19,35 +19,35 @@ recpp::ObserveOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Pub
 }
 
 template <typename T>
-void recpp::ObserveOn<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
+void recpp::processors::ObserveOn<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = ForwardSubscription(subscription);
+	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
 	m_subscriber.onSubscribe(forwardSubscription);
 }
 
 template <typename T>
-void recpp::ObserveOn<T>::Impl::onNext(const T &value)
+void recpp::processors::ObserveOn<T>::Impl::onNext(const T &value)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber, value]() mutable { subscriber.onNext(value); }));
+	m_scheduler.schedule(recpp::async::Schedulable([subscriber, value]() mutable { subscriber.onNext(value); }));
 }
 
 template <typename T>
-void recpp::ObserveOn<T>::Impl::onError(const std::exception_ptr &error)
+void recpp::processors::ObserveOn<T>::Impl::onError(const std::exception_ptr &error)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber, error]() mutable { subscriber.onError(error); }));
+	m_scheduler.schedule(recpp::async::Schedulable([subscriber, error]() mutable { subscriber.onError(error); }));
 }
 
 template <typename T>
-void recpp::ObserveOn<T>::Impl::onComplete()
+void recpp::processors::ObserveOn<T>::Impl::onComplete()
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(Schedulable([subscriber]() mutable { subscriber.onComplete(); }));
+	m_scheduler.schedule(recpp::async::Schedulable([subscriber]() mutable { subscriber.onComplete(); }));
 }
 
 template <typename T>
-void recpp::ObserveOn<T>::Impl::subscribe(rscpp::Subscriber<T> &subscriber)
+void recpp::processors::ObserveOn<T>::Impl::subscribe(rscpp::Subscriber<T> &subscriber)
 {
 	m_subscriber = subscriber;
 	m_publisher.subscribe(m_parent);

@@ -4,7 +4,7 @@
 
 #include <exception>
 
-namespace recpp
+namespace recpp::publishers
 {
 	template <typename T>
 	class ErrorPublisher : public rscpp::Publisher<T>
@@ -17,6 +17,6 @@ namespace recpp
 	private:
 		std::exception_ptr m_error;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/ErrorPublisher.inl>

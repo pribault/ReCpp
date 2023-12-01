@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T>
 	class Tap : public rscpp::Processor<T, T>
@@ -46,6 +46,6 @@ namespace recpp
 		explicit Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 					 const OnCompleteMethod &onCompleteMethod);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/Tap.inl>

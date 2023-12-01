@@ -6,12 +6,12 @@
 namespace recpp::processors
 {
 	template <typename T, typename R>
-	class AndThen : public rscpp::Processor<T, R>
+	class IgnoreElements : public rscpp::Processor<T, R>
 	{
 		class Impl : public rscpp::Processor<T, R>
 		{
 		public:
-			explicit Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest);
+			explicit Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &source);
 
 			void onSubscribe(rscpp::Subscription &subscription) override;
 
@@ -26,15 +26,14 @@ namespace recpp::processors
 		private:
 			rscpp::Processor<T, R> &m_parent;
 			rscpp::Publisher<T>		m_source;
-			rscpp::Publisher<R>		m_dest;
 			rscpp::Subscriber<R>	m_subscriber;
 			rscpp::Subscription		m_subscription;
 			size_t					m_remaining = 0;
 		};
 
 	public:
-		explicit AndThen(const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest);
+		explicit IgnoreElements(const rscpp::Publisher<T> &source);
 	};
 } // namespace recpp::processors
 
-#include <recpp/processors/inl/AndThen.inl>
+#include <recpp/processors/inl/IgnoreElements.inl>

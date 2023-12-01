@@ -2,7 +2,7 @@
 
 #include <rscpp/Subscriber.h>
 
-namespace recpp
+namespace recpp::subscribers
 {
 	class CompletableSubscriber
 	{
@@ -17,4 +17,4 @@ namespace recpp
 		rscpp::Subscriber<int> m_subscriber;
 		bool				   m_ended = false;
 	};
-} // namespace recpp
+} // namespace recpp::subscribers

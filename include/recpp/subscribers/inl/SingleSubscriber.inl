@@ -1,13 +1,13 @@
 #pragma once
 
 template <typename T>
-recpp::SingleSubscriber<T>::SingleSubscriber(const rscpp::Subscriber<T> &subscriber)
+recpp::subscribers::SingleSubscriber<T>::SingleSubscriber(const rscpp::Subscriber<T> &subscriber)
 	: m_subscriber(subscriber)
 {
 }
 
 template <typename T>
-void recpp::SingleSubscriber<T>::onNext(const T &value)
+void recpp::subscribers::SingleSubscriber<T>::onNext(const T &value)
 {
 	if (!m_ended)
 	{
@@ -18,7 +18,7 @@ void recpp::SingleSubscriber<T>::onNext(const T &value)
 }
 
 template <typename T>
-void recpp::SingleSubscriber<T>::onError(const std::exception_ptr &error)
+void recpp::subscribers::SingleSubscriber<T>::onError(const std::exception_ptr &error)
 {
 	if (!m_ended)
 	{

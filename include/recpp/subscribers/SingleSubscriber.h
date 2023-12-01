@@ -2,7 +2,7 @@
 
 #include <rscpp/Subscriber.h>
 
-namespace recpp
+namespace recpp::subscribers
 {
 	template <typename T>
 	class SingleSubscriber
@@ -18,6 +18,6 @@ namespace recpp
 		rscpp::Subscriber<T> m_subscriber;
 		bool				 m_ended = false;
 	};
-} // namespace recpp
+} // namespace recpp::subscribers
 
 #include <recpp/subscribers/inl/SingleSubscriber.inl>

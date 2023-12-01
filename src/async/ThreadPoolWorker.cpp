@@ -2,7 +2,7 @@
 
 #include "recpp/async/SchedulableQueue.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 ThreadPoolWorker::ThreadPoolWorker(SchedulableQueue &queue)

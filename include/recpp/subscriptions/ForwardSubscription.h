@@ -2,7 +2,7 @@
 
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::subscriptions
 {
 	class ForwardSubscription : public rscpp::Subscription
 	{
@@ -22,4 +22,4 @@ namespace recpp
 	public:
 		ForwardSubscription(const rscpp::Subscription &subscription);
 	};
-} // namespace recpp
+} // namespace recpp::subscriptions

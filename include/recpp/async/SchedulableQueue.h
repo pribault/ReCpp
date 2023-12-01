@@ -9,7 +9,7 @@
 #include <mutex>
 #include <optional>
 
-namespace recpp
+namespace recpp::async
 {
 	class SchedulableQueue
 	{
@@ -41,4 +41,4 @@ namespace recpp
 		std::condition_variable				  m_cv;
 		std::atomic_bool					  m_stop = false;
 	};
-} // namespace recpp
+} // namespace recpp::async

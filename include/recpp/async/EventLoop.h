@@ -4,7 +4,7 @@
 
 #include <atomic>
 
-namespace recpp
+namespace recpp::async
 {
 	class EventLoop : public Scheduler
 	{
@@ -22,4 +22,4 @@ namespace recpp
 	private:
 		std::atomic_bool m_stop = false;
 	};
-} // namespace recpp
+} // namespace recpp::async

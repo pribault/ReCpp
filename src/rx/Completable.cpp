@@ -1,45 +1,49 @@
 #include <recpp/rx/Completable.h>
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/AndThen.h>
+#include <recpp/processors/ObserveOn.h>
+#include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
-#include <recpp/processors/AndThen.h>
-#include <recpp/processors/ObserveOn.h>
-#include <recpp/processors/SubscribeOn.h>
-#include <recpp/processors/Tap.h>
 #include <recpp/subscribers/CompletableSubscriber.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 
-using namespace recpp;
+using namespace recpp::async;
+using namespace recpp::processors;
+using namespace recpp::publishers;
+using namespace recpp::rx;
+using namespace recpp::subscribers;
 using namespace rscpp;
 using namespace std;
 
 Completable Completable::complete()
 {
-	return Completable(shared_ptr<Publisher<int>>(new EmptyPublisher<int>()));
+	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::EmptyPublisher<int>()));
 }
 
 Completable Completable::create(const function<void(CompletableSubscriber &)> &method)
 {
-	return Completable(shared_ptr<Publisher<int>>(new CreatePublisher<int, CompletableSubscriber>(method)));
+	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::CreatePublisher<int, CompletableSubscriber>(method)));
 }
 
 Completable Completable::defer(const function<Completable()> &function)
 {
-	return Completable(shared_ptr<Publisher<int>>(new DeferPublisher<int, Completable>(function)));
+	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::DeferPublisher<int, Completable>(function)));
 }
 
- Completable Completable::error(const exception_ptr &error)
+Completable Completable::error(const exception_ptr &error)
 {
-	return Completable(shared_ptr<Publisher<int>>(new ErrorPublisher<int>(error)));
+	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::ErrorPublisher<int>(error)));
 }
 
- Completable Completable::never()
+Completable Completable::never()
 {
-	return Completable(shared_ptr<Publisher<int>>(new NeverPublisher<int>()));
+	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::NeverPublisher<int>()));
 }
 
 void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, const Completable::OnErrorMethod &onError)

@@ -4,7 +4,7 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::processors
 {
 	template <typename T, typename R>
 	class FlatMap : public rscpp::Processor<T, R>
@@ -37,6 +37,6 @@ namespace recpp
 	public:
 		explicit FlatMap(const rscpp::Publisher<T> &publisher, const std::function<rscpp::Publisher<R>(const T & /* value */)> &method);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/FlatMap.inl>

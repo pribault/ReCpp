@@ -2,7 +2,7 @@
 
 #include <rscpp/Publisher.h>
 
- namespace recpp
+namespace recpp::publishers
 {
 	template <typename T>
 	class EmptyPublisher : public rscpp::Publisher<T>
@@ -12,6 +12,6 @@
 
 		void subscribe(rscpp::Subscriber<T> &subscriber) override;
 	};
-} // namespace recpp
+} // namespace recpp::publishers
 
 #include <recpp/publishers/inl/EmptyPublisher.inl>

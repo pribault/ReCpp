@@ -1,13 +1,13 @@
 #pragma once
 
 template <typename T>
-recpp::MaybeSubscriber<T>::MaybeSubscriber(const rscpp::Subscriber<T> &subscriber)
+recpp::subscribers::MaybeSubscriber<T>::MaybeSubscriber(const rscpp::Subscriber<T> &subscriber)
 	: m_subscriber(subscriber)
 {
 }
 
 template <typename T>
-void recpp::MaybeSubscriber<T>::onNext(const T &value)
+void recpp::subscribers::MaybeSubscriber<T>::onNext(const T &value)
 {
 	if (!m_ended)
 	{
@@ -18,7 +18,7 @@ void recpp::MaybeSubscriber<T>::onNext(const T &value)
 }
 
 template <typename T>
-void recpp::MaybeSubscriber<T>::onError(const std::exception_ptr &error)
+void recpp::subscribers::MaybeSubscriber<T>::onError(const std::exception_ptr &error)
 {
 	if (!m_ended)
 	{
@@ -28,7 +28,7 @@ void recpp::MaybeSubscriber<T>::onError(const std::exception_ptr &error)
 }
 
 template <typename T>
-void recpp::MaybeSubscriber<T>::onComplete()
+void recpp::subscribers::MaybeSubscriber<T>::onComplete()
 {
 	if (!m_ended)
 	{

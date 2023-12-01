@@ -1,6 +1,6 @@
 #include "recpp/async/EventLoop.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 void EventLoop::run()

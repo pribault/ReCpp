@@ -9,7 +9,8 @@
 #include <array>
 #include <iostream>
 
-using namespace recpp;
+using namespace recpp::async;
+using namespace recpp::rx;
 using namespace std;
 
 namespace
@@ -292,6 +293,33 @@ TEST(Observable, filter)
 								   },
 								   []() { throw runtime_error("completion handler called"); }));
 	EXPECT_TRUE(errored);
+}
+
+TEST(Observable, ignoreElements)
+{
+	size_t valuesCount = 0;
+	bool   completed = false;
+	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
+						.doOnNext(
+							[&valuesCount](const auto value)
+							{
+								if (valuesCount >= defaultValues.size())
+									throw runtime_error("too much values forwarded");
+								const auto expectedValue = defaultValues[valuesCount++];
+								if (value != expectedValue)
+									throw runtime_error("unexpected value");
+							})
+						.ignoreElements()
+						.subscribe(
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							},
+							[](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_TRUE(completed);
+	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
 TEST(Observable, map)

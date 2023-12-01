@@ -3,7 +3,7 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::subscriptions
 {
 	template <typename T>
 	class EmptySubscription : public rscpp::Subscription
@@ -24,6 +24,6 @@ namespace recpp
 	public:
 		EmptySubscription(const rscpp::Subscriber<T> &subscriber);
 	};
-} // namespace recpp
+} // namespace recpp::subscriptions
 
 #include <recpp/subscriptions/inl/EmptySubscription.inl>

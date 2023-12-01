@@ -6,19 +6,19 @@
 #include <recpp/rx/Single.h>
 
 template <typename T>
-recpp::Maybe<T> recpp::Completable::andThen(const recpp::Maybe<T> &maybe)
+recpp::rx::Maybe<T> recpp::rx::Completable::andThen(const recpp::rx::Maybe<T> &maybe)
 {
-	return Maybe(std::shared_ptr<rscpp::Publisher<T>>(new recpp::AndThen<int, T>(*this, maybe)));
+	return Maybe(std::shared_ptr<rscpp::Publisher<T>>(new recpp::processors::AndThen<int, T>(*this, maybe)));
 }
 
 template <typename T>
-recpp::Observable<T> recpp::Completable::andThen(const recpp::Observable<T> &observable)
+recpp::rx::Observable<T> recpp::rx::Completable::andThen(const recpp::rx::Observable<T> &observable)
 {
-	return Observable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::AndThen<int, T>(*this, observable)));
+	return Observable(std::shared_ptr<rscpp::Publisher<T>>(new recpp::processors::AndThen<int, T>(*this, observable)));
 }
 
 template <typename T>
-recpp::Single<T> recpp::Completable::andThen(const recpp::Single<T> &maybe)
+recpp::rx::Single<T> recpp::rx::Completable::andThen(const recpp::rx::Single<T> &maybe)
 {
-	return Single(std::shared_ptr<rscpp::Publisher<T>>(new recpp::AndThen<int, T>(*this, maybe)));
+	return Single(std::shared_ptr<rscpp::Publisher<T>>(new recpp::processors::AndThen<int, T>(*this, maybe)));
 }

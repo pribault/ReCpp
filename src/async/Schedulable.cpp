@@ -1,6 +1,6 @@
 #include "recpp/async/Schedulable.h"
 
-using namespace recpp;
+using namespace recpp::async;
 using namespace std;
 
 Schedulable::Schedulable(const function<void(void)> &function)

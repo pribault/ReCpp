@@ -3,7 +3,7 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-namespace recpp
+namespace recpp::subscriptions
 {
 	template <typename T, class I>
 	class RangeSubscription : public rscpp::Subscription
@@ -28,6 +28,6 @@ namespace recpp
 	public:
 		RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last);
 	};
-} // namespace recpp
+} // namespace recpp::subscriptions
 
 #include <recpp/subscriptions/inl/RangeSubscription.inl>

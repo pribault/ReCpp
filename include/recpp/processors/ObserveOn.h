@@ -2,9 +2,12 @@
 
 #include <rscpp/Processor.h>
 
-namespace recpp
+namespace recpp::processors
 {
-	class Scheduler;
+	namespace async
+	{
+		class Scheduler;
+	}
 
 	template <typename T>
 	class ObserveOn : public rscpp::Processor<T, T>
@@ -12,7 +15,7 @@ namespace recpp
 		class Impl : public rscpp::Processor<T, T>
 		{
 		public:
-			explicit Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler);
+			explicit Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler);
 
 			void onSubscribe(rscpp::Subscription &subscription) override;
 
@@ -25,15 +28,15 @@ namespace recpp
 			void subscribe(rscpp::Subscriber<T> &subscriber) override;
 
 		private:
-			rscpp::Processor<T, T> &m_parent;
-			rscpp::Publisher<T>		m_publisher;
-			rscpp::Subscriber<T>	m_subscriber;
-			recpp::Scheduler	   &m_scheduler;
+			rscpp::Processor<T, T>	&m_parent;
+			rscpp::Publisher<T>		 m_publisher;
+			rscpp::Subscriber<T>	 m_subscriber;
+			recpp::async::Scheduler &m_scheduler;
 		};
 
 	public:
-		explicit ObserveOn(const rscpp::Publisher<T> &publisher, recpp::Scheduler &scheduler);
+		explicit ObserveOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler);
 	};
-} // namespace recpp
+} // namespace recpp::processors
 
 #include <recpp/processors/inl/ObserveOn.inl>

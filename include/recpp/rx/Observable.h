@@ -5,15 +5,24 @@
 
 #include <functional>
 
-namespace recpp
+namespace recpp::async
+{
+	class Scheduler;
+}
+
+namespace recpp::subscribers
+{
+	template <typename T>
+	class ObservableSubscriber;
+}
+
+namespace recpp::rx
 {
 	class Completable;
 	template <typename T>
 	class Maybe;
 	template <typename T>
 	class Single;
-	template <typename T>
-	class ObservableSubscriber;
 
 	template <typename T>
 	class Observable : public rscpp::Publisher<T>
@@ -27,7 +36,7 @@ namespace recpp
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 		using OnCompleteMethod = std::function<void()>;
 
-		static Observable<T> create(const std::function<void(ObservableSubscriber<T> &)> &method);
+		static Observable<T> create(const std::function<void(recpp::subscribers::ObservableSubscriber<T> &)> &method);
 
 		static Observable<T> defer(const std::function<Observable<T>()> &function);
 
@@ -49,6 +58,8 @@ namespace recpp
 
 		Observable<T> filter(const std::function<bool(const T & /* value */)> &method);
 
+		Completable ignoreElements();
+
 		template <typename R>
 		Observable<R> map(const std::function<R(const T & /* value */)> &method);
 
@@ -65,13 +76,13 @@ namespace recpp
 
 		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
-		Observable<T> observeOn(Scheduler &scheduler);
+		Observable<T> observeOn(async::Scheduler &scheduler);
 
-		Observable<T> subscribeOn(Scheduler &scheduler);
+		Observable<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
 		Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
-} // namespace recpp
+} // namespace recpp::rx
 
 #include <recpp/rx/inl/Observable.inl>

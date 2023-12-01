@@ -1,20 +1,20 @@
 #pragma once
 
 template <typename T>
-recpp::ObservableSubscriber<T>::ObservableSubscriber(const rscpp::Subscriber<T> &subscriber)
+recpp::subscribers::ObservableSubscriber<T>::ObservableSubscriber(const rscpp::Subscriber<T> &subscriber)
 	: m_subscriber(subscriber)
 {
 }
 
 template <typename T>
-void recpp::ObservableSubscriber<T>::onNext(const T &value)
+void recpp::subscribers::ObservableSubscriber<T>::onNext(const T &value)
 {
 	if (!m_ended)
 		m_subscriber.onNext(value);
 }
 
 template <typename T>
-void recpp::ObservableSubscriber<T>::onError(const std::exception_ptr &error)
+void recpp::subscribers::ObservableSubscriber<T>::onError(const std::exception_ptr &error)
 {
 	if (!m_ended)
 	{
@@ -24,7 +24,7 @@ void recpp::ObservableSubscriber<T>::onError(const std::exception_ptr &error)
 }
 
 template <typename T>
-void recpp::ObservableSubscriber<T>::onComplete()
+void recpp::subscribers::ObservableSubscriber<T>::onComplete()
 {
 	if (!m_ended)
 	{

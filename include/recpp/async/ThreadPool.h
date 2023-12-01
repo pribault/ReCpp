@@ -3,9 +3,10 @@
 #include <recpp/async/Scheduler.h>
 
 #include <memory>
+#include <thread>
 #include <vector>
 
-namespace recpp
+namespace recpp::async
 {
 	class ThreadPoolWorker;
 
@@ -14,11 +15,13 @@ namespace recpp
 		friend class ThreadPoolWorker;
 
 	public:
-		explicit ThreadPool(size_t threadCount);
+		explicit ThreadPool(size_t threadCount = std::thread::hardware_concurrency());
 
 		~ThreadPool();
+
+		size_t size() const;
 
 	private:
 		std::vector<std::unique_ptr<ThreadPoolWorker>> m_workers;
 	};
-} // namespace recpp
+} // namespace recpp::async
