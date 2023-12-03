@@ -9,6 +9,12 @@ namespace recpp::processors
 		class Scheduler;
 	}
 
+	/**
+	 * @class SubscribeOn SubscribeOn.h <recpp/processors/SubscribeOn.h>
+	 * @brief {@link Processor} that will subscribe to a given {@link Publisher} on a given {@link Scheduler}.
+	 * 
+	 * @tparam T The type of element signaled to the {@link Subscriber} and signaled from the {@link Publisher}.
+	 */
 	template <typename T>
 	class SubscribeOn : public rscpp::Processor<T, T>
 	{
@@ -35,6 +41,12 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link SubscribeOn} instance.
+		 *
+		 * @param publisher The source {@link Publisher} the {@link SubscribeOn} {@link Processor} subscribes to.
+		 * @param scheduler The {@link Scheduler} to subscribe to the {@link Publisher} on.
+		 */
 		explicit SubscribeOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler);
 	};
 } // namespace recpp::processors

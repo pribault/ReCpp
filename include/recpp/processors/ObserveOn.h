@@ -9,6 +9,12 @@ namespace recpp::processors
 		class Scheduler;
 	}
 
+	/**
+	 * @class ObserveOn ObserveOn.h <recpp/processors/ObserveOn.h>
+	 * @brief {@link Processor} that will subscribe to a given {@link Publisher} and forward its emissions on a given {@link Scheduler}.
+	 *
+	 * @tparam T The type of element signaled to the {@link Subscriber} and signaled from the {@link Publisher}.
+	 */
 	template <typename T>
 	class ObserveOn : public rscpp::Processor<T, T>
 	{
@@ -35,6 +41,12 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link ObserveOn} instance.
+		 *
+		 * @param publisher The source {@link Publisher} the {@link ObserveOn} {@link Processor} subscribes to.
+		 * @param scheduler The {@link Scheduler} to forward the emissions on.
+		 */
 		explicit ObserveOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler);
 	};
 } // namespace recpp::processors
