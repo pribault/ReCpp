@@ -6,7 +6,7 @@ namespace recpp::subscriptions
 {
 	/**
 	 * @class FilterSubscription FilterSubscription.h <recpp/subscriptions/FilterSubscription.h>
-	 * @brief {@link Subscription} that will be used by a {@link Filter} to filter the emitted items.
+	 * @brief {@link rscpp::Subscription} that will be used by a {@link Filter} to filter the emitted items.
 	 */
 	class FilterSubscription : public rscpp::Subscription
 	{
@@ -31,7 +31,7 @@ namespace recpp::subscriptions
 		/**
 		 * @brief Construct a new {@link FilterSubscription} instance.
 		 *
-		 * @param subscription The source {@link Subscription} used to request items when necessary.
+		 * @param subscription The source {@link rscpp::Subscription} used to request items when necessary.
 		 */
 		FilterSubscription(const rscpp::Subscription &subscription);
 

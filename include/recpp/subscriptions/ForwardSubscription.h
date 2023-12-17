@@ -6,9 +6,9 @@ namespace recpp::subscriptions
 {
 	/**
 	 * @class ForwardSubscription ForwardSubscription.h <recpp/subscriptions/ForwardSubscription.h>
-	 * @brief {@link Subscription} that is used to forward requests to another {@link Subscription}.
+	 * @brief {@link rscpp::Subscription} that is used to forward requests to another {@link rscpp::Subscription}.
 	 * <p>
-	 * This class is mainly used for {@link Processor}.
+	 * This class is mainly used for {@link rscpp::Processor}.
 	 */
 	class ForwardSubscription : public rscpp::Subscription
 	{
@@ -29,7 +29,7 @@ namespace recpp::subscriptions
 		/**
 		 * @brief Construct a new {@link ForwardSubscription} instance.
 		 *
-		 * @param subscription The {@link Subscription} to forward requests to.
+		 * @param subscription The {@link rscpp::Subscription} to forward requests to.
 		 */
 		ForwardSubscription(const rscpp::Subscription &subscription);
 	};

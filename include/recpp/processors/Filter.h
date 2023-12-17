@@ -11,9 +11,9 @@ namespace recpp::processors
 {
 	/**
 	 * @class Filter Filter.h <recpp/processors/Filter.h>
-	 * @brief {@link Processor} that will subscribe to a given {@link Publisher} and filter its emissions with a given function.
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and filter its emissions with a given function.
 	 *
-	 * @tparam T The type of element signaled to the {@link Subscriber} and signaled from the {@link Publisher}.
+	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber} and signaled from the {@link rscpp::Publisher}.
 	 */
 	template <typename T>
 	class Filter : public rscpp::Processor<T, T>
@@ -45,7 +45,7 @@ namespace recpp::processors
 		/**
 		 * @brief Construct a new {@link Filter} instance.
 		 *
-		 * @param publisher The source {@link Publisher} the {@link Filter} {@link Processor} subscribes to and filter the items.
+		 * @param publisher The source {@link rscpp::Publisher} the {@link Filter} {@link rscpp::Processor} subscribes to and filter the items.
 		 * @param method The filter method.
 		 */
 		explicit Filter(const rscpp::Publisher<T> &publisher, const std::function<bool(const T & /* value */)> &method);

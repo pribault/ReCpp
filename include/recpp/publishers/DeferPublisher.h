@@ -8,10 +8,10 @@ namespace recpp::publishers
 {
 	/**
 	 * @class DeferPublisher DeferPublisher.h <recpp/publishers/DeferPublisher.h>
-	 * @brief {@link Publisher} that will call a given method on subscription, and subscribe to its result.
+	 * @brief {@link rscpp::Publisher} that will call a given method on subscription, and subscribe to its result.
 	 *
-	 * @tparam T The type of element signaled by the {@link Publisher}.
-	 * @tparam P The method {@link Publisher} return type.
+	 * @tparam T The type of element signaled by the {@link rscpp::Publisher}.
+	 * @tparam P The method {@link rscpp::Publisher} return type.
 	 */
 	template <typename T, typename P>
 	class DeferPublisher : public rscpp::Publisher<T>
@@ -25,18 +25,18 @@ namespace recpp::publishers
 		DeferPublisher(const std::function<P()> &method);
 
 		/**
-		 * @brief Request {@link Publisher} to start streaming data.
+		 * @brief Request {@link rscpp::Publisher} to start streaming data.
 		 * <p>
-		 * This is a "factory method" and can be called multiple times, each time starting a new {@link Subscription}.
+		 * This is a "factory method" and can be called multiple times, each time starting a new {@link rscpp::Subscription}.
 		 * <p>
-		 * Each {@link Subscription} will work for only a single {@link Subscriber}.
+		 * Each {@link rscpp::Subscription} will work for only a single {@link rscpp::Subscriber}.
 		 * <p>
-		 * A {@link Subscriber} should only subscribe once to a single {@link Publisher}.
+		 * A {@link rscpp::Subscriber} should only subscribe once to a single {@link rscpp::Publisher}.
 		 * <p>
-		 * If the {@link Publisher} rejects the subscription attempt or otherwise fails it will
-		 * signal the error via {@link Subscriber::onError(const std::exception_ptr &)}.
+		 * If the {@link rscpp::Publisher} rejects the subscription attempt or otherwise fails it will
+		 * signal the error via {@link rscpp::Subscriber::onError(const std::exception_ptr &)}.
 		 *
-		 * @param subscriber The {@link Subscriber} that will consume signals from this {@link Publisher}
+		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Publisher}
 		 */
 		void subscribe(rscpp::Subscriber<T> &subscriber) override;
 

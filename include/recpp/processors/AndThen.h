@@ -7,11 +7,11 @@ namespace recpp::processors
 {
 	/**
 	 * @class AndThen AndThen.h <recpp/processors/AndThen.h>
-	 * @brief {@link Processor} that will subscribe to a given {@link Publisher} and request items until completion AND THEN subscribe to a second {@link Publisher}
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and request items until completion AND THEN subscribe to a second {@link rscpp::Publisher}
 	 * and forward its emissions.
 	 *
-	 * @param T The type of element signaled to the {@link Subscriber}.
-	 * @param R The type of element signaled by the {@link Publisher}.
+	 * @param T The type of element signaled to the {@link rscpp::Subscriber}.
+	 * @param R The type of element signaled by the {@link rscpp::Publisher}.
 	 */
 	template <typename T, typename R>
 	class AndThen : public rscpp::Processor<T, R>
@@ -44,8 +44,8 @@ namespace recpp::processors
 		/**
 		 * @brief Construct a new {@link AndThen} instance.
 		 *
-		 * @param source The source {@link Publisher} the {@link AndThen} {@link Processor} subscribes to and request items until completion.
-		 * @param dest The destination {@link Publisher} the {@link AndThen} {@link Processor} will subscribe to after the source {@link Publisher} completion.
+		 * @param source The source {@link rscpp::Publisher} the {@link AndThen} {@link rscpp::Processor} subscribes to and request items until completion.
+		 * @param dest The destination {@link rscpp::Publisher} the {@link AndThen} {@link rscpp::Processor} will subscribe to after the source {@link rscpp::Publisher} completion.
 		 */
 		explicit AndThen(const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest);
 	};
