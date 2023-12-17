@@ -35,7 +35,7 @@ namespace recpp::publishers
 		 * If the {@link Publisher} rejects the subscription attempt or otherwise fails it will
 		 * signal the error via {@link Subscriber::onError(const std::exception_ptr &)}.
 		 *
-		 * @param subscriber the {@link Subscriber} that will consume signals from this {@link Publisher}
+		 * @param subscriber The {@link Subscriber} that will consume signals from this {@link Publisher}
 		 */
 		void subscribe(rscpp::Subscriber<T> &subscriber) override;
 

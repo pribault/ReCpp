@@ -5,6 +5,12 @@
 
 namespace recpp::subscriptions
 {
+	/**
+	 * @class NeverSubscription NeverSubscription.h <recpp/subscriptions/NeverSubscription.h>
+	 * @brief {@link Subscription} that will never emit items nor complete. Completion will only happen on cancel.
+	 * 
+	 * @tparam T 
+	 */
 	template <typename T>
 	class NeverSubscription : public rscpp::Subscription
 	{

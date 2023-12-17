@@ -5,6 +5,12 @@
 
 namespace recpp::subscriptions
 {
+	/**
+	 * @class EmptySubscription EmptySubscription.h <recpp/subscriptions/EmptySubscription.h>
+	 * @brief {@link Subscription} that will emit no items but complete directly when items are requested.
+	 * 
+	 * @tparam T The type of element signaled to the {@link Subscriber}.
+	 */
 	template <typename T>
 	class EmptySubscription : public rscpp::Subscription
 	{
@@ -22,6 +28,11 @@ namespace recpp::subscriptions
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link EmptySubscription} instance.
+		 * 
+		 * @param subscriber The {@link Subscriber} that will consume signals from this {@link Subscription}.
+		 */
 		EmptySubscription(const rscpp::Subscriber<T> &subscriber);
 	};
 } // namespace recpp::subscriptions
