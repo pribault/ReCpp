@@ -24,6 +24,12 @@ namespace recpp::rx
 	template <typename T>
 	class Single;
 
+	/**
+	 * @class Observable Observable.h <recpp/rx/Observable.h>
+	 *
+	 * @brief An Observable is a Publisher that emits a stream of values.
+	 * @param T The type of element signaled.
+	 */
 	template <typename T>
 	class Observable : public rscpp::Publisher<T>
 	{
@@ -36,16 +42,53 @@ namespace recpp::rx
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 		using OnCompleteMethod = std::function<void()>;
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will call the given method when subscribed to.
+		 * <p>
+		 * The first parameter of the method will be a {@link recpp::subscribers::ObservableSubscriber} that can be used to emit values, errors or completion.
+		 *
+		 * @param method The method to call when subscribed to.
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> create(const std::function<void(recpp::subscribers::ObservableSubscriber<T> &)> &method);
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will call the given method when subscribed to.
+		 * <p>
+		 * The method must return a {@link Observable} instance that will be subscribed to after returning.
+		 *
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> defer(const std::function<Observable<T>()> &function);
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will not emit any value when subscribed to.
+		 *
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> empty();
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will emit the given error when subscribed to.
+		 *
+		 * @param error The error to emit.
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> error(const std::exception_ptr &error);
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will emit the given value when subscribed to.
+		 *
+		 * @param value The value to emit.
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> just(const T &value);
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will never emit a signal when subscribed to.
+		 *
+		 * @return The new {@link Observable} instance.
+		 */
 		static Observable<T> never();
 
 		template <class I>
