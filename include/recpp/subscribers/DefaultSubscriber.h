@@ -7,6 +7,12 @@
 
 namespace recpp::subscribers
 {
+	/**
+	 * @class DefaultSubscriber DefaultSubscriber.h <recpp/subscribers/DefaultSubscriber.h>
+	 *
+	 * @brief {@link rscpp::Subscriber} that will call a given set of functions on each signal.
+	 * @param T The type of element signaled.
+	 */
 	template <typename T>
 	class DefaultSubscriber : public rscpp::Subscriber<T>
 	{
@@ -40,6 +46,13 @@ namespace recpp::subscribers
 		using OnErrorMethod = typename Impl::OnErrorMethod;
 		using OnCompleteMethod = typename Impl::OnCompleteMethod;
 
+		/**
+		 * @brief Construct a new {@link DefaultSubscriber} instance.
+		 *
+		 * @param onNextMethod The function to call when a value is emitted.
+		 * @param onErrorMethod The function to call when an error is emitted.
+		 * @param onCompleteMethod The function to call when the {@link rscpp::Publisher} completes.
+		 */
 		explicit DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 	};
 } // namespace recpp::subscribers
