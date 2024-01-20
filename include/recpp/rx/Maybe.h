@@ -104,6 +104,7 @@ namespace recpp::rx
 		/**
 		 * @brief Apply the given method to the value emitted by this {@link Maybe} if any, and return a new {@link Maybe} containing the result.
 		 *
+		 * @tparam R The method return type.
 		 * @param method The method to apply to the value.
 		 * @return The new {@link Maybe} instance.
 		 */
@@ -115,6 +116,7 @@ namespace recpp::rx
 		 * <p>
 		 * The method must return a {@link Maybe} instance that will be subscribed to after returning.
 		 *
+		 * @tparam R The method return type.
 		 * @param method The method to apply to the value.
 		 * @return The new {@link Maybe} instance.
 		 */

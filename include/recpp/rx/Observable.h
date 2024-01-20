@@ -91,36 +91,130 @@ namespace recpp::rx
 		 */
 		static Observable<T> never();
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will emit values contained inside the given range.
+		 * 
+		 * @tparam I The range iterator type.
+		 * @param first The first iterator.
+		 * @param last The last iterator.
+		 * @return The new {@link Observable} instance.
+		 */
 		template <class I>
 		static Observable<T> range(I first, I last);
 
+		/**
+		 * @brief Construct a new {@link Observable} instance that will emit values contained inside the given range.
+		 * 
+		 * @tparam I The range iterator type.
+		 * @param first The first iterator.
+		 * @param last The last iterator.
+		 * @return The new {@link Observable} instance.
+		 */
 		template <class R>
 		static Observable<T> range(R &&range);
 
+		/**
+		 * @brief Subscribe to this {@link Observable} with the given methods.
+		 *
+		 * @param onNext The method to call when the {@link Observable} emits a value.
+		 * @param onError The method to call when the {@link Observable} errors.
+		 * @param onComplete The method to call when the {@link Observable} completes.
+		 */
 		void subscribe(const OnNextMethod &onNext = nullptr, const OnErrorMethod &onError = nullptr, const OnCompleteMethod &onComplete = nullptr);
 
+		/**
+		 * @brief Filter emitted values with the given method.
+		 *
+		 * @param method The method to apply to the value.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> filter(const std::function<bool(const T & /* value */)> &method);
 
+		/**
+		 * Convert this {@link Observable} into a {@link Completable} by discarding all contained value.
+		 *
+		 * @return The new {@link Completable} instance.
+		 */
 		Completable ignoreElements();
 
+		/**
+		 * @brief Apply a given method to the values emitted by this {@link Observable}.
+		 *
+		 * @tparam R The method return type.
+		 * @param method The method to apply to the values.
+		 * @return The new {@link Observable} instance.
+		 */
 		template <typename R>
 		Observable<R> map(const std::function<R(const T & /* value */)> &method);
 
+		/**
+		 * @brief Apply the given method to the values emitted by this {@link Observable}.
+		 * <p>
+		 * The method must return a {@link Observable} instance that will be subscribed to after returning.
+		 *
+		 * @tparam R The method return type.
+		 * @param method The method to apply to the value.
+		 * @return The new {@link Observable} instance.
+		 */
 		template <typename R>
 		Observable<R> flatMap(const std::function<Observable<R>(const T & /* value */)> &method);
 
+		/**
+		 * @brief Define a method that will be called when the {@link Observable} completes.
+		 *
+		 * @param method The method to call on completion.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> doOnComplete(const OnCompleteMethod &method);
 
+		/**
+		 * @brief Define a method that will be called on error.
+		 *
+		 * @param method The method to call on error.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> doOnError(const OnErrorMethod &method);
 
+		/**
+		 * @brief Define a method that will be called when the {@link Observable} emits a value.
+		 *
+		 * @param method The method to call for each value.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> doOnNext(const OnNextMethod &method);
 
+		/**
+		 * @brief Define a method that will be called when the {@link Observable} terminates, either by completing or erroring.
+		 *
+		 * @param method The method to call on termination.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> doOnTerminate(const OnCompleteMethod &method);
 
+		/**
+		 * @brief Define the methods that will be called when the {@link Observable} emits a value, completes or errors.
+		 *
+		 * @param onNextMethod The method to call for each value.
+		 * @param onErrorMethod The method to call on error.
+		 * @param onCompleteMethod The method to call on completion.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
+		/**
+		 * @brief Forwards all emissions on the given {@link Scheduler}.
+		 *
+		 * @param scheduler The {@link Scheduler} to observe on.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> observeOn(async::Scheduler &scheduler);
 
+		/**
+		 * @brief Subscribe to this {@link Observable} on the given {@link Scheduler}.
+		 *
+		 * @param scheduler The {@link Scheduler} to subscribe on.
+		 * @return The new {@link Observable} instance.
+		 */
 		Observable<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
