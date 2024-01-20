@@ -20,8 +20,19 @@ namespace recpp::async
 	class SchedulableQueue
 	{
 	public:
+		/**
+		 * @brief The clock used by the {@link SchedulableQueue}.
+		 */
 		using Clock = std::chrono::steady_clock;
+
+		/**
+		 * @brief The clock duration used by the {@link SchedulableQueue}.
+		 */
 		using Duration = Clock::duration;
+
+		/**
+		 * @brief The clock time point used by the {@link SchedulableQueue}.
+		 */
 		using TimePoint = Clock::time_point;
 
 		/**

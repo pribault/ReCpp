@@ -7,7 +7,7 @@ namespace recpp::subscribers
 	/**
 	 * @class MaybeSubscriber MaybeSubscriber.h <recpp/subscribers/MaybeSubscriber.h>
 	 *
-	 * @brief Subscriber that can be used to create a new {@link recpp::Maybe}.
+	 * @brief Subscriber that can be used to create a new {@link rx::Maybe}.
 	 * <p>
 	 * This class does not inherit from {@link rscpp::Subscriber}.
 	 * @param T The type of element signaled.

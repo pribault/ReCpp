@@ -7,7 +7,7 @@ namespace recpp::subscribers
 	/**
 	 * @class SingleSubscriber SingleSubscriber.h <recpp/subscribers/SingleSubscriber.h>
 	 *
-	 * @brief Subscriber that can be used to create a new {@link recpp::Single}.
+	 * @brief Subscriber that can be used to create a new {@link rx::Single}.
 	 * <p>
 	 * This class does not inherit from {@link rscpp::Subscriber}.
 	 * @param T The type of element signaled.

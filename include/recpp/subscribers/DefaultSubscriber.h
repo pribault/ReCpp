@@ -42,9 +42,20 @@ namespace recpp::subscribers
 		};
 
 	public:
-		using OnNextMethod = typename Impl::OnNextMethod;
-		using OnErrorMethod = typename Impl::OnErrorMethod;
-		using OnCompleteMethod = typename Impl::OnCompleteMethod;
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
+		using OnNextMethod = std::function<void(const T & /* value */)>;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
+		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
+		using OnCompleteMethod = std::function<void()>;
 
 		/**
 		 * @brief Construct a new {@link DefaultSubscriber} instance.

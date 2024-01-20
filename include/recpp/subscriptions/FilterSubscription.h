@@ -6,7 +6,7 @@ namespace recpp::subscriptions
 {
 	/**
 	 * @class FilterSubscription FilterSubscription.h <recpp/subscriptions/FilterSubscription.h>
-	 * @brief {@link rscpp::Subscription} that will be used by a {@link Filter} to filter the emitted items.
+	 * @brief {@link rscpp::Subscription} that will be used by a {@link processors::Filter} to filter the emitted items.
 	 */
 	class FilterSubscription : public rscpp::Subscription
 	{
@@ -36,7 +36,7 @@ namespace recpp::subscriptions
 		FilterSubscription(const rscpp::Subscription &subscription);
 
 		/**
-		 * @brief Method called by the {@link Filter} to notify that an item was emitted.
+		 * @brief Method called by the {@link processors::Filter} to notify that an item was emitted.
 		 *
 		 * @param filtered Boolean defining if the item is filtered.
 		 */

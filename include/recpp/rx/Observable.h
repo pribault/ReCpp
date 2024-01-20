@@ -38,14 +38,25 @@ namespace recpp::rx
 		friend class Completable;
 
 	public:
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
 		using OnNextMethod = std::function<void(const T & /* value */)>;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
 		using OnCompleteMethod = std::function<void()>;
 
 		/**
 		 * @brief Construct a new {@link Observable} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link recpp::subscribers::ObservableSubscriber} that can be used to emit values, errors or completion.
+		 * The first parameter of the method will be a {@link subscribers::ObservableSubscriber} that can be used to emit values, errors or completion.
 		 *
 		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Observable} instance.
@@ -57,9 +68,10 @@ namespace recpp::rx
 		 * <p>
 		 * The method must return a {@link Observable} instance that will be subscribed to after returning.
 		 *
+		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Observable} instance.
 		 */
-		static Observable<T> defer(const std::function<Observable<T>()> &function);
+		static Observable<T> defer(const std::function<Observable<T>()> &method);
 
 		/**
 		 * @brief Construct a new {@link Observable} instance that will not emit any value when subscribed to.
@@ -105,9 +117,8 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Observable} instance that will emit values contained inside the given range.
 		 * 
-		 * @tparam I The range iterator type.
-		 * @param first The first iterator.
-		 * @param last The last iterator.
+		 * @tparam R The range type.
+		 * @param range The range.
 		 * @return The new {@link Observable} instance.
 		 */
 		template <class R>
@@ -202,22 +213,27 @@ namespace recpp::rx
 		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
 		/**
-		 * @brief Forwards all emissions on the given {@link Scheduler}.
+		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to observe on.
+		 * @param scheduler The {@link async::Scheduler} to observe on.
 		 * @return The new {@link Observable} instance.
 		 */
 		Observable<T> observeOn(async::Scheduler &scheduler);
 
 		/**
-		 * @brief Subscribe to this {@link Observable} on the given {@link Scheduler}.
+		 * @brief Subscribe to this {@link Observable} on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to subscribe on.
+		 * @param scheduler The {@link async::Scheduler} to subscribe on.
 		 * @return The new {@link Observable} instance.
 		 */
 		Observable<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
+		/**
+		 * @brief Construct a new {@link Observable} instance with the given private implementation.
+		 * 
+		 * @param dd The private implementation.
+		 */
 		Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp::rx

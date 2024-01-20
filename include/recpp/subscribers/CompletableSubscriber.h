@@ -7,7 +7,7 @@ namespace recpp::subscribers
 	/**
 	 * @class CompletableSubscriber CompletableSubscriber.h <recpp/subscribers/CompletableSubscriber.h>
 	 *
-	 * @brief Subscriber that can be used to create a new {@link recpp::Completable}.
+	 * @brief Subscriber that can be used to create a new {@link rx::Completable}.
 	 * <p>
 	 * This class does not inherit from {@link rscpp::Subscriber}.
 	 */

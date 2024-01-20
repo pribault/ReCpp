@@ -15,8 +15,19 @@ namespace recpp::async
 	class Scheduler
 	{
 	public:
+		/**
+		 * @brief The clock used by the {@link Scheduler}.
+		 */
 		using Clock = SchedulableQueue::Clock;
+
+		/**
+		 * @brief The clock duration used by the {@link Scheduler}.
+		 */
 		using Duration = SchedulableQueue::Duration;
+
+		/**
+		 * @brief The clock time point used by the {@link Scheduler}.
+		 */
 		using TimePoint = SchedulableQueue::TimePoint;
 
 		/**

@@ -17,8 +17,19 @@ namespace recpp::async
 	class EventLoop : public Scheduler
 	{
 	public:
+		/**
+		 * @brief The clock used by the {@link EventLoop}.
+		 */
 		using Clock = Scheduler::Clock;
+
+		/**
+		 * @brief The clock duration used by the {@link EventLoop}.
+		 */
 		using Duration = Scheduler::Duration;
+
+		/**
+		 * @brief The clock time point used by the {@link EventLoop}.
+		 */
 		using TimePoint = Scheduler::TimePoint;
 
 		/**

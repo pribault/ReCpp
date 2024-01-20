@@ -45,8 +45,19 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
 		using OnNextMethod = typename Impl::OnNextMethod;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = typename Impl::OnErrorMethod;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
 		using OnCompleteMethod = typename Impl::OnCompleteMethod;
 
 		/**

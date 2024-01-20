@@ -7,7 +7,7 @@ namespace recpp::subscribers
 	/**
 	 * @class ObservableSubscriber ObservableSubscriber.h <recpp/subscribers/ObservableSubscriber.h>
 	 *
-	 * @brief Subscriber that can be used to create a new {@link recpp::Observable}.
+	 * @brief Subscriber that can be used to create a new {@link rx::Observable}.
 	 * <p>
 	 * This class does not inherit from {@link rscpp::Subscriber}.
 	 * @param T The type of element signaled.

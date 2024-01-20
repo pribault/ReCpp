@@ -24,6 +24,12 @@ namespace recpp::rx
 	template <typename T>
 	class Observable;
 
+	/**
+	 * @class Single Single.h <recpp/rx/Single.h>
+	 *
+	 * @brief A Single is a Publisher that emits either a single value or error signal.
+	 * @param T The type of element signaled.
+	 */
 	template <typename T>
 	class Single : public rscpp::Publisher<T>
 	{
@@ -32,14 +38,25 @@ namespace recpp::rx
 		friend class Completable;
 
 	public:
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
 		using OnSuccessMethod = std::function<void(const T & /* value */)>;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
+
+		/**
+		 * @brief The type of the method to call on termination.
+		 */
 		using OnCompleteMethod = std::function<void()>;
 
 		/**
 		 * @brief Construct a new {@link Single} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link recpp::subscriber::SingleSubscriber} that can be used to either complete or error the {@link
+		 * The first parameter of the method will be a {@link subscribers::SingleSubscriber} that can be used to either complete or error the {@link
 		 * Single}.
 		 *
 		 * @param method The method to call when subscribed to.
@@ -52,9 +69,10 @@ namespace recpp::rx
 		 * <p>
 		 * The method must return a {@link Single} instance that will be subscribed to after returning.
 		 *
+		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Single} instance.
 		 */
-		static Single<T> defer(const std::function<Single<T>()> &function);
+		static Single<T> defer(const std::function<Single<T>()> &method);
 
 		/**
 		 * @brief Construct a new {@link Single} instance that will emit the given error when subscribed to.
@@ -143,30 +161,34 @@ namespace recpp::rx
 		/**
 		 * @brief Define the methods that will be called when the {@link Single} emits a value, completes or errors.
 		 *
-		 * @param onNextMethod The method to call for each value.
+		 * @param onSuccessMethod The method to call on success.
 		 * @param onErrorMethod The method to call on error.
-		 * @param onCompleteMethod The method to call on completion.
 		 * @return The new {@link Single} instance.
 		 */
 		Single<T> tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod);
 
 		/**
-		 * @brief Forwards all emissions on the given {@link Scheduler}.
+		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to observe on.
+		 * @param scheduler The {@link async::Scheduler} to observe on.
 		 * @return The new {@link Single} instance.
 		 */
 		Single<T> observeOn(async::Scheduler &scheduler);
 
 		/**
-		 * @brief Subscribe to this {@link Single} on the given {@link Scheduler}.
+		 * @brief Subscribe to this {@link Single} on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to subscribe on.
+		 * @param scheduler The {@link async::Scheduler} to subscribe on.
 		 * @return The new {@link Single} instance.
 		 */
 		Single<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
+		/**
+		 * @brief Construct a new {@link Single} instance with the given private implementation.
+		 * 
+		 * @param dd The private implementation.
+		 */
 		Single(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp::rx

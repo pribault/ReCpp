@@ -17,7 +17,7 @@ namespace recpp::async
 		/**
 		 * @brief Construct a new {@link ThreadPoolWorker} instance that will use the given {@link SchedulableQueue}.
 		 *
-		 * @param queue The {@SchedulableQueue} to use.
+		 * @param queue The {@link SchedulableQueue} to use.
 		 */
 		explicit ThreadPoolWorker(SchedulableQueue &queue);
 

@@ -38,14 +38,25 @@ namespace recpp::rx
 		friend class Completable;
 
 	public:
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
 		using OnNextMethod = std::function<void(const T & /* value */)>;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
 		using OnCompleteMethod = std::function<void()>;
 
 		/**
 		 * @brief Construct a new {@link Maybe} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link recpp::subscriber::MaybeSubscriber} that can be used to either complete or error the {@link
+		 * The first parameter of the method will be a {@link subscribers::MaybeSubscriber} that can be used to either complete or error the {@link
 		 * Maybe}.
 		 *
 		 * @param method The method to call when subscribed to.
@@ -58,9 +69,10 @@ namespace recpp::rx
 		 * <p>
 		 * The method must return a {@link Maybe} instance that will be subscribed to after returning.
 		 *
+		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Maybe} instance.
 		 */
-		static Maybe<T> defer(const std::function<Maybe<T>()> &function);
+		static Maybe<T> defer(const std::function<Maybe<T>()> &method);
 
 		/**
 		 * @brief Construct a new {@link Maybe} instance that will not emit any value when subscribed to.
@@ -173,22 +185,27 @@ namespace recpp::rx
 		Maybe<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
 		/**
-		 * @brief Forwards all emissions on the given {@link Scheduler}.
+		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to observe on.
+		 * @param scheduler The {@link async::Scheduler} to observe on.
 		 * @return The new {@link Maybe} instance.
 		 */
 		Maybe<T> observeOn(async::Scheduler &scheduler);
 
 		/**
-		 * @brief Subscribe to this {@link Maybe} on the given {@link Scheduler}.
+		 * @brief Subscribe to this {@link Maybe} on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to subscribe on.
+		 * @param scheduler The {@link async::Scheduler} to subscribe on.
 		 * @return The new {@link Maybe} instance.
 		 */
 		Maybe<T> subscribeOn(async::Scheduler &scheduler);
 
 	protected:
+		/**
+		 * @brief Construct a new {@link Maybe} instance with the given private implementation.
+		 * 
+		 * @param dd The private implementation.
+		 */
 		Maybe(const std::shared_ptr<rscpp::Publisher<T>> &dd);
 	};
 } // namespace recpp::rx

@@ -18,6 +18,9 @@ namespace recpp::publishers
 	class CreatePublisher : public rscpp::Publisher<T>
 	{
 	public:
+		/**
+		 * @brief The type of the method to call with the subscriber.
+		 */
 		using CreateMethod = std::function<void(S & /* subscriber */)>;
 
 		/**

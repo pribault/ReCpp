@@ -39,7 +39,14 @@ namespace recpp::rx
 		friend class Single;
 
 	public:
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
 		using OnCompleteMethod = std::function<void()>;
 
 		/**
@@ -52,7 +59,7 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Completable} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link recpp::subscriber::CompletableSubscriber} that can be used to either complete or error the {@link
+		 * The first parameter of the method will be a {@link subscribers::CompletableSubscriber} that can be used to either complete or error the {@link
 		 * Completable}.
 		 *
 		 * @param method The method to call when subscribed to.
@@ -65,9 +72,10 @@ namespace recpp::rx
 		 * <p>
 		 * The method must return a {@link Completable} instance that will be subscribed to after returning.
 		 *
+		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Completable} instance.
 		 */
-		static Completable defer(const std::function<Completable()> &function);
+		static Completable defer(const std::function<Completable()> &method);
 
 		/**
 		 * @brief Construct a new {@link Completable} instance that will emit the given error when subscribed to.
@@ -126,17 +134,17 @@ namespace recpp::rx
 		Completable tap(const OnCompleteMethod &onCompleteMethod, const OnErrorMethod &onErrorMethod);
 
 		/**
-		 * @brief Forwards all emissions on the given {@link Scheduler}.
+		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to observe on.
+		 * @param scheduler The {@link async::Scheduler} to observe on.
 		 * @return The new {@link Completable} instance.
 		 */
 		Completable observeOn(async::Scheduler &scheduler);
 
 		/**
-		 * @brief Subscribe to this {@link Completable} on the given {@link Scheduler}.
+		 * @brief Subscribe to this {@link Completable} on the given {@link async::Scheduler}.
 		 *
-		 * @param scheduler The {@link Scheduler} to subscribe on.
+		 * @param scheduler The {@link async::Scheduler} to subscribe on.
 		 * @return The new {@link Completable} instance.
 		 */
 		Completable subscribeOn(async::Scheduler &scheduler);
@@ -177,6 +185,11 @@ namespace recpp::rx
 		Single<T> andThen(const Single<T> &maybe);
 
 	protected:
+		/**
+		 * @brief Construct a new {@link Completable} instance with the given private implementation.
+		 * 
+		 * @param dd The private implementation.
+		 */
 		Completable(const std::shared_ptr<rscpp::Publisher<int>> &dd);
 	};
 } // namespace recpp::rx

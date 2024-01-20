@@ -9,7 +9,7 @@ namespace recpp::async
 {
 	/**
 	 * @class WorkerThread WorkerThread.h <recpp/async/WorkerThread.h>
-	 * @brief Represents an independant {@Scheduler} running in a dedicated thread.
+	 * @brief Represents an independant {@link Scheduler} running in a dedicated thread.
 	 */
 	class WorkerThread : public Scheduler
 	{
