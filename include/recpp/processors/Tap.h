@@ -6,6 +6,12 @@
 
 namespace recpp::processors
 {
+	/**
+	 * @class Tap Tap.h <recpp/processors/Tap.h>
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and call as set of given functions on each emission.
+	 *
+	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber} and signaled from the {@link rscpp::Publisher}.
+	 */
 	template <typename T>
 	class Tap : public rscpp::Processor<T, T>
 	{
@@ -39,10 +45,29 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief The type of the method to call for each emitted value.
+		 */
 		using OnNextMethod = typename Impl::OnNextMethod;
+
+		/**
+		 * @brief The type of the method to call on error.
+		 */
 		using OnErrorMethod = typename Impl::OnErrorMethod;
+
+		/**
+		 * @brief The type of the method to call on completion.
+		 */
 		using OnCompleteMethod = typename Impl::OnCompleteMethod;
 
+		/**
+		 * @brief Construct a new {@link Tap} instance.
+		 *
+		 * @param publisher The source {@link rscpp::Publisher} the {@link Tap} {@link rscpp::Processor} subscribes to.
+		 * @param onNextMethod The function to call for each value.
+		 * @param onErrorMethod The function to call on error.
+		 * @param onCompleteMethod The function when the stream ends.
+		 */
 		explicit Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 					 const OnCompleteMethod &onCompleteMethod);
 	};

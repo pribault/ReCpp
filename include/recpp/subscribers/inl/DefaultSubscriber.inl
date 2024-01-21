@@ -3,13 +3,15 @@
 #include <limits>
 
 template <typename T>
-recpp::subscribers::DefaultSubscriber<T>::DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+recpp::subscribers::DefaultSubscriber<T>::DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+															const OnCompleteMethod &onCompleteMethod)
 	: rscpp::Subscriber<T>(std::shared_ptr<rscpp::Subscriber<T>>(new Impl(onNextMethod, onErrorMethod, onCompleteMethod)))
 {
 }
 
 template <typename T>
-recpp::subscribers::DefaultSubscriber<T>::Impl::Impl(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+recpp::subscribers::DefaultSubscriber<T>::Impl::Impl(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+													 const OnCompleteMethod &onCompleteMethod)
 	: m_onNextMethod(onNextMethod)
 	, m_onErrorMethod(onErrorMethod)
 	, m_onCompleteMethod(onCompleteMethod)

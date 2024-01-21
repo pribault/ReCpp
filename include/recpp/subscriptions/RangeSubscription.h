@@ -5,6 +5,13 @@
 
 namespace recpp::subscriptions
 {
+	/**
+	 * @class RangeSubscription RangeSubscription.h <recpp/subscriptions/RangeSubscription.h>
+	 * @brief {@link rscpp::Subscription} that will emit a range of items when requested.
+	 *
+	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber}.
+	 * @tparam I The type of the range iterator.
+	 */
 	template <typename T, class I>
 	class RangeSubscription : public rscpp::Subscription
 	{
@@ -26,6 +33,13 @@ namespace recpp::subscriptions
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link RangeSubscription} instance.
+		 *
+		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Subscription}.
+		 * @param first The first iterator.
+		 * @param last The last iterator.
+		 */
 		RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last);
 	};
 } // namespace recpp::subscriptions

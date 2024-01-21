@@ -9,7 +9,8 @@ recpp::processors::Map<T, R>::Map(const rscpp::Publisher<T> &publisher, const st
 }
 
 template <typename T, typename R>
-recpp::processors::Map<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &publisher, const std::function<R(const T & /* value */)> &method)
+recpp::processors::Map<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, const rscpp::Publisher<T> &publisher,
+										 const std::function<R(const T & /* value */)> &method)
 	: m_parent(parent)
 	, m_publisher(publisher)
 	, m_method(method)
