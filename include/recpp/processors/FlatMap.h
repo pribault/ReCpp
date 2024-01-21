@@ -10,8 +10,8 @@ namespace recpp::processors
 	 * @class FlatMap FlatMap.h <recpp/processors/FlatMap.h>
 	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and apply a given function to the emitted values.
 	 * <p>
-	 * The given function must return a {@link rscpp::Publisher}, the {@link FlatMap} {@link rscpp::Processor} will then subscribe to this {@link rscpp::Publisher} and forward its
-	 * values.
+	 * The given function must return a {@link rscpp::Publisher}, the {@link FlatMap} {@link rscpp::Processor} will then subscribe to this {@link
+	 * rscpp::Publisher} and forward its values.
 	 *
 	 * @param T The type of element signaled to the {@link rscpp::Subscriber}.
 	 * @param R The type of element signaled by the {@link rscpp::Publisher}.
@@ -47,7 +47,7 @@ namespace recpp::processors
 	public:
 		/**
 		 * @brief Construct a new {@link FlatMap} instance.
-		 * 
+		 *
 		 * @param publisher The source {@link rscpp::Publisher} the {@link FlatMap} {@link rscpp::Processor} subscribes to.
 		 * @param method The function to apply to the {@link rscpp::Publisher} values.
 		 */

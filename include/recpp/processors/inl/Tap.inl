@@ -3,14 +3,15 @@
 #include <recpp/subscriptions/ForwardSubscription.h>
 
 template <typename T>
-recpp::processors::Tap<T>::Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+recpp::processors::Tap<T>::Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+							   const OnCompleteMethod &onCompleteMethod)
 	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
 {
 }
 
 template <typename T>
-recpp::processors::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
-		   const OnCompleteMethod &onCompleteMethod)
+recpp::processors::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod,
+									  const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 	: m_parent(parent)
 	, m_publisher(publisher)
 	, m_onNextMethod(onNextMethod)

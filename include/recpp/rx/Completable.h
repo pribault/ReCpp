@@ -187,7 +187,7 @@ namespace recpp::rx
 	protected:
 		/**
 		 * @brief Construct a new {@link Completable} instance with the given private implementation.
-		 * 
+		 *
 		 * @param dd The private implementation.
 		 */
 		Completable(const std::shared_ptr<rscpp::Publisher<int>> &dd);

@@ -105,7 +105,7 @@ namespace recpp::rx
 
 		/**
 		 * @brief Construct a new {@link Observable} instance that will emit values contained inside the given range.
-		 * 
+		 *
 		 * @tparam I The range iterator type.
 		 * @param first The first iterator.
 		 * @param last The last iterator.
@@ -116,7 +116,7 @@ namespace recpp::rx
 
 		/**
 		 * @brief Construct a new {@link Observable} instance that will emit values contained inside the given range.
-		 * 
+		 *
 		 * @tparam R The range type.
 		 * @param range The range.
 		 * @return The new {@link Observable} instance.
@@ -231,7 +231,7 @@ namespace recpp::rx
 	protected:
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.
-		 * 
+		 *
 		 * @param dd The private implementation.
 		 */
 		Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd);

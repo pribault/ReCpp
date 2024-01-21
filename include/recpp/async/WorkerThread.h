@@ -31,7 +31,7 @@ namespace recpp::async
 
 		/**
 		 * @brief Get the thread id.
-		 * 
+		 *
 		 * @return std::thread::id The thread id.
 		 */
 		std::thread::id threadId() const;
@@ -47,7 +47,7 @@ namespace recpp::async
 		/**
 		 * @brief The thread object.
 		 */
-		std::thread		 m_thread;
+		std::thread m_thread;
 
 		/**
 		 * @brief Is this {@link WorkerThread} instance stopped ?

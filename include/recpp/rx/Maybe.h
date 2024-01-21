@@ -203,7 +203,7 @@ namespace recpp::rx
 	protected:
 		/**
 		 * @brief Construct a new {@link Maybe} instance with the given private implementation.
-		 * 
+		 *
 		 * @param dd The private implementation.
 		 */
 		Maybe(const std::shared_ptr<rscpp::Publisher<T>> &dd);

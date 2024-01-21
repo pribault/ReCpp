@@ -8,8 +8,8 @@ namespace recpp::publishers
 {
 	/**
 	 * @class CreatePublisher CreatePublisher.h <recpp/publishers/CreatePublisher.h>
-	 * @brief {@link rscpp::Publisher} that will call a given method on subscription, with a newly created subscriber as parameter that will be used to emit values,
-	 * errors and stream end.
+	 * @brief {@link rscpp::Publisher} that will call a given method on subscription, with a newly created subscriber as parameter that will be used to emit
+	 * values, errors and stream end.
 	 *
 	 * @param T The type of element signaled by the {@link rscpp::Publisher}.
 	 * @param S The type of subscriber that will be passed to the creation method

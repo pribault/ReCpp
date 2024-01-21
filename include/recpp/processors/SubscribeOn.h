@@ -12,7 +12,7 @@ namespace recpp::processors
 	/**
 	 * @class SubscribeOn SubscribeOn.h <recpp/processors/SubscribeOn.h>
 	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} on a given {@link async::Scheduler}.
-	 * 
+	 *
 	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber} and signaled from the {@link rscpp::Publisher}.
 	 */
 	template <typename T>

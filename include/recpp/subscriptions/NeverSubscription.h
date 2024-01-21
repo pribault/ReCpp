@@ -8,7 +8,7 @@ namespace recpp::subscriptions
 	/**
 	 * @class NeverSubscription NeverSubscription.h <recpp/subscriptions/NeverSubscription.h>
 	 * @brief {@link rscpp::Subscription} that will never emit items nor complete. Completion will only happen on cancel.
-	 * 
+	 *
 	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber}.
 	 */
 	template <typename T>
@@ -30,7 +30,7 @@ namespace recpp::subscriptions
 	public:
 		/**
 		 * @brief Construct a new {@link NeverSubscription} instance.
-		 * 
+		 *
 		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Subscription}.
 		 */
 		NeverSubscription(const rscpp::Subscriber<T> &subscriber);

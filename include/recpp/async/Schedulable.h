@@ -8,7 +8,8 @@ namespace recpp::async
 	 * @class Schedulable Schedulable.h <recpp/async/Schedulable.h>
 	 * @brief Represents a potentially asynchronous action to be executed that can be canceled.
 	 * <p>
-	 * This class is made to be used with the {@link Scheduler} class that can be used to schedule Schedulable execution at specific points in time with the {@link Scheduler::schedule} methods.
+	 * This class is made to be used with the {@link Scheduler} class that can be used to schedule Schedulable execution at specific points in time with the
+	 * {@link Scheduler::schedule} methods.
 	 */
 	class Schedulable
 	{
