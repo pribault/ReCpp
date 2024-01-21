@@ -59,8 +59,8 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Completable} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link subscribers::CompletableSubscriber} that can be used to either complete or error the {@link
-		 * Completable}.
+		 * The first parameter of the method will be a {@link subscribers::CompletableSubscriber} that can be used to either complete or error the
+		 * {@link Completable}.
 		 *
 		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Completable} instance.

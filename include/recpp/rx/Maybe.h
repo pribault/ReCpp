@@ -56,8 +56,8 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Maybe} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link subscribers::MaybeSubscriber} that can be used to either complete or error the {@link
-		 * Maybe}.
+		 * The first parameter of the method will be a {@link subscribers::MaybeSubscriber} that can be used to either complete or error the
+		 * {@link Maybe}.
 		 *
 		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Maybe} instance.

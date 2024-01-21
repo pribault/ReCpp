@@ -56,8 +56,8 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Single} instance that will call the given method when subscribed to.
 		 * <p>
-		 * The first parameter of the method will be a {@link subscribers::SingleSubscriber} that can be used to either complete or error the {@link
-		 * Single}.
+		 * The first parameter of the method will be a {@link subscribers::SingleSubscriber} that can be used to either complete or error the
+		 * {@link Single}.
 		 *
 		 * @param method The method to call when subscribed to.
 		 * @return The new {@link Single} instance.

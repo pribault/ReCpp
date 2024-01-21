@@ -45,8 +45,8 @@ namespace recpp::processors
 		 * @brief Construct a new {@link AndThen} instance.
 		 *
 		 * @param source The source {@link rscpp::Publisher} the {@link AndThen} {@link rscpp::Processor} subscribes to and request items until completion.
-		 * @param dest The destination {@link rscpp::Publisher} the {@link AndThen} {@link rscpp::Processor} will subscribe to after the source {@link
-		 * rscpp::Publisher} completion.
+		 * @param dest The destination {@link rscpp::Publisher} the {@link AndThen} {@link rscpp::Processor} will subscribe to after the source
+		 * {@link rscpp::Publisher} completion.
 		 */
 		explicit AndThen(const rscpp::Publisher<T> &source, const rscpp::Publisher<R> &dest);
 	};
