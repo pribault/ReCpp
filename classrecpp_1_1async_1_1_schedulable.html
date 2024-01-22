@@ -90,19 +90,56 @@ $(document).ready(function(){initNavTree('classrecpp_1_1async_1_1_schedulable.ht
 <div class="title">recpp::async::Schedulable Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a potentially asynchronous action to be executed that can be canceled.  
+ <a href="classrecpp_1_1async_1_1_schedulable.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_schedulable_8h_source.html">recpp/async/Schedulable.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3962890ebdf007506f1e01fb227e2816"><td class="memItemLeft" align="right" valign="top"><a id="a3962890ebdf007506f1e01fb227e2816"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Schedulable</b> (const std::function&lt; void(void)&gt; &amp;function)</td></tr>
+<tr class="memitem:a3962890ebdf007506f1e01fb227e2816"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable.html#a3962890ebdf007506f1e01fb227e2816">Schedulable</a> (const std::function&lt; void(void)&gt; &amp;function)</td></tr>
+<tr class="memdesc:a3962890ebdf007506f1e01fb227e2816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1async_1_1_schedulable.html" title="Represents a potentially asynchronous action to be executed that can be canceled.">Schedulable</a> object with the given action to execute.  <a href="classrecpp_1_1async_1_1_schedulable.html#a3962890ebdf007506f1e01fb227e2816">More...</a><br /></td></tr>
 <tr class="separator:a3962890ebdf007506f1e01fb227e2816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d78e2c5b8424ea42777e8d4a411dc2e"><td class="memItemLeft" align="right" valign="top"><a id="a9d78e2c5b8424ea42777e8d4a411dc2e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable.html#a9d78e2c5b8424ea42777e8d4a411dc2e">operator()</a> ()</td></tr>
+<tr class="memdesc:a9d78e2c5b8424ea42777e8d4a411dc2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run this <a class="el" href="classrecpp_1_1async_1_1_schedulable.html" title="Represents a potentially asynchronous action to be executed that can be canceled.">Schedulable</a> action. <br /></td></tr>
 <tr class="separator:a9d78e2c5b8424ea42777e8d4a411dc2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaec709f3f2a2af40411e5bf719f47aa"><td class="memItemLeft" align="right" valign="top"><a id="adaec709f3f2a2af40411e5bf719f47aa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>cancel</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa">cancel</a> ()</td></tr>
+<tr class="memdesc:adaec709f3f2a2af40411e5bf719f47aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cancel this schedulable. <br /></td></tr>
 <tr class="separator:adaec709f3f2a2af40411e5bf719f47aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a potentially asynchronous action to be executed that can be canceled. </p>
+<p>This class is made to be used with the <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a> class that can be used to schedule <a class="el" href="classrecpp_1_1async_1_1_schedulable.html" title="Represents a potentially asynchronous action to be executed that can be canceled.">Schedulable</a> execution at specific points in time with the <a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a1a6bb2510dc23dd005274b53bdf6e0a4">Scheduler::schedule</a> methods. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a3962890ebdf007506f1e01fb227e2816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3962890ebdf007506f1e01fb227e2816">&#9670;&nbsp;</a></span>Schedulable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">recpp::async::Schedulable::Schedulable </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; void(void)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1async_1_1_schedulable.html" title="Represents a potentially asynchronous action to be executed that can be canceled.">Schedulable</a> object with the given action to execute. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>the action to execute </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/async/<a class="el" href="_schedulable_8h_source.html">Schedulable.h</a></li>
 </ul>

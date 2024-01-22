@@ -93,22 +93,24 @@ $(document).ready(function(){initNavTree('_subscription_8h_source.html',''); ini
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>rscpp</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscription.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrscpp_1_1_subscription.html">Subscription</a></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classrscpp_1_1_subscription.html">Subscription</a>();</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> request(<span class="keywordtype">size_t</span> count);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> cancel();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrscpp_1_1_subscription.html">Subscription</a>(<span class="keyword">const</span> std::shared_ptr&lt;Subscription&gt; &amp;dd);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        std::shared_ptr&lt;Subscription&gt; d_ptr;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    };</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;} <span class="comment">// namespace rscpp</span></div>
-<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdef"><b>Definition:</b> Subscription.h:8</div></div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscription.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrscpp_1_1_subscription.html">Subscription</a></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="classrscpp_1_1_subscription.html">Subscription</a>();</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">   37</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">request</a>(<span class="keywordtype">size_t</span> count);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">   44</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">cancel</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrscpp_1_1_subscription.html">Subscription</a>(<span class="keyword">const</span> std::shared_ptr&lt;Subscription&gt; &amp;dd);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        std::shared_ptr&lt;Subscription&gt; d_ptr;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace rscpp</span></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdoc">A rscpp::Subscription represents a one-to-one lifecycle of a rscpp::Subscriber subscribing to a rscpp...</div><div class="ttdef"><b>Definition:</b> Subscription.h:16</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html_a352c062f064e8f2a61f2dfa62fb9fb1d"><div class="ttname"><a href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">rscpp::Subscription::cancel</a></div><div class="ttdeci">virtual void cancel()</div><div class="ttdoc">Request the rscpp::Publisher to stop sending data and clean up resources.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html_a80e7629e6f3522380b9b439d9b00bfcf"><div class="ttname"><a href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">rscpp::Subscription::request</a></div><div class="ttdeci">virtual void request(size_t count)</div><div class="ttdoc">No events will be sent by a rscpp::Publisher until demand is signaled via this method.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

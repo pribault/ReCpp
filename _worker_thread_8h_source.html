@@ -96,26 +96,31 @@ $(document).ready(function(){initNavTree('_worker_thread_8h_source.html',''); in
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>recpp::async</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a> : <span class="keyword">public</span> <a class="code" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a>();</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ~<a class="code" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a>();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> stop();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        std::thread::id threadId() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> run();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::thread      m_thread;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        std::atomic_bool m_stop = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    };</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
-<div class="ttc" id="aclassrecpp_1_1async_1_1_scheduler_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></div><div class="ttdef"><b>Definition:</b> Scheduler.h:10</div></div>
-<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html">recpp::async::WorkerThread</a></div><div class="ttdef"><b>Definition:</b> WorkerThread.h:11</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html">   14</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a> : <span class="keyword">public</span> <a class="code" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html#a08116f799552b860317c774ba36d10b8">   20</a></span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_worker_thread.html#a08116f799552b860317c774ba36d10b8">WorkerThread</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html#ab236d913ce81fba17f0c9d0bd0c8b384">   25</a></span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_worker_thread.html#ab236d913ce81fba17f0c9d0bd0c8b384">~WorkerThread</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html#a118e11b95f61311ae8becd59a6967abc">   30</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1async_1_1_worker_thread.html#a118e11b95f61311ae8becd59a6967abc">stop</a>();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_worker_thread.html#ac8ae163765dc9819f4584d6d3c54d082">   37</a></span>&#160;        std::thread::id <a class="code" href="classrecpp_1_1async_1_1_worker_thread.html#ac8ae163765dc9819f4584d6d3c54d082">threadId</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> run();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        std::thread m_thread;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::atomic_bool m_stop = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_scheduler_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></div><div class="ttdoc">Represents an object that can manage and execute Schedulable objects.</div><div class="ttdef"><b>Definition:</b> Scheduler.h:16</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html">recpp::async::WorkerThread</a></div><div class="ttdoc">Represents an independant Scheduler running in a dedicated thread.</div><div class="ttdef"><b>Definition:</b> WorkerThread.h:15</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html_a08116f799552b860317c774ba36d10b8"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html#a08116f799552b860317c774ba36d10b8">recpp::async::WorkerThread::WorkerThread</a></div><div class="ttdeci">WorkerThread()</div><div class="ttdoc">WorkerThread default Constructor.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html_a118e11b95f61311ae8becd59a6967abc"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html#a118e11b95f61311ae8becd59a6967abc">recpp::async::WorkerThread::stop</a></div><div class="ttdeci">void stop()</div><div class="ttdoc">Stop this WorkerThread instance.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html_ab236d913ce81fba17f0c9d0bd0c8b384"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html#ab236d913ce81fba17f0c9d0bd0c8b384">recpp::async::WorkerThread::~WorkerThread</a></div><div class="ttdeci">~WorkerThread()</div><div class="ttdoc">Destroy this WorkerThread instance.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_worker_thread_html_ac8ae163765dc9819f4584d6d3c54d082"><div class="ttname"><a href="classrecpp_1_1async_1_1_worker_thread.html#ac8ae163765dc9819f4584d6d3c54d082">recpp::async::WorkerThread::threadId</a></div><div class="ttdeci">std::thread::id threadId() const</div><div class="ttdoc">Get the thread id.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

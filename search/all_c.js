@@ -1,13 +1,9 @@
 var searchData=
 [
-  ['schedulable_33',['Schedulable',['../classrecpp_1_1async_1_1_schedulable.html',1,'recpp::async']]],
-  ['schedulablequeue_34',['SchedulableQueue',['../classrecpp_1_1async_1_1_schedulable_queue.html',1,'recpp::async']]],
-  ['scheduler_35',['Scheduler',['../classrecpp_1_1async_1_1_scheduler.html',1,'recpp::async']]],
-  ['single_36',['Single',['../classrecpp_1_1rx_1_1_single.html',1,'recpp::rx']]],
-  ['singlesubscriber_37',['SingleSubscriber',['../classrecpp_1_1subscribers_1_1_single_subscriber.html',1,'recpp::subscribers']]],
-  ['subscribeon_38',['SubscribeOn',['../classrecpp_1_1processors_1_1_subscribe_on.html',1,'recpp::processors']]],
-  ['subscriber_39',['Subscriber',['../classrscpp_1_1_subscriber.html',1,'rscpp']]],
-  ['subscriber_3c_20int_20_3e_40',['Subscriber&lt; int &gt;',['../classrscpp_1_1_subscriber.html',1,'rscpp']]],
-  ['subscriber_3c_20r_20_3e_41',['Subscriber&lt; R &gt;',['../classrscpp_1_1_subscriber.html',1,'rscpp']]],
-  ['subscription_42',['Subscription',['../classrscpp_1_1_subscription.html',1,'rscpp']]]
+  ['range_73',['range',['../classrecpp_1_1rx_1_1_observable.html#a8aa6fca70da67422aa6eadf6360884b7',1,'recpp::rx::Observable::range(I first, I last)'],['../classrecpp_1_1rx_1_1_observable.html#a704d5be1151d41a4233ecc8e32ce23da',1,'recpp::rx::Observable::range(R &amp;&amp;range)']]],
+  ['rangepublisher_74',['RangePublisher',['../classrecpp_1_1publishers_1_1_range_publisher.html#a9ca14520c4946a7a2390c7cf625c1f55',1,'recpp::publishers::RangePublisher::RangePublisher()'],['../classrecpp_1_1publishers_1_1_range_publisher.html',1,'recpp::publishers::RangePublisher&lt; T, I &gt;']]],
+  ['rangesubscription_75',['RangeSubscription',['../classrecpp_1_1subscriptions_1_1_range_subscription.html#afad90cf9a5cdfba17ae344b21971047b',1,'recpp::subscriptions::RangeSubscription::RangeSubscription()'],['../classrecpp_1_1subscriptions_1_1_range_subscription.html',1,'recpp::subscriptions::RangeSubscription&lt; T, I &gt;']]],
+  ['request_76',['request',['../classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf',1,'rscpp::Subscription']]],
+  ['run_77',['run',['../classrecpp_1_1async_1_1_event_loop.html#ad9d104efc8918727ebc5e76ae021be68',1,'recpp::async::EventLoop']]],
+  ['runfor_78',['runFor',['../classrecpp_1_1async_1_1_event_loop.html#a54d3bada9613d68fa7f34658aeb68db7',1,'recpp::async::EventLoop']]]
 ];

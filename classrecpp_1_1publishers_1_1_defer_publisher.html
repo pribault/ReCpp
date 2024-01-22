@@ -90,36 +90,114 @@ $(document).ready(function(){initNavTree('classrecpp_1_1publishers_1_1_defer_pub
 <div class="title">recpp::publishers::DeferPublisher&lt; T, P &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> that will call a given method on subscription, and subscribe to its result.  
+ <a href="classrecpp_1_1publishers_1_1_defer_publisher.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_defer_publisher_8h_source.html">recpp/publishers/DeferPublisher.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::publishers::DeferPublisher&lt; T, P &gt;:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrecpp_1_1publishers_1_1_defer_publisher.png" usemap="#recpp::publishers::DeferPublisher_3C_20T_2C_20P_20_3E_map" alt=""/>
   <map id="recpp::publishers::DeferPublisher_3C_20T_2C_20P_20_3E_map" name="recpp::publishers::DeferPublisher_3C_20T_2C_20P_20_3E_map">
-<area href="classrscpp_1_1_publisher.html" alt="rscpp::Publisher&lt; T &gt;" shape="rect" coords="0,0,248,24"/>
+<area href="classrscpp_1_1_publisher.html" title="A rscpp::Publisher is a provider of a potentially unbounded number of sequenced elements,..." alt="rscpp::Publisher&lt; T &gt;" shape="rect" coords="0,0,248,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6ef8c40a4fe8fa4dc1481d2948d84618"><td class="memItemLeft" align="right" valign="top"><a id="a6ef8c40a4fe8fa4dc1481d2948d84618"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DeferPublisher</b> (const std::function&lt; P()&gt; &amp;function)</td></tr>
-<tr class="separator:a6ef8c40a4fe8fa4dc1481d2948d84618"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8d1296a776dddb9191f2ba2d6b145c0"><td class="memItemLeft" align="right" valign="top"><a id="ad8d1296a776dddb9191f2ba2d6b145c0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (<a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;subscriber) override</td></tr>
+<tr class="memitem:ab2154cc0accf086d30630d02cc8e0971"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html#ab2154cc0accf086d30630d02cc8e0971">DeferPublisher</a> (const std::function&lt; P()&gt; &amp;method)</td></tr>
+<tr class="memdesc:ab2154cc0accf086d30630d02cc8e0971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html">DeferPublisher</a> instance.  <a href="classrecpp_1_1publishers_1_1_defer_publisher.html#ab2154cc0accf086d30630d02cc8e0971">More...</a><br /></td></tr>
+<tr class="separator:ab2154cc0accf086d30630d02cc8e0971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d1296a776dddb9191f2ba2d6b145c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html#ad8d1296a776dddb9191f2ba2d6b145c0">subscribe</a> (<a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;subscriber) override</td></tr>
+<tr class="memdesc:ad8d1296a776dddb9191f2ba2d6b145c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to start streaming data.  <a href="classrecpp_1_1publishers_1_1_defer_publisher.html#ad8d1296a776dddb9191f2ba2d6b145c0">More...</a><br /></td></tr>
 <tr class="separator:ad8d1296a776dddb9191f2ba2d6b145c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; T &gt;</a></td></tr>
-<tr class="memitem:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a3c027caabbb493abf7d2452c87139088"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Publisher</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; T &gt;&gt; &amp;dd)</td></tr>
-<tr class="separator:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; T &gt;</a></td></tr>
-<tr class="memitem:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a9a6d1f96c8d31a0f7eb7334c40b4e689"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T, typename P&gt;<br />
+class recpp::publishers::DeferPublisher&lt; T, P &gt;</h3>
+
+<p><a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> that will call a given method on subscription, and subscribe to its result. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of element signaled by the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>. </td></tr>
+    <tr><td class="paramname">P</td><td>The method <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> return type. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ab2154cc0accf086d30630d02cc8e0971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2154cc0accf086d30630d02cc8e0971">&#9670;&nbsp;</a></span>DeferPublisher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html">recpp::publishers::DeferPublisher</a>&lt; T, P &gt;::<a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html">DeferPublisher</a> </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; P()&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html">DeferPublisher</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on subscription. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad8d1296a776dddb9191f2ba2d6b145c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d1296a776dddb9191f2ba2d6b145c0">&#9670;&nbsp;</a></span>subscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrecpp_1_1publishers_1_1_defer_publisher.html">recpp::publishers::DeferPublisher</a>&lt; T, P &gt;::subscribe </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>subscriber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Request <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to start streaming data. </p>
+<p>This is a "factory method" and can be called multiple times, each time starting a new <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a>. </p>
+<p>Each <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> will work for only a single <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>. </p>
+<p>A <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> should only subscribe once to a single <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>. </p>
+<p>If the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> rejects the subscription attempt or otherwise fails it will signal the error via <a class="el" href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">rscpp::Subscriber::onError(const std::exception_ptr &amp;)</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subscriber</td><td>The <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> that will consume signals from this <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">rscpp::Publisher&lt; T &gt;</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/publishers/<a class="el" href="_defer_publisher_8h_source.html">DeferPublisher.h</a></li>
 </ul>

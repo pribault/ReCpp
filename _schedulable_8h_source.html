@@ -93,21 +93,25 @@ $(document).ready(function(){initNavTree('_schedulable_8h_source.html',''); init
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>recpp::async</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">void</span>)&gt; &amp;<span class="keyword">function</span>);</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordtype">void</span> operator()();</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordtype">void</span> cancel();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        std::function&lt;void(<span class="keywordtype">void</span>)&gt; m_task;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">bool</span>                      m_canceled = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    };</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
-<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html">recpp::async::Schedulable</a></div><div class="ttdef"><b>Definition:</b> Schedulable.h:8</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable.html">   14</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable.html#a3962890ebdf007506f1e01fb227e2816">   22</a></span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_schedulable.html#a3962890ebdf007506f1e01fb227e2816">Schedulable</a>(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">void</span>)&gt; &amp;<span class="keyword">function</span>);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable.html#a9d78e2c5b8424ea42777e8d4a411dc2e">   27</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1async_1_1_schedulable.html#a9d78e2c5b8424ea42777e8d4a411dc2e">operator()</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa">   32</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa">cancel</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        std::function&lt;void(<span class="keywordtype">void</span>)&gt; m_task;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">bool</span> m_canceled = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    };</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html">recpp::async::Schedulable</a></div><div class="ttdoc">Represents a potentially asynchronous action to be executed that can be canceled.</div><div class="ttdef"><b>Definition:</b> Schedulable.h:15</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html_a3962890ebdf007506f1e01fb227e2816"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html#a3962890ebdf007506f1e01fb227e2816">recpp::async::Schedulable::Schedulable</a></div><div class="ttdeci">Schedulable(const std::function&lt; void(void)&gt; &amp;function)</div><div class="ttdoc">Construct a new Schedulable object with the given action to execute.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html_a9d78e2c5b8424ea42777e8d4a411dc2e"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html#a9d78e2c5b8424ea42777e8d4a411dc2e">recpp::async::Schedulable::operator()</a></div><div class="ttdeci">void operator()()</div><div class="ttdoc">Run this Schedulable action.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_html_adaec709f3f2a2af40411e5bf719f47aa"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa">recpp::async::Schedulable::cancel</a></div><div class="ttdeci">void cancel()</div><div class="ttdoc">Cancel this schedulable.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

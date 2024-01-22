@@ -90,52 +90,93 @@ $(document).ready(function(){initNavTree('classrecpp_1_1async_1_1_worker_thread.
 <div class="title">recpp::async::WorkerThread Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents an independant <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a> running in a dedicated thread.  
+ <a href="classrecpp_1_1async_1_1_worker_thread.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_worker_thread_8h_source.html">recpp/async/WorkerThread.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::async::WorkerThread:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrecpp_1_1async_1_1_worker_thread.png" usemap="#recpp::async::WorkerThread_map" alt=""/>
   <map id="recpp::async::WorkerThread_map" name="recpp::async::WorkerThread_map">
-<area href="classrecpp_1_1async_1_1_scheduler.html" alt="recpp::async::Scheduler" shape="rect" coords="0,0,172,24"/>
+<area href="classrecpp_1_1async_1_1_scheduler.html" title="Represents an object that can manage and execute Schedulable objects." alt="recpp::async::Scheduler" shape="rect" coords="0,0,172,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a08116f799552b860317c774ba36d10b8"><td class="memItemLeft" align="right" valign="top"><a id="a08116f799552b860317c774ba36d10b8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_worker_thread.html#a08116f799552b860317c774ba36d10b8">WorkerThread</a> ()</td></tr>
+<tr class="memdesc:a08116f799552b860317c774ba36d10b8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a> default Constructor. <br /></td></tr>
+<tr class="separator:a08116f799552b860317c774ba36d10b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab236d913ce81fba17f0c9d0bd0c8b384"><td class="memItemLeft" align="right" valign="top"><a id="ab236d913ce81fba17f0c9d0bd0c8b384"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_worker_thread.html#ab236d913ce81fba17f0c9d0bd0c8b384">~WorkerThread</a> ()</td></tr>
+<tr class="memdesc:ab236d913ce81fba17f0c9d0bd0c8b384"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy this <a class="el" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a> instance. <br /></td></tr>
+<tr class="separator:ab236d913ce81fba17f0c9d0bd0c8b384"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a118e11b95f61311ae8becd59a6967abc"><td class="memItemLeft" align="right" valign="top"><a id="a118e11b95f61311ae8becd59a6967abc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_worker_thread.html#a118e11b95f61311ae8becd59a6967abc">stop</a> ()</td></tr>
+<tr class="memdesc:a118e11b95f61311ae8becd59a6967abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop this <a class="el" href="classrecpp_1_1async_1_1_worker_thread.html">WorkerThread</a> instance. <br /></td></tr>
 <tr class="separator:a118e11b95f61311ae8becd59a6967abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ae163765dc9819f4584d6d3c54d082"><td class="memItemLeft" align="right" valign="top"><a id="ac8ae163765dc9819f4584d6d3c54d082"></a>
-std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><b>threadId</b> () const</td></tr>
+<tr class="memitem:ac8ae163765dc9819f4584d6d3c54d082"><td class="memItemLeft" align="right" valign="top">std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_worker_thread.html#ac8ae163765dc9819f4584d6d3c54d082">threadId</a> () const</td></tr>
+<tr class="memdesc:ac8ae163765dc9819f4584d6d3c54d082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the thread id.  <a href="classrecpp_1_1async_1_1_worker_thread.html#ac8ae163765dc9819f4584d6d3c54d082">More...</a><br /></td></tr>
 <tr class="separator:ac8ae163765dc9819f4584d6d3c54d082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrecpp_1_1async_1_1_scheduler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrecpp_1_1async_1_1_scheduler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></td></tr>
-<tr class="memitem:a1a6bb2510dc23dd005274b53bdf6e0a4 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="a1a6bb2510dc23dd005274b53bdf6e0a4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>schedule</b> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memitem:a1a6bb2510dc23dd005274b53bdf6e0a4 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a1a6bb2510dc23dd005274b53bdf6e0a4">schedule</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memdesc:a1a6bb2510dc23dd005274b53bdf6e0a4 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedule a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> execution with no time specification.  <a href="classrecpp_1_1async_1_1_scheduler.html#a1a6bb2510dc23dd005274b53bdf6e0a4">More...</a><br /></td></tr>
 <tr class="separator:a1a6bb2510dc23dd005274b53bdf6e0a4 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee24036d59550f9725fbc482b2918560 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="aee24036d59550f9725fbc482b2918560"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>schedule</b> (const TimePoint &amp;timepoint, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memitem:aee24036d59550f9725fbc482b2918560 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#aee24036d59550f9725fbc482b2918560">schedule</a> (const <a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a1e3c698e9e75899164825a334da0d2d3">TimePoint</a> &amp;timepoint, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memdesc:aee24036d59550f9725fbc482b2918560 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedule a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to be executed after the specified time point.  <a href="classrecpp_1_1async_1_1_scheduler.html#aee24036d59550f9725fbc482b2918560">More...</a><br /></td></tr>
 <tr class="separator:aee24036d59550f9725fbc482b2918560 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a2ebe536e0a92973d1c5138040b7c40 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="a1a2ebe536e0a92973d1c5138040b7c40"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>schedule</b> (const Duration &amp;duration, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memitem:a1a2ebe536e0a92973d1c5138040b7c40 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a1a2ebe536e0a92973d1c5138040b7c40">schedule</a> (const <a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a65fc9a664baab0b4de6e113a1a573e78">Duration</a> &amp;duration, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memdesc:a1a2ebe536e0a92973d1c5138040b7c40 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedule a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to be executed after the specified duration starting from now.  <a href="classrecpp_1_1async_1_1_scheduler.html#a1a2ebe536e0a92973d1c5138040b7c40">More...</a><br /></td></tr>
 <tr class="separator:a1a2ebe536e0a92973d1c5138040b7c40 inherit pub_methods_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_types_classrecpp_1_1async_1_1_scheduler"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classrecpp_1_1async_1_1_scheduler')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></td></tr>
 <tr class="memitem:a3eab858c0cabe32509a192b016d65333 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="a3eab858c0cabe32509a192b016d65333"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Clock</b> = SchedulableQueue::Clock</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a3eab858c0cabe32509a192b016d65333">Clock</a> = <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#ad95f8b21d94f057ae6ca365c3ba83c90">SchedulableQueue::Clock</a></td></tr>
+<tr class="memdesc:a3eab858c0cabe32509a192b016d65333 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock used by the <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a>. <br /></td></tr>
 <tr class="separator:a3eab858c0cabe32509a192b016d65333 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65fc9a664baab0b4de6e113a1a573e78 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="a65fc9a664baab0b4de6e113a1a573e78"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b> = SchedulableQueue::Duration</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a65fc9a664baab0b4de6e113a1a573e78">Duration</a> = <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">SchedulableQueue::Duration</a></td></tr>
+<tr class="memdesc:a65fc9a664baab0b4de6e113a1a573e78 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock duration used by the <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a>. <br /></td></tr>
 <tr class="separator:a65fc9a664baab0b4de6e113a1a573e78 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e3c698e9e75899164825a334da0d2d3 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="a1e3c698e9e75899164825a334da0d2d3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TimePoint</b> = SchedulableQueue::TimePoint</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#a1e3c698e9e75899164825a334da0d2d3">TimePoint</a> = <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">SchedulableQueue::TimePoint</a></td></tr>
+<tr class="memdesc:a1e3c698e9e75899164825a334da0d2d3 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock time point used by the <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a>. <br /></td></tr>
 <tr class="separator:a1e3c698e9e75899164825a334da0d2d3 inherit pub_types_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classrecpp_1_1async_1_1_scheduler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrecpp_1_1async_1_1_scheduler')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">recpp::async::Scheduler</a></td></tr>
 <tr class="memitem:aebeb0da7408902d8dc5268f70fb32722 inherit pro_attribs_classrecpp_1_1async_1_1_scheduler"><td class="memItemLeft" align="right" valign="top"><a id="aebeb0da7408902d8dc5268f70fb32722"></a>
-<a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_queue</b></td></tr>
+<a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html#aebeb0da7408902d8dc5268f70fb32722">m_queue</a></td></tr>
+<tr class="memdesc:aebeb0da7408902d8dc5268f70fb32722 inherit pro_attribs_classrecpp_1_1async_1_1_scheduler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> to manage the <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> objects. <br /></td></tr>
 <tr class="separator:aebeb0da7408902d8dc5268f70fb32722 inherit pro_attribs_classrecpp_1_1async_1_1_scheduler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents an independant <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a> running in a dedicated thread. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac8ae163765dc9819f4584d6d3c54d082"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8ae163765dc9819f4584d6d3c54d082">&#9670;&nbsp;</a></span>threadId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::thread::id recpp::async::WorkerThread::threadId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the thread id. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::thread::id The thread id. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/async/<a class="el" href="_worker_thread_8h_source.html">WorkerThread.h</a></li>
 </ul>

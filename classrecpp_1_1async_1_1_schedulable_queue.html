@@ -91,43 +91,208 @@ $(document).ready(function(){initNavTree('classrecpp_1_1async_1_1_schedulable_qu
 <div class="title">recpp::async::SchedulableQueue Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> priority queue.  
+ <a href="classrecpp_1_1async_1_1_schedulable_queue.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_schedulable_queue_8h_source.html">recpp/async/SchedulableQueue.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ad95f8b21d94f057ae6ca365c3ba83c90"><td class="memItemLeft" align="right" valign="top"><a id="ad95f8b21d94f057ae6ca365c3ba83c90"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Clock</b> = std::chrono::steady_clock</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#ad95f8b21d94f057ae6ca365c3ba83c90">Clock</a> = std::chrono::steady_clock</td></tr>
+<tr class="memdesc:ad95f8b21d94f057ae6ca365c3ba83c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock used by the <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a>. <br /></td></tr>
 <tr class="separator:ad95f8b21d94f057ae6ca365c3ba83c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22a963584e199430b530208de4a7c237"><td class="memItemLeft" align="right" valign="top"><a id="a22a963584e199430b530208de4a7c237"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Duration</b> = Clock::duration</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">Duration</a> = Clock::duration</td></tr>
+<tr class="memdesc:a22a963584e199430b530208de4a7c237"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock duration used by the <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a>. <br /></td></tr>
 <tr class="separator:a22a963584e199430b530208de4a7c237"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5854ec4ff4ed5ba365e61178187a77d3"><td class="memItemLeft" align="right" valign="top"><a id="a5854ec4ff4ed5ba365e61178187a77d3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TimePoint</b> = Clock::time_point</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> = Clock::time_point</td></tr>
+<tr class="memdesc:a5854ec4ff4ed5ba365e61178187a77d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock time point used by the <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a>. <br /></td></tr>
 <tr class="separator:a5854ec4ff4ed5ba365e61178187a77d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afc3066c1b25786390eecb8218a59aa3b"><td class="memItemLeft" align="right" valign="top"><a id="afc3066c1b25786390eecb8218a59aa3b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (const TimePoint &amp;timePoint, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memitem:afc3066c1b25786390eecb8218a59aa3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#afc3066c1b25786390eecb8218a59aa3b">push</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;timePoint, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
+<tr class="memdesc:afc3066c1b25786390eecb8218a59aa3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to execute after the specified time point.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#afc3066c1b25786390eecb8218a59aa3b">More...</a><br /></td></tr>
 <tr class="separator:afc3066c1b25786390eecb8218a59aa3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa80bb689f8cef9d3ce382d7d366f892a"><td class="memItemLeft" align="right" valign="top"><a id="aa80bb689f8cef9d3ce382d7d366f892a"></a>
-std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> (const Duration &amp;duration)</td></tr>
+<tr class="memitem:aa80bb689f8cef9d3ce382d7d366f892a"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#aa80bb689f8cef9d3ce382d7d366f892a">pop</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">Duration</a> &amp;duration)</td></tr>
+<tr class="memdesc:aa80bb689f8cef9d3ce382d7d366f892a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting for the specified maximum duration.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#aa80bb689f8cef9d3ce382d7d366f892a">More...</a><br /></td></tr>
 <tr class="separator:aa80bb689f8cef9d3ce382d7d366f892a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a369d3e3433164bb3807e962d1a9b70fb"><td class="memItemLeft" align="right" valign="top"><a id="a369d3e3433164bb3807e962d1a9b70fb"></a>
-std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> (const TimePoint &amp;until)</td></tr>
+<tr class="memitem:a369d3e3433164bb3807e962d1a9b70fb"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a369d3e3433164bb3807e962d1a9b70fb">pop</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;until)</td></tr>
+<tr class="memdesc:a369d3e3433164bb3807e962d1a9b70fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting until the specified maximum time point.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a369d3e3433164bb3807e962d1a9b70fb">More...</a><br /></td></tr>
 <tr class="separator:a369d3e3433164bb3807e962d1a9b70fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa00d3739c33cdd26f1b726e2782e584"><td class="memItemLeft" align="right" valign="top"><a id="afa00d3739c33cdd26f1b726e2782e584"></a>
-std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>blockingPop</b> ()</td></tr>
+<tr class="memitem:afa00d3739c33cdd26f1b726e2782e584"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#afa00d3739c33cdd26f1b726e2782e584">blockingPop</a> ()</td></tr>
+<tr class="memdesc:afa00d3739c33cdd26f1b726e2782e584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting indefinitely for it.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#afa00d3739c33cdd26f1b726e2782e584">More...</a><br /></td></tr>
 <tr class="separator:afa00d3739c33cdd26f1b726e2782e584"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a840cde4fe66bd040ea29be9f2347b20d"><td class="memItemLeft" align="right" valign="top"><a id="a840cde4fe66bd040ea29be9f2347b20d"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> ()</td></tr>
+<tr class="memitem:a840cde4fe66bd040ea29be9f2347b20d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a840cde4fe66bd040ea29be9f2347b20d">size</a> ()</td></tr>
+<tr class="memdesc:a840cde4fe66bd040ea29be9f2347b20d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue size.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a840cde4fe66bd040ea29be9f2347b20d">More...</a><br /></td></tr>
 <tr class="separator:a840cde4fe66bd040ea29be9f2347b20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35e88ff8e5ef2e20e059da2b28008bc4"><td class="memItemLeft" align="right" valign="top"><a id="a35e88ff8e5ef2e20e059da2b28008bc4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+<tr class="memitem:a35e88ff8e5ef2e20e059da2b28008bc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a35e88ff8e5ef2e20e059da2b28008bc4">stop</a> ()</td></tr>
+<tr class="memdesc:a35e88ff8e5ef2e20e059da2b28008bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop this queue and wake up all threads trying to pop an element.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a35e88ff8e5ef2e20e059da2b28008bc4">More...</a><br /></td></tr>
 <tr class="separator:a35e88ff8e5ef2e20e059da2b28008bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00f9673dc4617916b5d6430abb554e8b"><td class="memItemLeft" align="right" valign="top"><a id="a00f9673dc4617916b5d6430abb554e8b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>notifyAll</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a00f9673dc4617916b5d6430abb554e8b">notifyAll</a> ()</td></tr>
+<tr class="memdesc:a00f9673dc4617916b5d6430abb554e8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wake up all threads trying to pop an element. <br /></td></tr>
 <tr class="separator:a00f9673dc4617916b5d6430abb554e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> priority queue. </p>
+<p>This class is made to be used with the a <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a>. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="afa00d3739c33cdd26f1b726e2782e584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa00d3739c33cdd26f1b726e2782e584">&#9670;&nbsp;</a></span>blockingPop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>&gt; recpp::async::SchedulableQueue::blockingPop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting indefinitely for it. </p>
+<p>This method is blocking until the <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a35e88ff8e5ef2e20e059da2b28008bc4">stop</a> method is called.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;Schedulable&gt; An optional <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>. </dd></dl>
+
+</div>
+</div>
+<a id="aa80bb689f8cef9d3ce382d7d366f892a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa80bb689f8cef9d3ce382d7d366f892a">&#9670;&nbsp;</a></span>pop() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>&gt; recpp::async::SchedulableQueue::pop </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">Duration</a> &amp;&#160;</td>
+          <td class="paramname"><em>duration</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting for the specified maximum duration. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">duration</td><td>The maximum duration to wait a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;Schedulable&gt; An optional <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a369d3e3433164bb3807e962d1a9b70fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a369d3e3433164bb3807e962d1a9b70fb">&#9670;&nbsp;</a></span>pop() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;<a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>&gt; recpp::async::SchedulableQueue::pop </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>until</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting until the specified maximum time point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">until</td><td>The maximum time point to wait a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::optional&lt;Schedulable&gt; An optional <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>. </dd></dl>
+
+</div>
+</div>
+<a id="afc3066c1b25786390eecb8218a59aa3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc3066c1b25786390eecb8218a59aa3b">&#9670;&nbsp;</a></span>push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void recpp::async::SchedulableQueue::push </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>timePoint</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;&#160;</td>
+          <td class="paramname"><em>schedulable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Push a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to execute after the specified time point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timePoint</td><td>The time point to execute the <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> after. </td></tr>
+    <tr><td class="paramname">schedulable</td><td>The <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to execute. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a840cde4fe66bd040ea29be9f2347b20d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840cde4fe66bd040ea29be9f2347b20d">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t recpp::async::SchedulableQueue::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the queue size. </p>
+<dl class="section return"><dt>Returns</dt><dd>size_t The queue size </dd></dl>
+
+</div>
+</div>
+<a id="a35e88ff8e5ef2e20e059da2b28008bc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35e88ff8e5ef2e20e059da2b28008bc4">&#9670;&nbsp;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void recpp::async::SchedulableQueue::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stop this queue and wake up all threads trying to pop an element. </p>
+<p>After this call threads will not be able to wait for elements anymore. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/async/<a class="el" href="_schedulable_queue_8h_source.html">SchedulableQueue.h</a></li>
 </ul>

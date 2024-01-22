@@ -91,43 +91,93 @@ $(document).ready(function(){initNavTree('classrecpp_1_1subscriptions_1_1_filter
 <div class="title">recpp::subscriptions::FilterSubscription Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> that will be used by a <a class="el" href="classrecpp_1_1processors_1_1_filter.html">processors::Filter</a> to filter the emitted items.  
+ <a href="classrecpp_1_1subscriptions_1_1_filter_subscription.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_filter_subscription_8h_source.html">recpp/subscriptions/FilterSubscription.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::subscriptions::FilterSubscription:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrecpp_1_1subscriptions_1_1_filter_subscription.png" usemap="#recpp::subscriptions::FilterSubscription_map" alt=""/>
   <map id="recpp::subscriptions::FilterSubscription_map" name="recpp::subscriptions::FilterSubscription_map">
-<area href="classrscpp_1_1_subscription.html" alt="rscpp::Subscription" shape="rect" coords="0,0,230,24"/>
+<area href="classrscpp_1_1_subscription.html" title="A rscpp::Subscription represents a one-to-one lifecycle of a rscpp::Subscriber subscribing to a rscpp..." alt="rscpp::Subscription" shape="rect" coords="0,0,230,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad80f0c1f3e420c124f449fffc2afd80a"><td class="memItemLeft" align="right" valign="top"><a id="ad80f0c1f3e420c124f449fffc2afd80a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FilterSubscription</b> (const <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> &amp;subscription)</td></tr>
+<tr class="memitem:ad80f0c1f3e420c124f449fffc2afd80a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscriptions_1_1_filter_subscription.html#ad80f0c1f3e420c124f449fffc2afd80a">FilterSubscription</a> (const <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> &amp;subscription)</td></tr>
+<tr class="memdesc:ad80f0c1f3e420c124f449fffc2afd80a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1subscriptions_1_1_filter_subscription.html">FilterSubscription</a> instance.  <a href="classrecpp_1_1subscriptions_1_1_filter_subscription.html#ad80f0c1f3e420c124f449fffc2afd80a">More...</a><br /></td></tr>
 <tr class="separator:ad80f0c1f3e420c124f449fffc2afd80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a303b3e3daf08d5c4c004a27578110c20"><td class="memItemLeft" align="right" valign="top"><a id="a303b3e3daf08d5c4c004a27578110c20"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onNext</b> (bool filtered)</td></tr>
+<tr class="memitem:a303b3e3daf08d5c4c004a27578110c20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscriptions_1_1_filter_subscription.html#a303b3e3daf08d5c4c004a27578110c20">onNext</a> (bool filtered)</td></tr>
+<tr class="memdesc:a303b3e3daf08d5c4c004a27578110c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called by the <a class="el" href="classrecpp_1_1processors_1_1_filter.html">processors::Filter</a> to notify that an item was emitted.  <a href="classrecpp_1_1subscriptions_1_1_filter_subscription.html#a303b3e3daf08d5c4c004a27578110c20">More...</a><br /></td></tr>
 <tr class="separator:a303b3e3daf08d5c4c004a27578110c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrscpp_1_1_subscription"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrscpp_1_1_subscription')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></td></tr>
-<tr class="memitem:a80e7629e6f3522380b9b439d9b00bfcf inherit pub_methods_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top"><a id="a80e7629e6f3522380b9b439d9b00bfcf"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>request</b> (size_t count)</td></tr>
+<tr class="memitem:a80e7629e6f3522380b9b439d9b00bfcf inherit pub_methods_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">request</a> (size_t count)</td></tr>
+<tr class="memdesc:a80e7629e6f3522380b9b439d9b00bfcf inherit pub_methods_classrscpp_1_1_subscription"><td class="mdescLeft">&#160;</td><td class="mdescRight">No events will be sent by a <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> until demand is signaled via this method.  <a href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">More...</a><br /></td></tr>
 <tr class="separator:a80e7629e6f3522380b9b439d9b00bfcf inherit pub_methods_classrscpp_1_1_subscription"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352c062f064e8f2a61f2dfa62fb9fb1d inherit pub_methods_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top"><a id="a352c062f064e8f2a61f2dfa62fb9fb1d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>cancel</b> ()</td></tr>
+<tr class="memitem:a352c062f064e8f2a61f2dfa62fb9fb1d inherit pub_methods_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">cancel</a> ()</td></tr>
+<tr class="memdesc:a352c062f064e8f2a61f2dfa62fb9fb1d inherit pub_methods_classrscpp_1_1_subscription"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to stop sending data and clean up resources.  <a href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">More...</a><br /></td></tr>
 <tr class="separator:a352c062f064e8f2a61f2dfa62fb9fb1d inherit pub_methods_classrscpp_1_1_subscription"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classrscpp_1_1_subscription"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrscpp_1_1_subscription')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></td></tr>
-<tr class="memitem:a15479a5c37b9998a03b4a395111bf686 inherit pro_methods_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top"><a id="a15479a5c37b9998a03b4a395111bf686"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Subscription</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &gt; &amp;dd)</td></tr>
-<tr class="separator:a15479a5c37b9998a03b4a395111bf686 inherit pro_methods_classrscpp_1_1_subscription"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrscpp_1_1_subscription"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrscpp_1_1_subscription')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></td></tr>
-<tr class="memitem:aeb7102d9f662d925aae38027c8ae8444 inherit pro_attribs_classrscpp_1_1_subscription"><td class="memItemLeft" align="right" valign="top"><a id="aeb7102d9f662d925aae38027c8ae8444"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:aeb7102d9f662d925aae38027c8ae8444 inherit pro_attribs_classrscpp_1_1_subscription"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> that will be used by a <a class="el" href="classrecpp_1_1processors_1_1_filter.html">processors::Filter</a> to filter the emitted items. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad80f0c1f3e420c124f449fffc2afd80a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad80f0c1f3e420c124f449fffc2afd80a">&#9670;&nbsp;</a></span>FilterSubscription()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">recpp::subscriptions::FilterSubscription::FilterSubscription </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> &amp;&#160;</td>
+          <td class="paramname"><em>subscription</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1subscriptions_1_1_filter_subscription.html">FilterSubscription</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subscription</td><td>The source <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> used to request items when necessary. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a303b3e3daf08d5c4c004a27578110c20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a303b3e3daf08d5c4c004a27578110c20">&#9670;&nbsp;</a></span>onNext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void recpp::subscriptions::FilterSubscription::onNext </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>filtered</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Method called by the <a class="el" href="classrecpp_1_1processors_1_1_filter.html">processors::Filter</a> to notify that an item was emitted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filtered</td><td>Boolean defining if the item is filtered. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/subscriptions/<a class="el" href="_filter_subscription_8h_source.html">FilterSubscription.h</a></li>
 </ul>

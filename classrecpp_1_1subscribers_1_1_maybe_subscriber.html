@@ -90,22 +90,125 @@ $(document).ready(function(){initNavTree('classrecpp_1_1subscribers_1_1_maybe_su
 <div class="title">recpp::subscribers::MaybeSubscriber&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Subscriber that can be used to create a new <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">rx::Maybe</a>.  
+ <a href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_maybe_subscriber_8h_source.html">recpp/subscribers/MaybeSubscriber.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7df6f968042508f4aa8d546730180fbd"><td class="memItemLeft" align="right" valign="top"><a id="a7df6f968042508f4aa8d546730180fbd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MaybeSubscriber</b> (const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;subscriber)</td></tr>
+<tr class="memitem:a7df6f968042508f4aa8d546730180fbd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a7df6f968042508f4aa8d546730180fbd">MaybeSubscriber</a> (const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;subscriber)</td></tr>
+<tr class="memdesc:a7df6f968042508f4aa8d546730180fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">MaybeSubscriber</a> instance.  <a href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a7df6f968042508f4aa8d546730180fbd">More...</a><br /></td></tr>
 <tr class="separator:a7df6f968042508f4aa8d546730180fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90b63d11aa8183f6632bef68e55c66f0"><td class="memItemLeft" align="right" valign="top"><a id="a90b63d11aa8183f6632bef68e55c66f0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onNext</b> (const T &amp;value)</td></tr>
+<tr class="memitem:a90b63d11aa8183f6632bef68e55c66f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a90b63d11aa8183f6632bef68e55c66f0">onNext</a> (const T &amp;value)</td></tr>
+<tr class="memdesc:a90b63d11aa8183f6632bef68e55c66f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits the given value to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted.  <a href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a90b63d11aa8183f6632bef68e55c66f0">More...</a><br /></td></tr>
 <tr class="separator:a90b63d11aa8183f6632bef68e55c66f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ff88075d01e8dd65a59e60bed3d8827"><td class="memItemLeft" align="right" valign="top"><a id="a0ff88075d01e8dd65a59e60bed3d8827"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onError</b> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memitem:a0ff88075d01e8dd65a59e60bed3d8827"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a0ff88075d01e8dd65a59e60bed3d8827">onError</a> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memdesc:a0ff88075d01e8dd65a59e60bed3d8827"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits the given error to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted.  <a href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a0ff88075d01e8dd65a59e60bed3d8827">More...</a><br /></td></tr>
 <tr class="separator:a0ff88075d01e8dd65a59e60bed3d8827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d4ed615ad4065865bd2beba8cb63819"><td class="memItemLeft" align="right" valign="top"><a id="a7d4ed615ad4065865bd2beba8cb63819"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onComplete</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a7d4ed615ad4065865bd2beba8cb63819">onComplete</a> ()</td></tr>
+<tr class="memdesc:a7d4ed615ad4065865bd2beba8cb63819"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits a completion signal to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted. <br /></td></tr>
 <tr class="separator:a7d4ed615ad4065865bd2beba8cb63819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+class recpp::subscribers::MaybeSubscriber&lt; T &gt;</h3>
+
+<p>Subscriber that can be used to create a new <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">rx::Maybe</a>. </p>
+<p>This class does not inherit from <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>The type of element signaled. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7df6f968042508f4aa8d546730180fbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7df6f968042508f4aa8d546730180fbd">&#9670;&nbsp;</a></span>MaybeSubscriber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">recpp::subscribers::MaybeSubscriber</a>&lt; T &gt;::<a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">MaybeSubscriber</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>subscriber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">MaybeSubscriber</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subscriber</td><td>The <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> to forward signals to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0ff88075d01e8dd65a59e60bed3d8827"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ff88075d01e8dd65a59e60bed3d8827">&#9670;&nbsp;</a></span>onError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">recpp::subscribers::MaybeSubscriber</a>&lt; T &gt;::onError </td>
+          <td>(</td>
+          <td class="paramtype">const std::exception_ptr &amp;&#160;</td>
+          <td class="paramname"><em>error</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Emits the given error to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">error</td><td>The error to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a90b63d11aa8183f6632bef68e55c66f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90b63d11aa8183f6632bef68e55c66f0">&#9670;&nbsp;</a></span>onNext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html">recpp::subscribers::MaybeSubscriber</a>&lt; T &gt;::onNext </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Emits the given value to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/recpp/rx/<a class="el" href="_maybe_8h_source.html">Maybe.h</a></li>
 <li>include/recpp/subscribers/<a class="el" href="_maybe_subscriber_8h_source.html">MaybeSubscriber.h</a></li>

@@ -90,19 +90,82 @@ $(document).ready(function(){initNavTree('classrecpp_1_1subscribers_1_1_completa
 <div class="title">recpp::subscribers::CompletableSubscriber Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Subscriber that can be used to create a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">rx::Completable</a>.  
+ <a href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_completable_subscriber_8h_source.html">recpp/subscribers/CompletableSubscriber.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1c22490fc46a66f80b6c910b1060884b"><td class="memItemLeft" align="right" valign="top"><a id="a1c22490fc46a66f80b6c910b1060884b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>CompletableSubscriber</b> (const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; int &gt; &amp;subscriber)</td></tr>
+<tr class="memitem:a1c22490fc46a66f80b6c910b1060884b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#a1c22490fc46a66f80b6c910b1060884b">CompletableSubscriber</a> (const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; int &gt; &amp;subscriber)</td></tr>
+<tr class="memdesc:a1c22490fc46a66f80b6c910b1060884b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">CompletableSubscriber</a> instance.  <a href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#a1c22490fc46a66f80b6c910b1060884b">More...</a><br /></td></tr>
 <tr class="separator:a1c22490fc46a66f80b6c910b1060884b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3d0f70e543615cc3c861390f9e51bed"><td class="memItemLeft" align="right" valign="top"><a id="aa3d0f70e543615cc3c861390f9e51bed"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onError</b> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memitem:aa3d0f70e543615cc3c861390f9e51bed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#aa3d0f70e543615cc3c861390f9e51bed">onError</a> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memdesc:aa3d0f70e543615cc3c861390f9e51bed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits the given error to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted.  <a href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#aa3d0f70e543615cc3c861390f9e51bed">More...</a><br /></td></tr>
 <tr class="separator:aa3d0f70e543615cc3c861390f9e51bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ba48131a1c2b9c8d195834d3dd95cd0"><td class="memItemLeft" align="right" valign="top"><a id="a8ba48131a1c2b9c8d195834d3dd95cd0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>onComplete</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html#a8ba48131a1c2b9c8d195834d3dd95cd0">onComplete</a> ()</td></tr>
+<tr class="memdesc:a8ba48131a1c2b9c8d195834d3dd95cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits a completion signal to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted. <br /></td></tr>
 <tr class="separator:a8ba48131a1c2b9c8d195834d3dd95cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Subscriber that can be used to create a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">rx::Completable</a>. </p>
+<p>This class does not inherit from <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1c22490fc46a66f80b6c910b1060884b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c22490fc46a66f80b6c910b1060884b">&#9670;&nbsp;</a></span>CompletableSubscriber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">recpp::subscribers::CompletableSubscriber::CompletableSubscriber </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>subscriber</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">CompletableSubscriber</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">subscriber</td><td>The <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> to forward signals to. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa3d0f70e543615cc3c861390f9e51bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3d0f70e543615cc3c861390f9e51bed">&#9670;&nbsp;</a></span>onError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void recpp::subscribers::CompletableSubscriber::onError </td>
+          <td>(</td>
+          <td class="paramtype">const std::exception_ptr &amp;&#160;</td>
+          <td class="paramname"><em>error</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Emits the given error to the <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> if it has not already been emitted. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">error</td><td>The error to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/subscribers/<a class="el" href="_completable_subscriber_8h_source.html">CompletableSubscriber.h</a></li>
 </ul>

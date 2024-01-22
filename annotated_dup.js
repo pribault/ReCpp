@@ -52,7 +52,7 @@ var annotated_dup =
       ] ]
     ] ],
     [ "rscpp", null, [
-      [ "Processor", "classrscpp_1_1_processor.html", "classrscpp_1_1_processor" ],
+      [ "Processor", "classrscpp_1_1_processor.html", null ],
       [ "Subscriber", "classrscpp_1_1_subscriber.html", "classrscpp_1_1_subscriber" ],
       [ "Publisher", "classrscpp_1_1_publisher.html", "classrscpp_1_1_publisher" ],
       [ "Subscription", "classrscpp_1_1_subscription.html", "classrscpp_1_1_subscription" ]

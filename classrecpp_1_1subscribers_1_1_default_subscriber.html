@@ -92,58 +92,121 @@ $(document).ready(function(){initNavTree('classrecpp_1_1subscribers_1_1_default_
 <div class="title">recpp::subscribers::DefaultSubscriber&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> that will call a given set of functions on each signal.  
+ <a href="classrecpp_1_1subscribers_1_1_default_subscriber.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_default_subscriber_8h_source.html">recpp/subscribers/DefaultSubscriber.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::subscribers::DefaultSubscriber&lt; T &gt;:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrecpp_1_1subscribers_1_1_default_subscriber.png" usemap="#recpp::subscribers::DefaultSubscriber_3C_20T_20_3E_map" alt=""/>
   <map id="recpp::subscribers::DefaultSubscriber_3C_20T_20_3E_map" name="recpp::subscribers::DefaultSubscriber_3C_20T_20_3E_map">
-<area href="classrscpp_1_1_subscriber.html" alt="rscpp::Subscriber&lt; T &gt;" shape="rect" coords="0,0,256,24"/>
+<area href="classrscpp_1_1_subscriber.html" title="Will receive call to onSubscribe(Subscription&amp;) once after passing an instance of rscpp::Subscriber t..." alt="rscpp::Subscriber&lt; T &gt;" shape="rect" coords="0,0,256,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a0084c36a36879833fa01d2687569c9da"><td class="memItemLeft" align="right" valign="top"><a id="a0084c36a36879833fa01d2687569c9da"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnNextMethod</b> = typename Impl::OnNextMethod</td></tr>
-<tr class="separator:a0084c36a36879833fa01d2687569c9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4ebab5cd141bc0679c7b11ebad8fb69"><td class="memItemLeft" align="right" valign="top"><a id="ac4ebab5cd141bc0679c7b11ebad8fb69"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnErrorMethod</b> = typename Impl::OnErrorMethod</td></tr>
-<tr class="separator:ac4ebab5cd141bc0679c7b11ebad8fb69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9fa0f41ffe25a1b6f1eec29d907d4a8"><td class="memItemLeft" align="right" valign="top"><a id="ac9fa0f41ffe25a1b6f1eec29d907d4a8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnCompleteMethod</b> = typename Impl::OnCompleteMethod</td></tr>
-<tr class="separator:ac9fa0f41ffe25a1b6f1eec29d907d4a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6e0caec292d7d5cb395148e8887c09"><td class="memItemLeft" align="right" valign="top"><a id="a4d6e0caec292d7d5cb395148e8887c09"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a4d6e0caec292d7d5cb395148e8887c09">OnNextMethod</a> = std::function&lt; void(const T &amp;)&gt;</td></tr>
+<tr class="memdesc:a4d6e0caec292d7d5cb395148e8887c09"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call for each emitted value. <br /></td></tr>
+<tr class="separator:a4d6e0caec292d7d5cb395148e8887c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adec7bca90283bcef966abf685ccbde86"><td class="memItemLeft" align="right" valign="top"><a id="adec7bca90283bcef966abf685ccbde86"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#adec7bca90283bcef966abf685ccbde86">OnErrorMethod</a> = std::function&lt; void(const std::exception_ptr &amp;)&gt;</td></tr>
+<tr class="memdesc:adec7bca90283bcef966abf685ccbde86"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on error. <br /></td></tr>
+<tr class="separator:adec7bca90283bcef966abf685ccbde86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d96080b1b29f27621d75044fae0c44f"><td class="memItemLeft" align="right" valign="top"><a id="a8d96080b1b29f27621d75044fae0c44f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a8d96080b1b29f27621d75044fae0c44f">OnCompleteMethod</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="memdesc:a8d96080b1b29f27621d75044fae0c44f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on completion. <br /></td></tr>
+<tr class="separator:a8d96080b1b29f27621d75044fae0c44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a65b099d168a091b1d1fdad200d05fa06"><td class="memItemLeft" align="right" valign="top"><a id="a65b099d168a091b1d1fdad200d05fa06"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DefaultSubscriber</b> (const OnNextMethod &amp;onNextMethod, const OnErrorMethod &amp;onErrorMethod, const OnCompleteMethod &amp;onCompleteMethod)</td></tr>
+<tr class="memitem:a65b099d168a091b1d1fdad200d05fa06"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a65b099d168a091b1d1fdad200d05fa06">DefaultSubscriber</a> (const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a4d6e0caec292d7d5cb395148e8887c09">OnNextMethod</a> &amp;onNextMethod, const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#adec7bca90283bcef966abf685ccbde86">OnErrorMethod</a> &amp;onErrorMethod, const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a8d96080b1b29f27621d75044fae0c44f">OnCompleteMethod</a> &amp;onCompleteMethod)</td></tr>
+<tr class="memdesc:a65b099d168a091b1d1fdad200d05fa06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html">DefaultSubscriber</a> instance.  <a href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a65b099d168a091b1d1fdad200d05fa06">More...</a><br /></td></tr>
 <tr class="separator:a65b099d168a091b1d1fdad200d05fa06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrscpp_1_1_subscriber"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrscpp_1_1_subscriber')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt; T &gt;</a></td></tr>
-<tr class="memitem:ae8e0b6f8c07f76abd4213b25407f9a56 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="ae8e0b6f8c07f76abd4213b25407f9a56"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onSubscribe</b> (<a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &amp;subscription)</td></tr>
+<tr class="memitem:ae8e0b6f8c07f76abd4213b25407f9a56 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">onSubscribe</a> (<a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &amp;subscription)</td></tr>
+<tr class="memdesc:ae8e0b6f8c07f76abd4213b25407f9a56 inherit pub_methods_classrscpp_1_1_subscriber"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invoked after calling <a class="el" href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">rscpp::Publisher::subscribe(Subscriber&amp;)</a>.  <a href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">More...</a><br /></td></tr>
 <tr class="separator:ae8e0b6f8c07f76abd4213b25407f9a56 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a578e972bf8b6768058a1c4911a3e063c inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="a578e972bf8b6768058a1c4911a3e063c"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onNext</b> (const T &amp;value)</td></tr>
+<tr class="memitem:a578e972bf8b6768058a1c4911a3e063c inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscriber.html#a578e972bf8b6768058a1c4911a3e063c">onNext</a> (const T &amp;value)</td></tr>
+<tr class="memdesc:a578e972bf8b6768058a1c4911a3e063c inherit pub_methods_classrscpp_1_1_subscriber"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data notification sent by the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> in response to requests to <a class="el" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">rscpp::Subscription::request(size_t)</a>.  <a href="classrscpp_1_1_subscriber.html#a578e972bf8b6768058a1c4911a3e063c">More...</a><br /></td></tr>
 <tr class="separator:a578e972bf8b6768058a1c4911a3e063c inherit pub_methods_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7399e18dd055a3321c0a749de0fa24a inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="af7399e18dd055a3321c0a749de0fa24a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onError</b> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memitem:af7399e18dd055a3321c0a749de0fa24a inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">onError</a> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memdesc:af7399e18dd055a3321c0a749de0fa24a inherit pub_methods_classrscpp_1_1_subscriber"><td class="mdescLeft">&#160;</td><td class="mdescRight">Failed terminal state.  <a href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">More...</a><br /></td></tr>
 <tr class="separator:af7399e18dd055a3321c0a749de0fa24a inherit pub_methods_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6f9f1996835cf5c55457bcbf52cfeb2 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="ac6f9f1996835cf5c55457bcbf52cfeb2"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onComplete</b> ()</td></tr>
+<tr class="memitem:ac6f9f1996835cf5c55457bcbf52cfeb2 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">onComplete</a> ()</td></tr>
+<tr class="memdesc:ac6f9f1996835cf5c55457bcbf52cfeb2 inherit pub_methods_classrscpp_1_1_subscriber"><td class="mdescLeft">&#160;</td><td class="mdescRight">Successful terminal state.  <a href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">More...</a><br /></td></tr>
 <tr class="separator:ac6f9f1996835cf5c55457bcbf52cfeb2 inherit pub_methods_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classrscpp_1_1_subscriber"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrscpp_1_1_subscriber')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt; T &gt;</a></td></tr>
-<tr class="memitem:a557ff3a46082e21e09a693ba593041b9 inherit pro_methods_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="a557ff3a46082e21e09a693ba593041b9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Subscriber</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; T &gt;&gt; &amp;dd)</td></tr>
-<tr class="separator:a557ff3a46082e21e09a693ba593041b9 inherit pro_methods_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classrscpp_1_1_subscriber"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrscpp_1_1_subscriber')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt; T &gt;</a></td></tr>
-<tr class="memitem:a30a516b3f1c53a8977c59b973ab264d9 inherit pro_attribs_classrscpp_1_1_subscriber"><td class="memItemLeft" align="right" valign="top"><a id="a30a516b3f1c53a8977c59b973ab264d9"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:a30a516b3f1c53a8977c59b973ab264d9 inherit pro_attribs_classrscpp_1_1_subscriber"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+class recpp::subscribers::DefaultSubscriber&lt; T &gt;</h3>
+
+<p><a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> that will call a given set of functions on each signal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>The type of element signaled. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a65b099d168a091b1d1fdad200d05fa06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65b099d168a091b1d1fdad200d05fa06">&#9670;&nbsp;</a></span>DefaultSubscriber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html">recpp::subscribers::DefaultSubscriber</a>&lt; T &gt;::<a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html">DefaultSubscriber</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a4d6e0caec292d7d5cb395148e8887c09">OnNextMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onNextMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#adec7bca90283bcef966abf685ccbde86">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onErrorMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a8d96080b1b29f27621d75044fae0c44f">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onCompleteMethod</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html">DefaultSubscriber</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onNextMethod</td><td>The function to call when a value is emitted. </td></tr>
+    <tr><td class="paramname">onErrorMethod</td><td>The function to call when an error is emitted. </td></tr>
+    <tr><td class="paramname">onCompleteMethod</td><td>The function to call when the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/subscribers/<a class="el" href="_default_subscriber_8h_source.html">DefaultSubscriber.h</a></li>
 </ul>

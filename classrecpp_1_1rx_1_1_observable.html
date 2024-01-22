@@ -94,125 +94,873 @@ $(document).ready(function(){initNavTree('classrecpp_1_1rx_1_1_observable.html',
 <div class="title">recpp::rx::Observable&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>An <a class="el" href="classrecpp_1_1rx_1_1_observable.html" title="An Observable is a Publisher that emits a stream of values.">Observable</a> is a Publisher that emits a stream of values.  
+ <a href="classrecpp_1_1rx_1_1_observable.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_observable_8h_source.html">recpp/rx/Observable.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::rx::Observable&lt; T &gt;:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrecpp_1_1rx_1_1_observable.png" usemap="#recpp::rx::Observable_3C_20T_20_3E_map" alt=""/>
   <map id="recpp::rx::Observable_3C_20T_20_3E_map" name="recpp::rx::Observable_3C_20T_20_3E_map">
-<area href="classrscpp_1_1_publisher.html" alt="rscpp::Publisher&lt; T &gt;" shape="rect" coords="0,0,165,24"/>
+<area href="classrscpp_1_1_publisher.html" title="A rscpp::Publisher is a provider of a potentially unbounded number of sequenced elements,..." alt="rscpp::Publisher&lt; T &gt;" shape="rect" coords="0,0,165,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a72087edf313ea71ebb21bd7af7c439a1"><td class="memItemLeft" align="right" valign="top"><a id="a72087edf313ea71ebb21bd7af7c439a1"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnNextMethod</b> = std::function&lt; void(const T &amp;)&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> = std::function&lt; void(const T &amp;)&gt;</td></tr>
+<tr class="memdesc:a72087edf313ea71ebb21bd7af7c439a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call for each emitted value. <br /></td></tr>
 <tr class="separator:a72087edf313ea71ebb21bd7af7c439a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23ae02be86a21a0ac61b0ada1b85dca7"><td class="memItemLeft" align="right" valign="top"><a id="a23ae02be86a21a0ac61b0ada1b85dca7"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnErrorMethod</b> = std::function&lt; void(const std::exception_ptr &amp;)&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> = std::function&lt; void(const std::exception_ptr &amp;)&gt;</td></tr>
+<tr class="memdesc:a23ae02be86a21a0ac61b0ada1b85dca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on error. <br /></td></tr>
 <tr class="separator:a23ae02be86a21a0ac61b0ada1b85dca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ea28bed3fa97989afe4ae6ad37a340e"><td class="memItemLeft" align="right" valign="top"><a id="a2ea28bed3fa97989afe4ae6ad37a340e"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnCompleteMethod</b> = std::function&lt; void()&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="memdesc:a2ea28bed3fa97989afe4ae6ad37a340e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on completion. <br /></td></tr>
 <tr class="separator:a2ea28bed3fa97989afe4ae6ad37a340e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adf6841bb1fb30bac97157946b936e521"><td class="memItemLeft" align="right" valign="top"><a id="adf6841bb1fb30bac97157946b936e521"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (const OnNextMethod &amp;onNext=nullptr, const OnErrorMethod &amp;onError=nullptr, const OnCompleteMethod &amp;onComplete=nullptr)</td></tr>
+<tr class="memitem:adf6841bb1fb30bac97157946b936e521"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#adf6841bb1fb30bac97157946b936e521">subscribe</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;onNext=nullptr, const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;onError=nullptr, const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;onComplete=nullptr)</td></tr>
+<tr class="memdesc:adf6841bb1fb30bac97157946b936e521"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> with the given methods.  <a href="classrecpp_1_1rx_1_1_observable.html#adf6841bb1fb30bac97157946b936e521">More...</a><br /></td></tr>
 <tr class="separator:adf6841bb1fb30bac97157946b936e521"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0b37156e1b6c89240399cc71f058003"><td class="memItemLeft" align="right" valign="top"><a id="ae0b37156e1b6c89240399cc71f058003"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>filter</b> (const std::function&lt; bool(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memitem:ae0b37156e1b6c89240399cc71f058003"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#ae0b37156e1b6c89240399cc71f058003">filter</a> (const std::function&lt; bool(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memdesc:ae0b37156e1b6c89240399cc71f058003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filter emitted values with the given method.  <a href="classrecpp_1_1rx_1_1_observable.html#ae0b37156e1b6c89240399cc71f058003">More...</a><br /></td></tr>
 <tr class="separator:ae0b37156e1b6c89240399cc71f058003"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad985021910a4b2751c0b0ea1ce52e42a"><td class="memItemLeft" align="right" valign="top"><a id="ad985021910a4b2751c0b0ea1ce52e42a"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ignoreElements</b> ()</td></tr>
+<tr class="memitem:ad985021910a4b2751c0b0ea1ce52e42a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#ad985021910a4b2751c0b0ea1ce52e42a">ignoreElements</a> ()</td></tr>
 <tr class="separator:ad985021910a4b2751c0b0ea1ce52e42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c1726cb85b32494d34811f93e2dc16d"><td class="memTemplParams" colspan="2"><a id="a4c1726cb85b32494d34811f93e2dc16d"></a>
-template&lt;typename R &gt; </td></tr>
-<tr class="memitem:a4c1726cb85b32494d34811f93e2dc16d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>map</b> (const std::function&lt; R(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memitem:a4c1726cb85b32494d34811f93e2dc16d"><td class="memTemplParams" colspan="2">template&lt;typename R &gt; </td></tr>
+<tr class="memitem:a4c1726cb85b32494d34811f93e2dc16d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a4c1726cb85b32494d34811f93e2dc16d">map</a> (const std::function&lt; R(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memdesc:a4c1726cb85b32494d34811f93e2dc16d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a given method to the values emitted by this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>.  <a href="classrecpp_1_1rx_1_1_observable.html#a4c1726cb85b32494d34811f93e2dc16d">More...</a><br /></td></tr>
 <tr class="separator:a4c1726cb85b32494d34811f93e2dc16d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="memTemplParams" colspan="2"><a id="a57c24c26e8b05ec2eee693dfcd0308cf"></a>
-template&lt;typename R &gt; </td></tr>
-<tr class="memitem:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>flatMap</b> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memitem:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="memTemplParams" colspan="2">template&lt;typename R &gt; </td></tr>
+<tr class="memitem:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a57c24c26e8b05ec2eee693dfcd0308cf">flatMap</a> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;(const T &amp;)&gt; &amp;method)</td></tr>
+<tr class="memdesc:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the given method to the values emitted by this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>.  <a href="classrecpp_1_1rx_1_1_observable.html#a57c24c26e8b05ec2eee693dfcd0308cf">More...</a><br /></td></tr>
 <tr class="separator:a57c24c26e8b05ec2eee693dfcd0308cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a06c42e1702e3e1048252850fd3d324"><td class="memItemLeft" align="right" valign="top"><a id="a2a06c42e1702e3e1048252850fd3d324"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>doOnComplete</b> (const OnCompleteMethod &amp;method)</td></tr>
+<tr class="memitem:a2a06c42e1702e3e1048252850fd3d324"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2a06c42e1702e3e1048252850fd3d324">doOnComplete</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:a2a06c42e1702e3e1048252850fd3d324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> completes.  <a href="classrecpp_1_1rx_1_1_observable.html#a2a06c42e1702e3e1048252850fd3d324">More...</a><br /></td></tr>
 <tr class="separator:a2a06c42e1702e3e1048252850fd3d324"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcb098a42e8eedba85007b3829d5d7af"><td class="memItemLeft" align="right" valign="top"><a id="adcb098a42e8eedba85007b3829d5d7af"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>doOnError</b> (const OnErrorMethod &amp;method)</td></tr>
+<tr class="memitem:adcb098a42e8eedba85007b3829d5d7af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#adcb098a42e8eedba85007b3829d5d7af">doOnError</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:adcb098a42e8eedba85007b3829d5d7af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called on error.  <a href="classrecpp_1_1rx_1_1_observable.html#adcb098a42e8eedba85007b3829d5d7af">More...</a><br /></td></tr>
 <tr class="separator:adcb098a42e8eedba85007b3829d5d7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae13b62dac400d02ad3855d808582938a"><td class="memItemLeft" align="right" valign="top"><a id="ae13b62dac400d02ad3855d808582938a"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>doOnNext</b> (const OnNextMethod &amp;method)</td></tr>
+<tr class="memitem:ae13b62dac400d02ad3855d808582938a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#ae13b62dac400d02ad3855d808582938a">doOnNext</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:ae13b62dac400d02ad3855d808582938a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> emits a value.  <a href="classrecpp_1_1rx_1_1_observable.html#ae13b62dac400d02ad3855d808582938a">More...</a><br /></td></tr>
 <tr class="separator:ae13b62dac400d02ad3855d808582938a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2096d9d052a0f6762b5f6c380f622666"><td class="memItemLeft" align="right" valign="top"><a id="a2096d9d052a0f6762b5f6c380f622666"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>doOnTerminate</b> (const OnCompleteMethod &amp;method)</td></tr>
+<tr class="memitem:a2096d9d052a0f6762b5f6c380f622666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2096d9d052a0f6762b5f6c380f622666">doOnTerminate</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:a2096d9d052a0f6762b5f6c380f622666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> terminates, either by completing or erroring.  <a href="classrecpp_1_1rx_1_1_observable.html#a2096d9d052a0f6762b5f6c380f622666">More...</a><br /></td></tr>
 <tr class="separator:a2096d9d052a0f6762b5f6c380f622666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a053f2d3b26d37cd98d3af7a6cc5f9340"><td class="memItemLeft" align="right" valign="top"><a id="a053f2d3b26d37cd98d3af7a6cc5f9340"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tap</b> (const OnNextMethod &amp;onNextMethod, const OnErrorMethod &amp;onErrorMethod, const OnCompleteMethod &amp;onCompleteMethod)</td></tr>
+<tr class="memitem:a053f2d3b26d37cd98d3af7a6cc5f9340"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a053f2d3b26d37cd98d3af7a6cc5f9340">tap</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;onNextMethod, const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;onErrorMethod, const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;onCompleteMethod)</td></tr>
+<tr class="memdesc:a053f2d3b26d37cd98d3af7a6cc5f9340"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the methods that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> emits a value, completes or errors.  <a href="classrecpp_1_1rx_1_1_observable.html#a053f2d3b26d37cd98d3af7a6cc5f9340">More...</a><br /></td></tr>
 <tr class="separator:a053f2d3b26d37cd98d3af7a6cc5f9340"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5c1c15abd07acd297011dcf0e880f4a"><td class="memItemLeft" align="right" valign="top"><a id="ad5c1c15abd07acd297011dcf0e880f4a"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>observeOn</b> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memitem:ad5c1c15abd07acd297011dcf0e880f4a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#ad5c1c15abd07acd297011dcf0e880f4a">observeOn</a> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memdesc:ad5c1c15abd07acd297011dcf0e880f4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forwards all emissions on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>.  <a href="classrecpp_1_1rx_1_1_observable.html#ad5c1c15abd07acd297011dcf0e880f4a">More...</a><br /></td></tr>
 <tr class="separator:ad5c1c15abd07acd297011dcf0e880f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeabbed0e3713d721a2d27ddf2bb698da"><td class="memItemLeft" align="right" valign="top"><a id="aeabbed0e3713d721a2d27ddf2bb698da"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>subscribeOn</b> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memitem:aeabbed0e3713d721a2d27ddf2bb698da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#aeabbed0e3713d721a2d27ddf2bb698da">subscribeOn</a> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memdesc:aeabbed0e3713d721a2d27ddf2bb698da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>.  <a href="classrecpp_1_1rx_1_1_observable.html#aeabbed0e3713d721a2d27ddf2bb698da">More...</a><br /></td></tr>
 <tr class="separator:aeabbed0e3713d721a2d27ddf2bb698da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; T &gt;</a></td></tr>
-<tr class="memitem:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a12d21f01f002143e18175c0f192b89df"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (<a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; T &gt; &amp;subscriber)</td></tr>
+<tr class="memitem:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">subscribe</a> (<a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; T &gt; &amp;subscriber)</td></tr>
+<tr class="memdesc:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to start streaming data.  <a href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">More...</a><br /></td></tr>
 <tr class="separator:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a89de1354fadf6d87c0d898189bd52b31"><td class="memItemLeft" align="right" valign="top"><a id="a89de1354fadf6d87c0d898189bd52b31"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">recpp::subscribers::ObservableSubscriber</a>&lt; T &gt; &amp;)&gt; &amp;method)</td></tr>
+<tr class="memitem:a89de1354fadf6d87c0d898189bd52b31"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a89de1354fadf6d87c0d898189bd52b31">create</a> (const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">recpp::subscribers::ObservableSubscriber</a>&lt; T &gt; &amp;)&gt; &amp;method)</td></tr>
+<tr class="memdesc:a89de1354fadf6d87c0d898189bd52b31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will call the given method when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#a89de1354fadf6d87c0d898189bd52b31">More...</a><br /></td></tr>
 <tr class="separator:a89de1354fadf6d87c0d898189bd52b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7262221082f7a7ab4a52a7f5826f305e"><td class="memItemLeft" align="right" valign="top"><a id="a7262221082f7a7ab4a52a7f5826f305e"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>defer</b> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;()&gt; &amp;function)</td></tr>
-<tr class="separator:a7262221082f7a7ab4a52a7f5826f305e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f2999561d7029e81468f68adb95556d"><td class="memItemLeft" align="right" valign="top"><a id="a7f2999561d7029e81468f68adb95556d"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> ()</td></tr>
+<tr class="memitem:a110037f901f3ab796bfd468c705ed809"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a110037f901f3ab796bfd468c705ed809">defer</a> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;()&gt; &amp;method)</td></tr>
+<tr class="memdesc:a110037f901f3ab796bfd468c705ed809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will call the given method when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#a110037f901f3ab796bfd468c705ed809">More...</a><br /></td></tr>
+<tr class="separator:a110037f901f3ab796bfd468c705ed809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f2999561d7029e81468f68adb95556d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a7f2999561d7029e81468f68adb95556d">empty</a> ()</td></tr>
+<tr class="memdesc:a7f2999561d7029e81468f68adb95556d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will not emit any value when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#a7f2999561d7029e81468f68adb95556d">More...</a><br /></td></tr>
 <tr class="separator:a7f2999561d7029e81468f68adb95556d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab14c5307fbdc30024bdf60b109d10a8a"><td class="memItemLeft" align="right" valign="top"><a id="ab14c5307fbdc30024bdf60b109d10a8a"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>error</b> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memitem:ab14c5307fbdc30024bdf60b109d10a8a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#ab14c5307fbdc30024bdf60b109d10a8a">error</a> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memdesc:ab14c5307fbdc30024bdf60b109d10a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit the given error when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#ab14c5307fbdc30024bdf60b109d10a8a">More...</a><br /></td></tr>
 <tr class="separator:ab14c5307fbdc30024bdf60b109d10a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacd91a357e9fdc93d82505ebab3b0093"><td class="memItemLeft" align="right" valign="top"><a id="aacd91a357e9fdc93d82505ebab3b0093"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>just</b> (const T &amp;value)</td></tr>
+<tr class="memitem:aacd91a357e9fdc93d82505ebab3b0093"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#aacd91a357e9fdc93d82505ebab3b0093">just</a> (const T &amp;value)</td></tr>
+<tr class="memdesc:aacd91a357e9fdc93d82505ebab3b0093"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit the given value when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#aacd91a357e9fdc93d82505ebab3b0093">More...</a><br /></td></tr>
 <tr class="separator:aacd91a357e9fdc93d82505ebab3b0093"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ea74fd44ec3a561d52549e755f0b5c0"><td class="memItemLeft" align="right" valign="top"><a id="a1ea74fd44ec3a561d52549e755f0b5c0"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>never</b> ()</td></tr>
+<tr class="memitem:a1ea74fd44ec3a561d52549e755f0b5c0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a1ea74fd44ec3a561d52549e755f0b5c0">never</a> ()</td></tr>
+<tr class="memdesc:a1ea74fd44ec3a561d52549e755f0b5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will never emit a signal when subscribed to.  <a href="classrecpp_1_1rx_1_1_observable.html#a1ea74fd44ec3a561d52549e755f0b5c0">More...</a><br /></td></tr>
 <tr class="separator:a1ea74fd44ec3a561d52549e755f0b5c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8aa6fca70da67422aa6eadf6360884b7"><td class="memTemplParams" colspan="2"><a id="a8aa6fca70da67422aa6eadf6360884b7"></a>
-template&lt;class I &gt; </td></tr>
-<tr class="memitem:a8aa6fca70da67422aa6eadf6360884b7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>range</b> (I first, I last)</td></tr>
+<tr class="memitem:a8aa6fca70da67422aa6eadf6360884b7"><td class="memTemplParams" colspan="2">template&lt;class I &gt; </td></tr>
+<tr class="memitem:a8aa6fca70da67422aa6eadf6360884b7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a8aa6fca70da67422aa6eadf6360884b7">range</a> (I first, I last)</td></tr>
+<tr class="memdesc:a8aa6fca70da67422aa6eadf6360884b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit values contained inside the given range.  <a href="classrecpp_1_1rx_1_1_observable.html#a8aa6fca70da67422aa6eadf6360884b7">More...</a><br /></td></tr>
 <tr class="separator:a8aa6fca70da67422aa6eadf6360884b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a704d5be1151d41a4233ecc8e32ce23da"><td class="memTemplParams" colspan="2"><a id="a704d5be1151d41a4233ecc8e32ce23da"></a>
-template&lt;class R &gt; </td></tr>
-<tr class="memitem:a704d5be1151d41a4233ecc8e32ce23da"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>range</b> (R &amp;&amp;range)</td></tr>
+<tr class="memitem:a704d5be1151d41a4233ecc8e32ce23da"><td class="memTemplParams" colspan="2">template&lt;class R &gt; </td></tr>
+<tr class="memitem:a704d5be1151d41a4233ecc8e32ce23da"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a704d5be1151d41a4233ecc8e32ce23da">range</a> (R &amp;&amp;range)</td></tr>
+<tr class="memdesc:a704d5be1151d41a4233ecc8e32ce23da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit values contained inside the given range.  <a href="classrecpp_1_1rx_1_1_observable.html#a704d5be1151d41a4233ecc8e32ce23da">More...</a><br /></td></tr>
 <tr class="separator:a704d5be1151d41a4233ecc8e32ce23da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a7678cfedf717a8bbc08d50691ac00509"><td class="memItemLeft" align="right" valign="top"><a id="a7678cfedf717a8bbc08d50691ac00509"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Observable</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; T &gt;&gt; &amp;dd)</td></tr>
+<tr class="memitem:a7678cfedf717a8bbc08d50691ac00509"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_observable.html#a7678cfedf717a8bbc08d50691ac00509">Observable</a> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; T &gt;&gt; &amp;dd)</td></tr>
+<tr class="memdesc:a7678cfedf717a8bbc08d50691ac00509"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance with the given private implementation.  <a href="classrecpp_1_1rx_1_1_observable.html#a7678cfedf717a8bbc08d50691ac00509">More...</a><br /></td></tr>
 <tr class="separator:a7678cfedf717a8bbc08d50691ac00509"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; T &gt;</a></td></tr>
-<tr class="memitem:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a3c027caabbb493abf7d2452c87139088"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Publisher</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; T &gt;&gt; &amp;dd)</td></tr>
-<tr class="separator:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a5f7053bea907d84db2e60646a5237957"><td class="memItemLeft" align="right" valign="top"><a id="a5f7053bea907d84db2e60646a5237957"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Completable</b></td></tr>
 <tr class="separator:a5f7053bea907d84db2e60646a5237957"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_attribs_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; T &gt;</a></td></tr>
-<tr class="memitem:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a9a6d1f96c8d31a0f7eb7334c40b4e689"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+class recpp::rx::Observable&lt; T &gt;</h3>
+
+<p>An <a class="el" href="classrecpp_1_1rx_1_1_observable.html" title="An Observable is a Publisher that emits a stream of values.">Observable</a> is a Publisher that emits a stream of values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">T</td><td>The type of element signaled. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a7678cfedf717a8bbc08d50691ac00509"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7678cfedf717a8bbc08d50691ac00509">&#9670;&nbsp;</a></span>Observable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::<a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; T &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>dd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance with the given private implementation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dd</td><td>The private implementation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a89de1354fadf6d87c0d898189bd52b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89de1354fadf6d87c0d898189bd52b31">&#9670;&nbsp;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::create </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">recpp::subscribers::ObservableSubscriber</a>&lt; T &gt; &amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will call the given method when subscribed to. </p>
+<p>The first parameter of the method will be a <a class="el" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">subscribers::ObservableSubscriber</a> that can be used to emit values, errors or completion.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call when subscribed to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a110037f901f3ab796bfd468c705ed809"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a110037f901f3ab796bfd468c705ed809">&#9670;&nbsp;</a></span>defer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::defer </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;()&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will call the given method when subscribed to. </p>
+<p>The method must return a <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will be subscribed to after returning.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call when subscribed to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a2a06c42e1702e3e1048252850fd3d324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a06c42e1702e3e1048252850fd3d324">&#9670;&nbsp;</a></span>doOnComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::doOnComplete </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on completion. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="adcb098a42e8eedba85007b3829d5d7af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcb098a42e8eedba85007b3829d5d7af">&#9670;&nbsp;</a></span>doOnError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::doOnError </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called on error. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ae13b62dac400d02ad3855d808582938a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae13b62dac400d02ad3855d808582938a">&#9670;&nbsp;</a></span>doOnNext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::doOnNext </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> emits a value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call for each value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a2096d9d052a0f6762b5f6c380f622666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2096d9d052a0f6762b5f6c380f622666">&#9670;&nbsp;</a></span>doOnTerminate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::doOnTerminate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> terminates, either by completing or erroring. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on termination. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a7f2999561d7029e81468f68adb95556d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f2999561d7029e81468f68adb95556d">&#9670;&nbsp;</a></span>empty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::empty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will not emit any value when subscribed to. </p>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ab14c5307fbdc30024bdf60b109d10a8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab14c5307fbdc30024bdf60b109d10a8a">&#9670;&nbsp;</a></span>error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::error </td>
+          <td>(</td>
+          <td class="paramtype">const std::exception_ptr &amp;&#160;</td>
+          <td class="paramname"><em>error</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit the given error when subscribed to. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">error</td><td>The error to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ae0b37156e1b6c89240399cc71f058003"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0b37156e1b6c89240399cc71f058003">&#9670;&nbsp;</a></span>filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::filter </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; bool(const T &amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Filter emitted values with the given method. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to apply to the value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a57c24c26e8b05ec2eee693dfcd0308cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57c24c26e8b05ec2eee693dfcd0308cf">&#9670;&nbsp;</a></span>flatMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<div class="memtemplate">
+template&lt;typename R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;R&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::flatMap </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; R &gt;(const T &amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply the given method to the values emitted by this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>. </p>
+<p>The method must return a <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will be subscribed to after returning.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">R</td><td>The method return type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to apply to the value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ad985021910a4b2751c0b0ea1ce52e42a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad985021910a4b2751c0b0ea1ce52e42a">&#9670;&nbsp;</a></span>ignoreElements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::ignoreElements </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Convert this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> into a <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> by discarding all contained value.</p>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="aacd91a357e9fdc93d82505ebab3b0093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacd91a357e9fdc93d82505ebab3b0093">&#9670;&nbsp;</a></span>just()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::just </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit the given value when subscribed to. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a4c1726cb85b32494d34811f93e2dc16d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c1726cb85b32494d34811f93e2dc16d">&#9670;&nbsp;</a></span>map()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<div class="memtemplate">
+template&lt;typename R &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;R&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::map </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; R(const T &amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a given method to the values emitted by this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">R</td><td>The method return type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to apply to the values. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a1ea74fd44ec3a561d52549e755f0b5c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ea74fd44ec3a561d52549e755f0b5c0">&#9670;&nbsp;</a></span>never()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::never </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will never emit a signal when subscribed to. </p>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ad5c1c15abd07acd297011dcf0e880f4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5c1c15abd07acd297011dcf0e880f4a">&#9670;&nbsp;</a></span>observeOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::observeOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;&#160;</td>
+          <td class="paramname"><em>scheduler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Forwards all emissions on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scheduler</td><td>The <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> to observe on. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a8aa6fca70da67422aa6eadf6360884b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa6fca70da67422aa6eadf6360884b7">&#9670;&nbsp;</a></span>range() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<div class="memtemplate">
+template&lt;class I &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::range </td>
+          <td>(</td>
+          <td class="paramtype">I&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">I&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit values contained inside the given range. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">I</td><td>The range iterator type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The first iterator. </td></tr>
+    <tr><td class="paramname">last</td><td>The last iterator. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a704d5be1151d41a4233ecc8e32ce23da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a704d5be1151d41a4233ecc8e32ce23da">&#9670;&nbsp;</a></span>range() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<div class="memtemplate">
+template&lt;class R &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::range </td>
+          <td>(</td>
+          <td class="paramtype">R &amp;&amp;&#160;</td>
+          <td class="paramname"><em>range</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance that will emit values contained inside the given range. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">R</td><td>The range type. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">range</td><td>The range. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="adf6841bb1fb30bac97157946b936e521"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf6841bb1fb30bac97157946b936e521">&#9670;&nbsp;</a></span>subscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::subscribe </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onNext</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onError</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onComplete</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> with the given methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onNext</td><td>The method to call when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> emits a value. </td></tr>
+    <tr><td class="paramname">onError</td><td>The method to call when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> errors. </td></tr>
+    <tr><td class="paramname">onComplete</td><td>The method to call when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aeabbed0e3713d721a2d27ddf2bb698da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeabbed0e3713d721a2d27ddf2bb698da">&#9670;&nbsp;</a></span>subscribeOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::subscribeOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;&#160;</td>
+          <td class="paramname"><em>scheduler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scheduler</td><td>The <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> to subscribe on. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a053f2d3b26d37cd98d3af7a6cc5f9340"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a053f2d3b26d37cd98d3af7a6cc5f9340">&#9670;&nbsp;</a></span>tap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; <a class="el" href="classrecpp_1_1rx_1_1_observable.html">recpp::rx::Observable</a>&lt; T &gt;::tap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1">OnNextMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onNextMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onErrorMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a2ea28bed3fa97989afe4ae6ad37a340e">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onCompleteMethod</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define the methods that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> emits a value, completes or errors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onNextMethod</td><td>The method to call for each value. </td></tr>
+    <tr><td class="paramname">onErrorMethod</td><td>The method to call on error. </td></tr>
+    <tr><td class="paramname">onCompleteMethod</td><td>The method to call on completion. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>include/recpp/rx/<a class="el" href="_completable_8h_source.html">Completable.h</a></li>
 <li>include/recpp/rx/<a class="el" href="_observable_8h_source.html">Observable.h</a></li>

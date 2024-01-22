@@ -96,25 +96,30 @@ $(document).ready(function(){initNavTree('_thread_pool_worker_8h_source.html',''
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>SchedulableQueue;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html">   10</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a>(<a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;queue);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ~<a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a>();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> stop();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">void</span> run();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;m_queue;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        std::thread       m_thread;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::atomic&lt;bool&gt; m_stop;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
-<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable_queue.html">recpp::async::SchedulableQueue</a></div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:15</div></div>
-<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html">recpp::async::ThreadPoolWorker</a></div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:11</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html">   14</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html">ThreadPoolWorker</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html#a003dfc2badece1d316c5c0e339601312">   22</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html#a003dfc2badece1d316c5c0e339601312">ThreadPoolWorker</a>(<a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;queue);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html#ae7a27a57cafbc4e729948ab853cf0d0d">   27</a></span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html#ae7a27a57cafbc4e729948ab853cf0d0d">~ThreadPoolWorker</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classrecpp_1_1async_1_1_thread_pool_worker.html#a022daffbf01c30bc6591ff3d6b7fc190">   32</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1async_1_1_thread_pool_worker.html#a022daffbf01c30bc6591ff3d6b7fc190">stop</a>();</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">void</span> run();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> &amp;m_queue;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        std::thread m_thread;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::atomic&lt;bool&gt; m_stop;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    };</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;} <span class="comment">// namespace recpp::async</span></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_schedulable_queue_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_schedulable_queue.html">recpp::async::SchedulableQueue</a></div><div class="ttdoc">Represents a Schedulable priority queue.</div><div class="ttdef"><b>Definition:</b> SchedulableQueue.h:21</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html">recpp::async::ThreadPoolWorker</a></div><div class="ttdoc">Represents a worker thread used by a ThreadPool.</div><div class="ttdef"><b>Definition:</b> ThreadPoolWorker.h:15</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html_a003dfc2badece1d316c5c0e339601312"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html#a003dfc2badece1d316c5c0e339601312">recpp::async::ThreadPoolWorker::ThreadPoolWorker</a></div><div class="ttdeci">ThreadPoolWorker(SchedulableQueue &amp;queue)</div><div class="ttdoc">Construct a new ThreadPoolWorker instance that will use the given SchedulableQueue.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html_a022daffbf01c30bc6591ff3d6b7fc190"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html#a022daffbf01c30bc6591ff3d6b7fc190">recpp::async::ThreadPoolWorker::stop</a></div><div class="ttdeci">void stop()</div><div class="ttdoc">Stop this ThreadPoolWorker instance.</div></div>
+<div class="ttc" id="aclassrecpp_1_1async_1_1_thread_pool_worker_html_ae7a27a57cafbc4e729948ab853cf0d0d"><div class="ttname"><a href="classrecpp_1_1async_1_1_thread_pool_worker.html#ae7a27a57cafbc4e729948ab853cf0d0d">recpp::async::ThreadPoolWorker::~ThreadPoolWorker</a></div><div class="ttdeci">~ThreadPoolWorker()</div><div class="ttdoc">Destroy this ThreadPoolWorker instance.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

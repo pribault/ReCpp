@@ -96,30 +96,34 @@ $(document).ready(function(){initNavTree('_subscriber_8h_source.html',''); initR
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>Subscription;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscriber.html">   11</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrscpp_1_1_subscriber.html">Subscriber</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="classrscpp_1_1_subscriber.html">Subscriber</a>();</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> onSubscribe(<a class="code" href="classrscpp_1_1_subscription.html">Subscription</a> &amp;subscription);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> onNext(<span class="keyword">const</span> T &amp;value);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> onError(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> onComplete();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrscpp_1_1_subscriber.html">Subscriber</a>(<span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="classrscpp_1_1_subscriber.html">Subscriber&lt;T&gt;</a>&gt; &amp;dd);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::shared_ptr&lt;Subscriber&lt;T&gt;&gt; d_ptr;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    };</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <span class="comment">// namespace rscpp</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;rscpp/inl/Subscriber.inl&gt;</span></div>
-<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdef"><b>Definition:</b> Subscriber.h:12</div></div>
-<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdef"><b>Definition:</b> Subscription.h:8</div></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">class </span>Subscriber</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        Subscriber();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">   48</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">onSubscribe</a>(<a class="code" href="classrscpp_1_1_subscription.html">Subscription</a> &amp;subscription);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscriber.html#a578e972bf8b6768058a1c4911a3e063c">   55</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscriber.html#a578e972bf8b6768058a1c4911a3e063c">onNext</a>(<span class="keyword">const</span> T &amp;value);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">   64</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">onError</a>(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">   71</a></span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">onComplete</a>();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classrscpp_1_1_subscriber.html">Subscriber</a>(<span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="classrscpp_1_1_subscriber.html">Subscriber&lt;T&gt;</a>&gt; &amp;dd);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        std::shared_ptr&lt;Subscriber&lt;T&gt;&gt; d_ptr;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    };</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;} <span class="comment">// namespace rscpp</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#include &lt;rscpp/inl/Subscriber.inl&gt;</span></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdoc">Will receive call to onSubscribe(Subscription&amp;) once after passing an instance of rscpp::Subscriber t...</div><div class="ttdef"><b>Definition:</b> Subscriber.h:8</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html_a578e972bf8b6768058a1c4911a3e063c"><div class="ttname"><a href="classrscpp_1_1_subscriber.html#a578e972bf8b6768058a1c4911a3e063c">rscpp::Subscriber::onNext</a></div><div class="ttdeci">virtual void onNext(const T &amp;value)</div><div class="ttdoc">Data notification sent by the rscpp::Publisher in response to requests to rscpp::Subscription::reques...</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html_ac6f9f1996835cf5c55457bcbf52cfeb2"><div class="ttname"><a href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">rscpp::Subscriber::onComplete</a></div><div class="ttdeci">virtual void onComplete()</div><div class="ttdoc">Successful terminal state.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html_ae8e0b6f8c07f76abd4213b25407f9a56"><div class="ttname"><a href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">rscpp::Subscriber::onSubscribe</a></div><div class="ttdeci">virtual void onSubscribe(Subscription &amp;subscription)</div><div class="ttdoc">Invoked after calling rscpp::Publisher::subscribe(Subscriber&amp;).</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html_af7399e18dd055a3321c0a749de0fa24a"><div class="ttname"><a href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">rscpp::Subscriber::onError</a></div><div class="ttdeci">virtual void onError(const std::exception_ptr &amp;error)</div><div class="ttdoc">Failed terminal state.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdoc">A rscpp::Subscription represents a one-to-one lifecycle of a rscpp::Subscriber subscribing to a rscpp...</div><div class="ttdef"><b>Definition:</b> Subscription.h:16</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

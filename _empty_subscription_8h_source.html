@@ -94,31 +94,34 @@ $(document).ready(function(){initNavTree('_empty_subscription_8h_source.html',''
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>recpp::subscriptions</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;{</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">    9</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">EmptySubscription</a> : <span class="keyword">public</span> <a class="code" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">class </span>Impl : <span class="keyword">public</span> <a class="code" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            Impl(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordtype">void</span> request(<span class="keywordtype">size_t</span> count) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keywordtype">void</span> cancel() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> m_subscriber;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        };</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">EmptySubscription</a> : <span class="keyword">public</span> <a class="code" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">class </span>Impl : <span class="keyword">public</span> <a class="code" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            Impl(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">request</a>(<span class="keywordtype">size_t</span> count) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <a class="code" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">EmptySubscription</a>(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    };</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">// namespace recpp::subscriptions</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;recpp/subscriptions/inl/EmptySubscription.inl&gt;</span></div>
-<div class="ttc" id="aclassrecpp_1_1subscriptions_1_1_empty_subscription_html"><div class="ttname"><a href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">recpp::subscriptions::EmptySubscription</a></div><div class="ttdef"><b>Definition:</b> EmptySubscription.h:10</div></div>
-<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdef"><b>Definition:</b> Subscriber.h:12</div></div>
-<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdef"><b>Definition:</b> Subscription.h:8</div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">cancel</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> m_subscriber;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        };</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html#a3e85b15a2f7034f9602a559d2cf1a6d5">   36</a></span>&#160;        <a class="code" href="classrecpp_1_1subscriptions_1_1_empty_subscription.html#a3e85b15a2f7034f9602a559d2cf1a6d5">EmptySubscription</a>(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    };</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// namespace recpp::subscriptions</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#include &lt;recpp/subscriptions/inl/EmptySubscription.inl&gt;</span></div>
+<div class="ttc" id="aclassrecpp_1_1subscriptions_1_1_empty_subscription_html"><div class="ttname"><a href="classrecpp_1_1subscriptions_1_1_empty_subscription.html">recpp::subscriptions::EmptySubscription</a></div><div class="ttdoc">rscpp::Subscription that will emit no items but complete directly when items are requested.</div><div class="ttdef"><b>Definition:</b> EmptySubscription.h:16</div></div>
+<div class="ttc" id="aclassrecpp_1_1subscriptions_1_1_empty_subscription_html_a3e85b15a2f7034f9602a559d2cf1a6d5"><div class="ttname"><a href="classrecpp_1_1subscriptions_1_1_empty_subscription.html#a3e85b15a2f7034f9602a559d2cf1a6d5">recpp::subscriptions::EmptySubscription::EmptySubscription</a></div><div class="ttdeci">EmptySubscription(const rscpp::Subscriber&lt; T &gt; &amp;subscriber)</div><div class="ttdoc">Construct a new EmptySubscription instance.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdoc">Will receive call to onSubscribe(Subscription&amp;) once after passing an instance of rscpp::Subscriber t...</div><div class="ttdef"><b>Definition:</b> Subscriber.h:8</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html"><div class="ttname"><a href="classrscpp_1_1_subscription.html">rscpp::Subscription</a></div><div class="ttdoc">A rscpp::Subscription represents a one-to-one lifecycle of a rscpp::Subscriber subscribing to a rscpp...</div><div class="ttdef"><b>Definition:</b> Subscription.h:16</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html_a352c062f064e8f2a61f2dfa62fb9fb1d"><div class="ttname"><a href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">rscpp::Subscription::cancel</a></div><div class="ttdeci">virtual void cancel()</div><div class="ttdoc">Request the rscpp::Publisher to stop sending data and clean up resources.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscription_html_a80e7629e6f3522380b9b439d9b00bfcf"><div class="ttname"><a href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">rscpp::Subscription::request</a></div><div class="ttdeci">virtual void request(size_t count)</div><div class="ttdoc">No events will be sent by a rscpp::Publisher until demand is signaled via this method.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

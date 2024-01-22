@@ -94,6 +94,11 @@ $(document).ready(function(){initNavTree('classrecpp_1_1rx_1_1_completable.html'
 <div class="title">recpp::rx::Completable Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <a class="el" href="classrecpp_1_1rx_1_1_completable.html" title="A Completable is a Publisher that emits either a completion or error signal.">Completable</a> is a Publisher that emits either a completion or error signal.  
+ <a href="classrecpp_1_1rx_1_1_completable.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_completable_8h_source.html">recpp/rx/Completable.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for recpp::rx::Completable:</div>
 <div class="dyncontent">
@@ -107,82 +112,80 @@ Inheritance diagram for recpp::rx::Completable:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aca88b604dcc845ed9e318e7bfad970d3"><td class="memItemLeft" align="right" valign="top"><a id="aca88b604dcc845ed9e318e7bfad970d3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnErrorMethod</b> = std::function&lt; void(const std::exception_ptr &amp;)&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> = std::function&lt; void(const std::exception_ptr &amp;)&gt;</td></tr>
+<tr class="memdesc:aca88b604dcc845ed9e318e7bfad970d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on error. <br /></td></tr>
 <tr class="separator:aca88b604dcc845ed9e318e7bfad970d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14f3af0e35f0d9c40f164ef951d0f9fe"><td class="memItemLeft" align="right" valign="top"><a id="a14f3af0e35f0d9c40f164ef951d0f9fe"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>OnCompleteMethod</b> = std::function&lt; void()&gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="memdesc:a14f3af0e35f0d9c40f164ef951d0f9fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the method to call on completion. <br /></td></tr>
 <tr class="separator:a14f3af0e35f0d9c40f164ef951d0f9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0d9678663233aca61a1a6affb622dcb4"><td class="memItemLeft" align="right" valign="top"><a id="a0d9678663233aca61a1a6affb622dcb4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (const OnCompleteMethod &amp;onComplete=nullptr, const OnErrorMethod &amp;onError=nullptr)</td></tr>
+<tr class="memitem:a0d9678663233aca61a1a6affb622dcb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a0d9678663233aca61a1a6affb622dcb4">subscribe</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;onComplete=nullptr, const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;onError=nullptr)</td></tr>
+<tr class="memdesc:a0d9678663233aca61a1a6affb622dcb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> with the given methods.  <a href="classrecpp_1_1rx_1_1_completable.html#a0d9678663233aca61a1a6affb622dcb4">More...</a><br /></td></tr>
 <tr class="separator:a0d9678663233aca61a1a6affb622dcb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae82e9d688b9f21caadcdaea5cb3fb37c"><td class="memItemLeft" align="right" valign="top"><a id="ae82e9d688b9f21caadcdaea5cb3fb37c"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>doOnComplete</b> (const OnCompleteMethod &amp;method)</td></tr>
+<tr class="memitem:ae82e9d688b9f21caadcdaea5cb3fb37c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#ae82e9d688b9f21caadcdaea5cb3fb37c">doOnComplete</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:ae82e9d688b9f21caadcdaea5cb3fb37c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes.  <a href="classrecpp_1_1rx_1_1_completable.html#ae82e9d688b9f21caadcdaea5cb3fb37c">More...</a><br /></td></tr>
 <tr class="separator:ae82e9d688b9f21caadcdaea5cb3fb37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6109145606e0827f77982364b1d3b3be"><td class="memItemLeft" align="right" valign="top"><a id="a6109145606e0827f77982364b1d3b3be"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>doOnError</b> (const OnErrorMethod &amp;method)</td></tr>
+<tr class="memitem:a6109145606e0827f77982364b1d3b3be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a6109145606e0827f77982364b1d3b3be">doOnError</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:a6109145606e0827f77982364b1d3b3be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called on error.  <a href="classrecpp_1_1rx_1_1_completable.html#a6109145606e0827f77982364b1d3b3be">More...</a><br /></td></tr>
 <tr class="separator:a6109145606e0827f77982364b1d3b3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5a3b3dad5a9c54c4708fae5962bc3a9"><td class="memItemLeft" align="right" valign="top"><a id="ab5a3b3dad5a9c54c4708fae5962bc3a9"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>doOnTerminate</b> (const OnCompleteMethod &amp;method)</td></tr>
+<tr class="memitem:ab5a3b3dad5a9c54c4708fae5962bc3a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#ab5a3b3dad5a9c54c4708fae5962bc3a9">doOnTerminate</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;method)</td></tr>
+<tr class="memdesc:ab5a3b3dad5a9c54c4708fae5962bc3a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> terminates, either by completing or erroring.  <a href="classrecpp_1_1rx_1_1_completable.html#ab5a3b3dad5a9c54c4708fae5962bc3a9">More...</a><br /></td></tr>
 <tr class="separator:ab5a3b3dad5a9c54c4708fae5962bc3a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bbf191e17721be04fbdedb38908b4ec"><td class="memItemLeft" align="right" valign="top"><a id="a2bbf191e17721be04fbdedb38908b4ec"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>tap</b> (const OnCompleteMethod &amp;onCompleteMethod, const OnErrorMethod &amp;onErrorMethod)</td></tr>
+<tr class="memitem:a2bbf191e17721be04fbdedb38908b4ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a2bbf191e17721be04fbdedb38908b4ec">tap</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;onCompleteMethod, const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;onErrorMethod)</td></tr>
+<tr class="memdesc:a2bbf191e17721be04fbdedb38908b4ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the methods that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes or errors.  <a href="classrecpp_1_1rx_1_1_completable.html#a2bbf191e17721be04fbdedb38908b4ec">More...</a><br /></td></tr>
 <tr class="separator:a2bbf191e17721be04fbdedb38908b4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a054c65733f1eb001296a6ae8c148f484"><td class="memItemLeft" align="right" valign="top"><a id="a054c65733f1eb001296a6ae8c148f484"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>observeOn</b> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memitem:a054c65733f1eb001296a6ae8c148f484"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a054c65733f1eb001296a6ae8c148f484">observeOn</a> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memdesc:a054c65733f1eb001296a6ae8c148f484"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forwards all emissions on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>.  <a href="classrecpp_1_1rx_1_1_completable.html#a054c65733f1eb001296a6ae8c148f484">More...</a><br /></td></tr>
 <tr class="separator:a054c65733f1eb001296a6ae8c148f484"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cb18b7f290dfae8478b0186066ae395"><td class="memItemLeft" align="right" valign="top"><a id="a8cb18b7f290dfae8478b0186066ae395"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>subscribeOn</b> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memitem:a8cb18b7f290dfae8478b0186066ae395"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a8cb18b7f290dfae8478b0186066ae395">subscribeOn</a> (<a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;scheduler)</td></tr>
+<tr class="memdesc:a8cb18b7f290dfae8478b0186066ae395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>.  <a href="classrecpp_1_1rx_1_1_completable.html#a8cb18b7f290dfae8478b0186066ae395">More...</a><br /></td></tr>
 <tr class="separator:a8cb18b7f290dfae8478b0186066ae395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae281c8a3307a7eb0225cfe6cbc78c73e"><td class="memItemLeft" align="right" valign="top"><a id="ae281c8a3307a7eb0225cfe6cbc78c73e"></a>
-<a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>andThen</b> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> &amp;completable)</td></tr>
+<tr class="memitem:ae281c8a3307a7eb0225cfe6cbc78c73e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#ae281c8a3307a7eb0225cfe6cbc78c73e">andThen</a> (const <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> &amp;completable)</td></tr>
+<tr class="memdesc:ae281c8a3307a7eb0225cfe6cbc78c73e"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes.  <a href="classrecpp_1_1rx_1_1_completable.html#ae281c8a3307a7eb0225cfe6cbc78c73e">More...</a><br /></td></tr>
 <tr class="separator:ae281c8a3307a7eb0225cfe6cbc78c73e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bc5453f32b0eeba5194be9cca0221a4"><td class="memTemplParams" colspan="2"><a id="a3bc5453f32b0eeba5194be9cca0221a4"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a3bc5453f32b0eeba5194be9cca0221a4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>andThen</b> (const <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt; T &gt; &amp;maybe)</td></tr>
+<tr class="memitem:a3bc5453f32b0eeba5194be9cca0221a4"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a3bc5453f32b0eeba5194be9cca0221a4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a3bc5453f32b0eeba5194be9cca0221a4">andThen</a> (const <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt; T &gt; &amp;maybe)</td></tr>
+<tr class="memdesc:a3bc5453f32b0eeba5194be9cca0221a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes.  <a href="classrecpp_1_1rx_1_1_completable.html#a3bc5453f32b0eeba5194be9cca0221a4">More...</a><br /></td></tr>
 <tr class="separator:a3bc5453f32b0eeba5194be9cca0221a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3766c53ed6fd2b51ff72ada03a45e962"><td class="memTemplParams" colspan="2"><a id="a3766c53ed6fd2b51ff72ada03a45e962"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a3766c53ed6fd2b51ff72ada03a45e962"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>andThen</b> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt; &amp;observable)</td></tr>
+<tr class="memitem:a3766c53ed6fd2b51ff72ada03a45e962"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a3766c53ed6fd2b51ff72ada03a45e962"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a3766c53ed6fd2b51ff72ada03a45e962">andThen</a> (const <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt; &amp;observable)</td></tr>
+<tr class="memdesc:a3766c53ed6fd2b51ff72ada03a45e962"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes.  <a href="classrecpp_1_1rx_1_1_completable.html#a3766c53ed6fd2b51ff72ada03a45e962">More...</a><br /></td></tr>
 <tr class="separator:a3766c53ed6fd2b51ff72ada03a45e962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="memTemplParams" colspan="2"><a id="a2db91e2b7fecd9d971fa172e1aa1561e"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>andThen</b> (const <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt; T &gt; &amp;maybe)</td></tr>
+<tr class="memitem:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a2db91e2b7fecd9d971fa172e1aa1561e">andThen</a> (const <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt; T &gt; &amp;maybe)</td></tr>
+<tr class="memdesc:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes.  <a href="classrecpp_1_1rx_1_1_completable.html#a2db91e2b7fecd9d971fa172e1aa1561e">More...</a><br /></td></tr>
 <tr class="separator:a2db91e2b7fecd9d971fa172e1aa1561e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; int &gt;</a></td></tr>
-<tr class="memitem:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a12d21f01f002143e18175c0f192b89df"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (<a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; int &gt; &amp;subscriber)</td></tr>
+<tr class="memitem:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">subscribe</a> (<a class="el" href="classrscpp_1_1_subscriber.html">Subscriber</a>&lt; int &gt; &amp;subscriber)</td></tr>
+<tr class="memdesc:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to start streaming data.  <a href="classrscpp_1_1_publisher.html#a12d21f01f002143e18175c0f192b89df">More...</a><br /></td></tr>
 <tr class="separator:a12d21f01f002143e18175c0f192b89df inherit pub_methods_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8544606a34f349f3037a23c597b7acf6"><td class="memItemLeft" align="right" valign="top"><a id="a8544606a34f349f3037a23c597b7acf6"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>complete</b> ()</td></tr>
+<tr class="memitem:a8544606a34f349f3037a23c597b7acf6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a8544606a34f349f3037a23c597b7acf6">complete</a> ()</td></tr>
+<tr class="memdesc:a8544606a34f349f3037a23c597b7acf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will emit a completion signal when subscribed to.  <a href="classrecpp_1_1rx_1_1_completable.html#a8544606a34f349f3037a23c597b7acf6">More...</a><br /></td></tr>
 <tr class="separator:a8544606a34f349f3037a23c597b7acf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0b40e7859073905ddd2c651fd631904"><td class="memItemLeft" align="right" valign="top"><a id="ae0b40e7859073905ddd2c651fd631904"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">recpp::subscribers::CompletableSubscriber</a> &amp;)&gt; &amp;method)</td></tr>
+<tr class="memitem:ae0b40e7859073905ddd2c651fd631904"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#ae0b40e7859073905ddd2c651fd631904">create</a> (const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">recpp::subscribers::CompletableSubscriber</a> &amp;)&gt; &amp;method)</td></tr>
+<tr class="memdesc:ae0b40e7859073905ddd2c651fd631904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will call the given method when subscribed to.  <a href="classrecpp_1_1rx_1_1_completable.html#ae0b40e7859073905ddd2c651fd631904">More...</a><br /></td></tr>
 <tr class="separator:ae0b40e7859073905ddd2c651fd631904"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ba00e322f0c761fd05724e294e4f8b1"><td class="memItemLeft" align="right" valign="top"><a id="a6ba00e322f0c761fd05724e294e4f8b1"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>defer</b> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>()&gt; &amp;function)</td></tr>
-<tr class="separator:a6ba00e322f0c761fd05724e294e4f8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe9d8d3180fcb4fb978e9861c85783d7"><td class="memItemLeft" align="right" valign="top"><a id="afe9d8d3180fcb4fb978e9861c85783d7"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>error</b> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memitem:aa9402b316af2a6afba2d1f1efaf4a6e7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#aa9402b316af2a6afba2d1f1efaf4a6e7">defer</a> (const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>()&gt; &amp;method)</td></tr>
+<tr class="memdesc:aa9402b316af2a6afba2d1f1efaf4a6e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will call the given method when subscribed to.  <a href="classrecpp_1_1rx_1_1_completable.html#aa9402b316af2a6afba2d1f1efaf4a6e7">More...</a><br /></td></tr>
+<tr class="separator:aa9402b316af2a6afba2d1f1efaf4a6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe9d8d3180fcb4fb978e9861c85783d7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#afe9d8d3180fcb4fb978e9861c85783d7">error</a> (const std::exception_ptr &amp;error)</td></tr>
+<tr class="memdesc:afe9d8d3180fcb4fb978e9861c85783d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will emit the given error when subscribed to.  <a href="classrecpp_1_1rx_1_1_completable.html#afe9d8d3180fcb4fb978e9861c85783d7">More...</a><br /></td></tr>
 <tr class="separator:afe9d8d3180fcb4fb978e9861c85783d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dee0ace5c5f6c9be5bde762ce228eba"><td class="memItemLeft" align="right" valign="top"><a id="a5dee0ace5c5f6c9be5bde762ce228eba"></a>
-static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>never</b> ()</td></tr>
+<tr class="memitem:a5dee0ace5c5f6c9be5bde762ce228eba"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a5dee0ace5c5f6c9be5bde762ce228eba">never</a> ()</td></tr>
+<tr class="memdesc:a5dee0ace5c5f6c9be5bde762ce228eba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will never emit a signal when subscribed to.  <a href="classrecpp_1_1rx_1_1_completable.html#a5dee0ace5c5f6c9be5bde762ce228eba">More...</a><br /></td></tr>
 <tr class="separator:a5dee0ace5c5f6c9be5bde762ce228eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a8a3e22483398a25056b8fbdb16e9370a"><td class="memItemLeft" align="right" valign="top"><a id="a8a3e22483398a25056b8fbdb16e9370a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Completable</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; int &gt;&gt; &amp;dd)</td></tr>
+<tr class="memitem:a8a3e22483398a25056b8fbdb16e9370a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1rx_1_1_completable.html#a8a3e22483398a25056b8fbdb16e9370a">Completable</a> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; int &gt;&gt; &amp;dd)</td></tr>
+<tr class="memdesc:a8a3e22483398a25056b8fbdb16e9370a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance with the given private implementation.  <a href="classrecpp_1_1rx_1_1_completable.html#a8a3e22483398a25056b8fbdb16e9370a">More...</a><br /></td></tr>
 <tr class="separator:a8a3e22483398a25056b8fbdb16e9370a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; int &gt;</a></td></tr>
-<tr class="memitem:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a3c027caabbb493abf7d2452c87139088"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Publisher</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; int &gt;&gt; &amp;dd)</td></tr>
-<tr class="separator:a3c027caabbb493abf7d2452c87139088 inherit pro_methods_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -198,14 +201,532 @@ template&lt;typename T &gt; </td></tr>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12092baab2e5f6b0b9c2018977e7f94c"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Single</b></td></tr>
 <tr class="separator:a12092baab2e5f6b0b9c2018977e7f94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_attribs_classrscpp_1_1_publisher"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classrscpp_1_1_publisher')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher&lt; int &gt;</a></td></tr>
-<tr class="memitem:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memItemLeft" align="right" valign="top"><a id="a9a6d1f96c8d31a0f7eb7334c40b4e689"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">Publisher</a>&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:a9a6d1f96c8d31a0f7eb7334c40b4e689 inherit pro_attribs_classrscpp_1_1_publisher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <a class="el" href="classrecpp_1_1rx_1_1_completable.html" title="A Completable is a Publisher that emits either a completion or error signal.">Completable</a> is a Publisher that emits either a completion or error signal. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8a3e22483398a25056b8fbdb16e9370a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a3e22483398a25056b8fbdb16e9370a">&#9670;&nbsp;</a></span>Completable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">recpp::rx::Completable::Completable </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>&lt; int &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>dd</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance with the given private implementation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dd</td><td>The private implementation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae281c8a3307a7eb0225cfe6cbc78c73e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae281c8a3307a7eb0225cfe6cbc78c73e">&#9670;&nbsp;</a></span>andThen() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::andThen </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> &amp;&#160;</td>
+          <td class="paramname"><em>completable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>define a <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">completable</td><td>The <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> to subscribe to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a3bc5453f32b0eeba5194be9cca0221a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bc5453f32b0eeba5194be9cca0221a4">&#9670;&nbsp;</a></span>andThen() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt;T&gt; recpp::rx::Completable::andThen </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>maybe</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>define a <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maybe</td><td>The <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a> to subscribe to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_maybe.html">Maybe</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a3766c53ed6fd2b51ff72ada03a45e962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3766c53ed6fd2b51ff72ada03a45e962">&#9670;&nbsp;</a></span>andThen() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt;T&gt; recpp::rx::Completable::andThen </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>observable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>define a <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">observable</td><td>The <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> to subscribe to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_observable.html">Observable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a2db91e2b7fecd9d971fa172e1aa1561e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2db91e2b7fecd9d971fa172e1aa1561e">&#9670;&nbsp;</a></span>andThen() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt;T&gt; recpp::rx::Completable::andThen </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>maybe</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>define a <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a> that will be subscribed to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maybe</td><td>The <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a> to subscribe to after this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_single.html">Single</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a8544606a34f349f3037a23c597b7acf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8544606a34f349f3037a23c597b7acf6">&#9670;&nbsp;</a></span>complete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::complete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will emit a completion signal when subscribed to. </p>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ae0b40e7859073905ddd2c651fd631904"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0b40e7859073905ddd2c651fd631904">&#9670;&nbsp;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::create </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; void(<a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">recpp::subscribers::CompletableSubscriber</a> &amp;)&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will call the given method when subscribed to. </p>
+<p>The first parameter of the method will be a <a class="el" href="classrecpp_1_1subscribers_1_1_completable_subscriber.html">subscribers::CompletableSubscriber</a> that can be used to either complete or error the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call when subscribed to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="aa9402b316af2a6afba2d1f1efaf4a6e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9402b316af2a6afba2d1f1efaf4a6e7">&#9670;&nbsp;</a></span>defer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::defer </td>
+          <td>(</td>
+          <td class="paramtype">const std::function&lt; <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a>()&gt; &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will call the given method when subscribed to. </p>
+<p>The method must return a <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will be subscribed to after returning.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call when subscribed to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ae82e9d688b9f21caadcdaea5cb3fb37c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae82e9d688b9f21caadcdaea5cb3fb37c">&#9670;&nbsp;</a></span>doOnComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::doOnComplete </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on completion. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a6109145606e0827f77982364b1d3b3be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6109145606e0827f77982364b1d3b3be">&#9670;&nbsp;</a></span>doOnError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::doOnError </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called on error. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="ab5a3b3dad5a9c54c4708fae5962bc3a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a3b3dad5a9c54c4708fae5962bc3a9">&#9670;&nbsp;</a></span>doOnTerminate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::doOnTerminate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>method</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define a method that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> terminates, either by completing or erroring. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">method</td><td>The method to call on termination. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="afe9d8d3180fcb4fb978e9861c85783d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe9d8d3180fcb4fb978e9861c85783d7">&#9670;&nbsp;</a></span>error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::error </td>
+          <td>(</td>
+          <td class="paramtype">const std::exception_ptr &amp;&#160;</td>
+          <td class="paramname"><em>error</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will emit the given error when subscribed to. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">error</td><td>The error to emit. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a5dee0ace5c5f6c9be5bde762ce228eba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dee0ace5c5f6c9be5bde762ce228eba">&#9670;&nbsp;</a></span>never()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::never </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance that will never emit a signal when subscribed to. </p>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a054c65733f1eb001296a6ae8c148f484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a054c65733f1eb001296a6ae8c148f484">&#9670;&nbsp;</a></span>observeOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::observeOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;&#160;</td>
+          <td class="paramname"><em>scheduler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Forwards all emissions on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scheduler</td><td>The <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> to observe on. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a0d9678663233aca61a1a6affb622dcb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d9678663233aca61a1a6affb622dcb4">&#9670;&nbsp;</a></span>subscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void recpp::rx::Completable::subscribe </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onComplete</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onError</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> with the given methods. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onComplete</td><td>The method to call when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes. </td></tr>
+    <tr><td class="paramname">onError</td><td>The method to call when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> errors. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8cb18b7f290dfae8478b0186066ae395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cb18b7f290dfae8478b0186066ae395">&#9670;&nbsp;</a></span>subscribeOn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::subscribeOn </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> &amp;&#160;</td>
+          <td class="paramname"><em>scheduler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Subscribe to this <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> on the given <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">scheduler</td><td>The <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">async::Scheduler</a> to subscribe on. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
+<a id="a2bbf191e17721be04fbdedb38908b4ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bbf191e17721be04fbdedb38908b4ec">&#9670;&nbsp;</a></span>tap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> recpp::rx::Completable::tap </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a14f3af0e35f0d9c40f164ef951d0f9fe">OnCompleteMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onCompleteMethod</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aca88b604dcc845ed9e318e7bfad970d3">OnErrorMethod</a> &amp;&#160;</td>
+          <td class="paramname"><em>onErrorMethod</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Define the methods that will be called when the <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> completes or errors. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">onCompleteMethod</td><td>The method to call on completion. </td></tr>
+    <tr><td class="paramname">onErrorMethod</td><td>The method to call on error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new <a class="el" href="classrecpp_1_1rx_1_1_completable.html">Completable</a> instance. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/recpp/rx/<a class="el" href="_completable_8h_source.html">Completable.h</a></li>
 </ul>

@@ -85,49 +85,110 @@ $(document).ready(function(){initNavTree('classrscpp_1_1_subscription.html','');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classrscpp_1_1_subscription-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">rscpp::Subscription Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> represents a one-to-one lifecycle of a <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> subscribing to a <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>.  
+ <a href="classrscpp_1_1_subscription.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_subscription_8h_source.html">rscpp/Subscription.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for rscpp::Subscription:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classrscpp_1_1_subscription.png" usemap="#rscpp::Subscription_map" alt=""/>
   <map id="rscpp::Subscription_map" name="rscpp::Subscription_map">
-<area href="classrecpp_1_1subscriptions_1_1_empty_subscription.html" alt="recpp::subscriptions::EmptySubscription&lt; T &gt;" shape="rect" coords="0,56,280,80"/>
-<area href="classrecpp_1_1subscriptions_1_1_filter_subscription.html" alt="recpp::subscriptions::FilterSubscription" shape="rect" coords="290,56,570,80"/>
-<area href="classrecpp_1_1subscriptions_1_1_forward_subscription.html" alt="recpp::subscriptions::ForwardSubscription" shape="rect" coords="580,56,860,80"/>
-<area href="classrecpp_1_1subscriptions_1_1_just_subscription.html" alt="recpp::subscriptions::JustSubscription&lt; T &gt;" shape="rect" coords="870,56,1150,80"/>
-<area href="classrecpp_1_1subscriptions_1_1_never_subscription.html" alt="recpp::subscriptions::NeverSubscription&lt; T &gt;" shape="rect" coords="1160,56,1440,80"/>
-<area href="classrecpp_1_1subscriptions_1_1_range_subscription.html" alt="recpp::subscriptions::RangeSubscription&lt; T, I &gt;" shape="rect" coords="1450,56,1730,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_empty_subscription.html" title="rscpp::Subscription that will emit no items but complete directly when items are requested." alt="recpp::subscriptions::EmptySubscription&lt; T &gt;" shape="rect" coords="0,56,280,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_filter_subscription.html" title="rscpp::Subscription that will be used by a processors::Filter to filter the emitted items." alt="recpp::subscriptions::FilterSubscription" shape="rect" coords="290,56,570,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_forward_subscription.html" title="rscpp::Subscription that is used to forward requests to another rscpp::Subscription." alt="recpp::subscriptions::ForwardSubscription" shape="rect" coords="580,56,860,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_just_subscription.html" title="rscpp::Subscription that will pass only one item to the rscpp::Subscriber before completing." alt="recpp::subscriptions::JustSubscription&lt; T &gt;" shape="rect" coords="870,56,1150,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_never_subscription.html" title="rscpp::Subscription that will never emit items nor complete. Completion will only happen on cancel." alt="recpp::subscriptions::NeverSubscription&lt; T &gt;" shape="rect" coords="1160,56,1440,80"/>
+<area href="classrecpp_1_1subscriptions_1_1_range_subscription.html" title="rscpp::Subscription that will emit a range of items when requested." alt="recpp::subscriptions::RangeSubscription&lt; T, I &gt;" shape="rect" coords="1450,56,1730,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a80e7629e6f3522380b9b439d9b00bfcf"><td class="memItemLeft" align="right" valign="top"><a id="a80e7629e6f3522380b9b439d9b00bfcf"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>request</b> (size_t count)</td></tr>
+<tr class="memitem:a80e7629e6f3522380b9b439d9b00bfcf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">request</a> (size_t count)</td></tr>
+<tr class="memdesc:a80e7629e6f3522380b9b439d9b00bfcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">No events will be sent by a <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> until demand is signaled via this method.  <a href="classrscpp_1_1_subscription.html#a80e7629e6f3522380b9b439d9b00bfcf">More...</a><br /></td></tr>
 <tr class="separator:a80e7629e6f3522380b9b439d9b00bfcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352c062f064e8f2a61f2dfa62fb9fb1d"><td class="memItemLeft" align="right" valign="top"><a id="a352c062f064e8f2a61f2dfa62fb9fb1d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>cancel</b> ()</td></tr>
+<tr class="memitem:a352c062f064e8f2a61f2dfa62fb9fb1d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">cancel</a> ()</td></tr>
+<tr class="memdesc:a352c062f064e8f2a61f2dfa62fb9fb1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to stop sending data and clean up resources.  <a href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">More...</a><br /></td></tr>
 <tr class="separator:a352c062f064e8f2a61f2dfa62fb9fb1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a15479a5c37b9998a03b4a395111bf686"><td class="memItemLeft" align="right" valign="top"><a id="a15479a5c37b9998a03b4a395111bf686"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Subscription</b> (const std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &gt; &amp;dd)</td></tr>
-<tr class="separator:a15479a5c37b9998a03b4a395111bf686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:aeb7102d9f662d925aae38027c8ae8444"><td class="memItemLeft" align="right" valign="top"><a id="aeb7102d9f662d925aae38027c8ae8444"></a>
-std::shared_ptr&lt; <a class="el" href="classrscpp_1_1_subscription.html">Subscription</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>d_ptr</b></td></tr>
-<tr class="separator:aeb7102d9f662d925aae38027c8ae8444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <a class="el" href="classrscpp_1_1_subscription.html">rscpp::Subscription</a> represents a one-to-one lifecycle of a <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a> subscribing to a <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a>. </p>
+<p>It can only be used once by a single <a class="el" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a>. </p>
+<p>It is used to both signal desire for data and cancel demand (and allow resource cleanup). </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a352c062f064e8f2a61f2dfa62fb9fb1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352c062f064e8f2a61f2dfa62fb9fb1d">&#9670;&nbsp;</a></span>cancel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void rscpp::Subscription::cancel </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Request the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> to stop sending data and clean up resources. </p>
+<p>Data may still be sent to meet previously signalled demand after calling cancel. </p>
+
+</div>
+</div>
+<a id="a80e7629e6f3522380b9b439d9b00bfcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80e7629e6f3522380b9b439d9b00bfcf">&#9670;&nbsp;</a></span>request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void rscpp::Subscription::request </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>count</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>No events will be sent by a <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> until demand is signaled via this method. </p>
+<p>It can be called however often and whenever needed—but if the outstanding cumulative demand ever becomes std::numeric_limits&lt;size_t&gt;::max() or more, it may be treated by the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> as "effectively unbounded". </p>
+<p>Whatever has been requested can be sent by the <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> so only signal demand for what can be safely handled. </p>
+<p>A <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> can send less than is requested if the stream ends but then must emit either <a class="el" href="classrscpp_1_1_subscriber.html#af7399e18dd055a3321c0a749de0fa24a">rscpp::Subscriber::onError(const std::exception_ptr&amp;)</a> or <a class="el" href="classrscpp_1_1_subscriber.html#ac6f9f1996835cf5c55457bcbf52cfeb2">rscpp::Subscriber::onComplete()</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">count</td><td>the strictly positive number of elements to requests to the upstream <a class="el" href="classrscpp_1_1_publisher.html">rscpp::Publisher</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>rscpp/include/rscpp/<a class="el" href="_subscription_8h_source.html">Subscription.h</a></li>
 </ul>

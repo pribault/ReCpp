@@ -93,27 +93,31 @@ $(document).ready(function(){initNavTree('_observable_subscriber_8h_source.html'
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>recpp::subscribers</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">ObservableSubscriber</a></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">ObservableSubscriber</a>(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> onNext(<span class="keyword">const</span> T &amp;value);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> onError(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> onComplete();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> m_subscriber;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">bool</span>                 m_ended = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;} <span class="comment">// namespace recpp::subscribers</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;recpp/subscribers/inl/ObservableSubscriber.inl&gt;</span></div>
-<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">recpp::subscribers::ObservableSubscriber</a></div><div class="ttdef"><b>Definition:</b> ObservableSubscriber.h:9</div></div>
-<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdef"><b>Definition:</b> Subscriber.h:12</div></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">   16</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">ObservableSubscriber</a></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a4a36800464ad723348b31e490b1b16d0">   24</a></span>&#160;        <a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a4a36800464ad723348b31e490b1b16d0">ObservableSubscriber</a>(<span class="keyword">const</span> <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> &amp;subscriber);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#ad216f877f770429e1aeebfb57078d58b">   31</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#ad216f877f770429e1aeebfb57078d58b">onNext</a>(<span class="keyword">const</span> T &amp;value);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a5b013f57014f4af94d674cf0c5c0d9e2">   38</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a5b013f57014f4af94d674cf0c5c0d9e2">onError</a>(<span class="keyword">const</span> std::exception_ptr &amp;error);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a2666aa2c3b98234be839d0a12a4b55ba">   43</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a2666aa2c3b98234be839d0a12a4b55ba">onComplete</a>();</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="classrscpp_1_1_subscriber.html">rscpp::Subscriber&lt;T&gt;</a> m_subscriber;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">bool</span>                 m_ended = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    };</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// namespace recpp::subscribers</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#include &lt;recpp/subscribers/inl/ObservableSubscriber.inl&gt;</span></div>
+<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html">recpp::subscribers::ObservableSubscriber</a></div><div class="ttdoc">Subscriber that can be used to create a new rx::Observable.</div><div class="ttdef"><b>Definition:</b> ObservableSubscriber.h:17</div></div>
+<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html_a2666aa2c3b98234be839d0a12a4b55ba"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a2666aa2c3b98234be839d0a12a4b55ba">recpp::subscribers::ObservableSubscriber::onComplete</a></div><div class="ttdeci">void onComplete()</div><div class="ttdoc">Emits a completion signal to the rscpp::Subscriber if it has not already been emitted.</div></div>
+<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html_a4a36800464ad723348b31e490b1b16d0"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a4a36800464ad723348b31e490b1b16d0">recpp::subscribers::ObservableSubscriber::ObservableSubscriber</a></div><div class="ttdeci">ObservableSubscriber(const rscpp::Subscriber&lt; T &gt; &amp;subscriber)</div><div class="ttdoc">Construct a new ObservableSubscriber instance.</div></div>
+<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html_a5b013f57014f4af94d674cf0c5c0d9e2"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#a5b013f57014f4af94d674cf0c5c0d9e2">recpp::subscribers::ObservableSubscriber::onError</a></div><div class="ttdeci">void onError(const std::exception_ptr &amp;error)</div><div class="ttdoc">Emits the given error to the rscpp::Subscriber if it has not already been emitted.</div></div>
+<div class="ttc" id="aclassrecpp_1_1subscribers_1_1_observable_subscriber_html_ad216f877f770429e1aeebfb57078d58b"><div class="ttname"><a href="classrecpp_1_1subscribers_1_1_observable_subscriber.html#ad216f877f770429e1aeebfb57078d58b">recpp::subscribers::ObservableSubscriber::onNext</a></div><div class="ttdeci">void onNext(const T &amp;value)</div><div class="ttdoc">Emits the given value to the rscpp::Subscriber if it has not already been emitted.</div></div>
+<div class="ttc" id="aclassrscpp_1_1_subscriber_html"><div class="ttname"><a href="classrscpp_1_1_subscriber.html">rscpp::Subscriber</a></div><div class="ttdoc">Will receive call to onSubscribe(Subscription&amp;) once after passing an instance of rscpp::Subscriber t...</div><div class="ttdef"><b>Definition:</b> Subscriber.h:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
