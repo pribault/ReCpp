@@ -7,7 +7,8 @@ recpp::processors::Filter<T>::Filter(const rscpp::Publisher<T> &publisher, const
 }
 
 template <typename T>
-recpp::processors::Filter<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher, const std::function<bool(const T & /* value */)> &method)
+recpp::processors::Filter<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscpp::Publisher<T> &publisher,
+										 const std::function<bool(const T & /* value */)> &method)
 	: m_parent(parent)
 	, m_publisher(publisher)
 	, m_method(method)

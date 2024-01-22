@@ -6,6 +6,13 @@
 
 namespace recpp::processors
 {
+	/**
+	 * @class Map Map.h <recpp/processors/Map.h>
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and apply a given function to the emitted values.
+	 *
+	 * @param T The type of element signaled to the {@link rscpp::Subscriber}.
+	 * @param R The type of element signaled by the {@link rscpp::Publisher}.
+	 */
 	template <typename T, typename R>
 	class Map : public rscpp::Processor<T, R>
 	{
@@ -32,6 +39,12 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link Map} instance.
+		 *
+		 * @param publisher The source {@link rscpp::Publisher} the {@link FlatMap} {@link rscpp::Processor} subscribes to.
+		 * @param method The function to apply to the {@link rscpp::Publisher} values.
+		 */
 		explicit Map(const rscpp::Publisher<T> &publisher, const std::function<R(const T & /* value */)> &method);
 	};
 } // namespace recpp::processors

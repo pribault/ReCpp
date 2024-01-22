@@ -128,7 +128,8 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnTerminate(const OnComplet
 }
 
 template <typename T>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
+recpp::rx::Observable<T> recpp::rx::Observable<T>::tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
+													   const OnCompleteMethod &onCompleteMethod)
 {
 	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
 }

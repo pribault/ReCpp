@@ -5,6 +5,12 @@
 
 namespace recpp::subscriptions
 {
+	/**
+	 * @class JustSubscription JustSubscription.h <recpp/subscriptions/JustSubscription.h>
+	 * @brief {@link rscpp::Subscription} that will pass only one item to the {@link rscpp::Subscriber} before completing.
+	 *
+	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber}.
+	 */
 	template <typename T>
 	class JustSubscription : public rscpp::Subscription
 	{
@@ -24,6 +30,12 @@ namespace recpp::subscriptions
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link JustSubscription} instance.
+		 *
+		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Subscription}.
+		 * @param value The value to emit.
+		 */
 		JustSubscription(const rscpp::Subscriber<T> &subscriber, const T &value);
 	};
 } // namespace recpp::subscriptions

@@ -5,6 +5,13 @@
 
 namespace recpp::processors
 {
+	/**
+	 * @class IgnoreElements IgnoreElements.h <recpp/processors/IgnoreElements.h>
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and discard its elements.
+	 *
+	 * @param T The type of element signaled to the {@link rscpp::Subscriber}.
+	 * @param R The type of element signaled by the {@link rscpp::Publisher}.
+	 */
 	template <typename T, typename R>
 	class IgnoreElements : public rscpp::Processor<T, R>
 	{
@@ -32,6 +39,11 @@ namespace recpp::processors
 		};
 
 	public:
+		/**
+		 * @brief Construct a new {@link IgnoreElements} instance.
+		 *
+		 * @param source The source {@link rscpp::Publisher} the {@link IgnoreElements} {@link rscpp::Processor} subscribes to.
+		 */
 		explicit IgnoreElements(const rscpp::Publisher<T> &source);
 	};
 } // namespace recpp::processors
