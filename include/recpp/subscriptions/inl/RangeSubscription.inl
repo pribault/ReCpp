@@ -2,7 +2,7 @@
 
 template <typename T, class I>
 recpp::subscriptions::RangeSubscription<T, I>::RangeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last)
-	: rscpp::Subscription(std::shared_ptr<rscpp::Subscription>(new Impl(subscriber, first, last)))
+	: rscpp::Subscription(std::make_shared<Impl>(subscriber, first, last))
 {
 }
 

@@ -22,44 +22,44 @@
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::create(const std::function<void(recpp::subscribers::ObservableSubscriber<T> &)> &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::CreatePublisher<T, recpp::subscribers::ObservableSubscriber<T>>(method)));
+	return Observable<T>(std::make_shared<recpp::publishers::CreatePublisher<T, recpp::subscribers::ObservableSubscriber<T>>>(method));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::defer(const std::function<Observable<T>()> &function)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::DeferPublisher<T, Observable<T>>(function)));
+	return Observable<T>(std::make_shared<recpp::publishers::DeferPublisher<T, Observable<T>>>(function));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::empty()
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::EmptyPublisher<T>()));
+	return Observable<T>(std::make_shared<recpp::publishers::EmptyPublisher<T>>());
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::error(const std::exception_ptr &error)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::ErrorPublisher<T>(error)));
+	return Observable<T>(std::make_shared<recpp::publishers::ErrorPublisher<T>>(error));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::just(const T &value)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::JustPublisher<T>(value)));
+	return Observable<T>(std::make_shared<recpp::publishers::JustPublisher<T>>(value));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::never()
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::NeverPublisher<T>()));
+	return Observable<T>(std::make_shared<recpp::publishers::NeverPublisher<T>>());
 }
 
 template <typename T>
 template <class I>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::range(I first, I last)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new recpp::publishers::RangePublisher<T, I>(first, last)));
+	return Observable<T>(std::make_shared<recpp::publishers::RangePublisher<T, I>>(first, last));
 }
 
 template <typename T>
@@ -79,71 +79,71 @@ void recpp::rx::Observable<T>::subscribe(const OnNextMethod &onNext, const OnErr
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::filter(const std::function<bool(const T & /* value */)> &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Filter<T>(*this, method)));
+	return Observable<T>(std::make_shared<processors::Filter<T>>(*this, method));
 }
 
 template <typename T>
 recpp::rx::Completable recpp::rx::Observable<T>::ignoreElements()
 {
-	return Completable(std::shared_ptr<rscpp::Publisher<T>>(new processors::IgnoreElements<int, int>(*this)));
+	return Completable(std::make_shared<processors::IgnoreElements<int, int>>(*this));
 }
 
 template <typename T>
 template <typename R>
 recpp::rx::Observable<R> recpp::rx::Observable<T>::map(const std::function<R(const T & /* value */)> &method)
 {
-	return Observable<R>(std::shared_ptr<rscpp::Publisher<R>>(new processors::Map<T, R>(*this, method)));
+	return Observable<R>(std::make_shared<processors::Map<T, R>>(*this, method));
 }
 
 template <typename T>
 template <typename R>
 recpp::rx::Observable<R> recpp::rx::Observable<T>::flatMap(const std::function<Observable<R>(const T & /* value */)> &method)
 {
-	return Observable<R>(std::shared_ptr<rscpp::Publisher<R>>(new processors::FlatMap<T, R>(*this, method)));
+	return Observable<R>(std::make_shared<processors::FlatMap<T, R>>(*this, method));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnComplete(const OnCompleteMethod &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, nullptr, nullptr, method)));
+	return Observable<T>(std::make_shared<processors::Tap<T>>(*this, nullptr, nullptr, method));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnError(const OnErrorMethod &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, nullptr, method, nullptr)));
+	return Observable<T>(std::make_shared<processors::Tap<T>>(*this, nullptr, method, nullptr));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnNext(const OnNextMethod &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, method, nullptr, nullptr)));
+	return Observable<T>(std::make_shared<processors::Tap<T>>(*this, method, nullptr, nullptr));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnTerminate(const OnCompleteMethod &method)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(
-		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method)));
+	return Observable<T>(std::make_shared<processors::Tap<T>>(
+		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 													   const OnCompleteMethod &onCompleteMethod)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::Tap<T>(*this, onNextMethod, onErrorMethod, onCompleteMethod)));
+	return Observable<T>(std::make_shared<processors::Tap<T>>(*this, onNextMethod, onErrorMethod, onCompleteMethod));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::observeOn(recpp::async::Scheduler &scheduler)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::ObserveOn<T>(*this, scheduler)));
+	return Observable<T>(std::make_shared<processors::ObserveOn<T>>(*this, scheduler));
 }
 
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::subscribeOn(recpp::async::Scheduler &scheduler)
 {
-	return Observable<T>(std::shared_ptr<rscpp::Publisher<T>>(new processors::SubscribeOn<T>(*this, scheduler)));
+	return Observable<T>(std::make_shared<processors::SubscribeOn<T>>(*this, scheduler));
 }
 
 template <typename T>
