@@ -5,7 +5,7 @@
 
 template <typename T, typename R>
 recpp::processors::FlatMap<T, R>::FlatMap(const rscpp::Publisher<T> &publisher, const std::function<rscpp::Publisher<R>(const T & /* value */)> &method)
-	: rscpp::Processor<T, R>(std::shared_ptr<rscpp::Processor<T, R>>(new Impl(*this, publisher, method)))
+	: rscpp::Processor<T, R>(std::make_shared<Impl>(*this, publisher, method))
 {
 }
 

@@ -6,7 +6,7 @@
 
 template <typename T>
 recpp::processors::SubscribeOn<T>::SubscribeOn(const rscpp::Publisher<T> &publisher, recpp::async::Scheduler &scheduler)
-	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, scheduler)))
+	: rscpp::Processor<T, T>(std::make_shared<Impl>(*this, publisher, scheduler))
 {
 }
 

@@ -23,27 +23,27 @@ using namespace std;
 
 Completable Completable::complete()
 {
-	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::EmptyPublisher<int>()));
+	return Completable(make_shared<recpp::publishers::EmptyPublisher<int>>());
 }
 
 Completable Completable::create(const function<void(CompletableSubscriber &)> &method)
 {
-	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::CreatePublisher<int, CompletableSubscriber>(method)));
+	return Completable(make_shared<recpp::publishers::CreatePublisher<int, CompletableSubscriber>>(method));
 }
 
 Completable Completable::defer(const function<Completable()> &function)
 {
-	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::DeferPublisher<int, Completable>(function)));
+	return Completable(make_shared<recpp::publishers::DeferPublisher<int, Completable>>(function));
 }
 
 Completable Completable::error(const exception_ptr &error)
 {
-	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::ErrorPublisher<int>(error)));
+	return Completable(make_shared<recpp::publishers::ErrorPublisher<int>>(error));
 }
 
 Completable Completable::never()
 {
-	return Completable(shared_ptr<Publisher<int>>(new recpp::publishers::NeverPublisher<int>()));
+	return Completable(make_shared<recpp::publishers::NeverPublisher<int>>());
 }
 
 void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, const Completable::OnErrorMethod &onError)
@@ -54,38 +54,38 @@ void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, con
 
 Completable Completable::doOnComplete(const Completable::OnCompleteMethod &method)
 {
-	return Completable(shared_ptr<Publisher<int>>(new Tap<int>(*this, nullptr, nullptr, method)));
+	return Completable(make_shared<Tap<int>>(*this, nullptr, nullptr, method));
 }
 
 Completable Completable::doOnError(const Completable::OnErrorMethod &method)
 {
-	return Completable(shared_ptr<Publisher<int>>(new Tap<int>(*this, nullptr, method, nullptr)));
+	return Completable(make_shared<Tap<int>>(*this, nullptr, method, nullptr));
 }
 
 Completable Completable::doOnTerminate(const Completable::OnCompleteMethod &method)
 {
-	return Completable(shared_ptr<Publisher<int>>(new Tap<int>(
-		*this, nullptr, [method](const exception_ptr &) { method(); }, method)));
+	return Completable(make_shared<Tap<int>>(
+		*this, nullptr, [method](const exception_ptr &) { method(); }, method));
 }
 
 Completable Completable::tap(const Completable::OnCompleteMethod &onCompleteMethod, const Completable::OnErrorMethod &onErrorMethod)
 {
-	return Completable(shared_ptr<Publisher<int>>(new Tap<int>(*this, nullptr, onErrorMethod, onCompleteMethod)));
+	return Completable(make_shared<Tap<int>>(*this, nullptr, onErrorMethod, onCompleteMethod));
 }
 
 Completable Completable::observeOn(Scheduler &scheduler)
 {
-	return Completable(shared_ptr<Publisher<int>>(new ObserveOn<int>(*this, scheduler)));
+	return Completable(make_shared<ObserveOn<int>>(*this, scheduler));
 }
 
 Completable Completable::subscribeOn(Scheduler &scheduler)
 {
-	return Completable(shared_ptr<Publisher<int>>(new SubscribeOn<int>(*this, scheduler)));
+	return Completable(make_shared<SubscribeOn<int>>(*this, scheduler));
 }
 
 Completable Completable::andThen(const Completable &completable)
 {
-	return Completable(shared_ptr<Publisher<int>>(new AndThen<int, int>(*this, completable)));
+	return Completable(make_shared<AndThen<int, int>>(*this, completable));
 }
 
 Completable::Completable(const shared_ptr<Publisher<int>> &dd)

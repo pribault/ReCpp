@@ -5,7 +5,7 @@
 template <typename T>
 recpp::processors::Tap<T>::Tap(const rscpp::Publisher<T> &publisher, const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 							   const OnCompleteMethod &onCompleteMethod)
-	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod)))
+	: rscpp::Processor<T, T>(std::make_shared<Impl>(*this, publisher, onNextMethod, onErrorMethod, onCompleteMethod))
 {
 }
 
