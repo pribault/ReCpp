@@ -111,6 +111,13 @@ recpp::rx::Single<T> recpp::rx::Single<T>::subscribeOn(recpp::async::Scheduler &
 }
 
 template <typename T>
+template <typename Rep, typename Period>
+recpp::rx::Single<T> recpp::rx::Single<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
+{
+	return Single<T>(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+}
+
+template <typename T>
 recpp::rx::Single<T>::Single(const std::shared_ptr<rscpp::Publisher<T>> &dd)
 	: rscpp::Publisher<T>(dd)
 {

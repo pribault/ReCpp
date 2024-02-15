@@ -124,6 +124,13 @@ recpp::rx::Maybe<T> recpp::rx::Maybe<T>::subscribeOn(recpp::async::Scheduler &sc
 }
 
 template <typename T>
+template <typename Rep, typename Period>
+recpp::rx::Maybe<T> recpp::rx::Maybe<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
+{
+	return Maybe<T>(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+}
+
+template <typename T>
 recpp::rx::Maybe<T>::Maybe(const std::shared_ptr<rscpp::Publisher<T>> &dd)
 	: rscpp::Publisher<T>(dd)
 {

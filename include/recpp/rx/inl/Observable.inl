@@ -147,6 +147,13 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::subscribeOn(recpp::async::Sch
 }
 
 template <typename T>
+template <typename Rep, typename Period>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
+{
+	return Observable<T>(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+}
+
+template <typename T>
 recpp::rx::Observable<T>::Observable(const std::shared_ptr<rscpp::Publisher<T>> &dd)
 	: rscpp::Publisher<T>(dd)
 {
