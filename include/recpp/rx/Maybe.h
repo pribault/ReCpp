@@ -200,6 +200,19 @@ namespace recpp::rx
 		 */
 		Maybe<T> subscribeOn(async::Scheduler &scheduler);
 
+		/**
+		 * @brief Delay this {@link Maybe} emissions.
+		 *
+		 * @tparam Rep The duration arithmetic type representing the number of ticks of the delay duration.
+		 * @tparam Period The duration period type representing the tick period (i.e. the number of second's fractions per tick) of the delay duration.
+		 * @param scheduler The {@link async::Scheduler} to delay emissions on.
+		 * @param delay The minimum duration before emissions will be received.
+		 * @param delayError Boolean defining if error emissions should also be delayed.
+		 * @return The new {@link Maybe} instance.
+		 */
+		template <typename Rep, typename Period>
+		Maybe<T> delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Maybe} instance with the given private implementation.

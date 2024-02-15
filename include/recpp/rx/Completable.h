@@ -3,6 +3,7 @@
 #include <recpp/subscribers/CompletableSubscriber.h>
 #include <rscpp/Publisher.h>
 
+#include <chrono>
 #include <functional>
 
 namespace recpp::async
@@ -183,6 +184,19 @@ namespace recpp::rx
 		 */
 		template <typename T>
 		Single<T> andThen(const Single<T> &maybe);
+
+		/**
+		 * @brief Delay this {@link Completable} emissions.
+		 *
+		 * @tparam Rep The duration arithmetic type representing the number of ticks of the delay duration.
+		 * @tparam Period The duration period type representing the tick period (i.e. the number of second's fractions per tick) of the delay duration.
+		 * @param scheduler The {@link async::Scheduler} to delay emissions on.
+		 * @param delay The minimum duration before emissions will be received.
+		 * @param delayError Boolean defining if error emissions should also be delayed.
+		 * @return The new {@link Completable} instance.
+		 */
+		template <typename Rep, typename Period>
+		Completable delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
 
 	protected:
 		/**
