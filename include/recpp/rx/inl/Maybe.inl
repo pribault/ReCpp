@@ -1,6 +1,7 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/Delay.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
 #include <recpp/processors/Map.h>
@@ -127,7 +128,7 @@ template <typename T>
 template <typename Rep, typename Period>
 recpp::rx::Maybe<T> recpp::rx::Maybe<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
 {
-	return Maybe<T>(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+	return Maybe<T>(std::make_shared<processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
 }
 
 template <typename T>

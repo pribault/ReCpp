@@ -27,5 +27,5 @@ recpp::rx::Single<T> recpp::rx::Completable::andThen(const recpp::rx::Single<T> 
 template <typename Rep, typename Period>
 recpp::rx::Completable recpp::rx::Completable::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
 {
-	return Completable(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+	return Completable(std::make_shared<processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
 }

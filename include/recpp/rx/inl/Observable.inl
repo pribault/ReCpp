@@ -1,6 +1,7 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/Delay.h>
 #include <recpp/processors/Filter.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
@@ -150,7 +151,7 @@ template <typename T>
 template <typename Rep, typename Period>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
 {
-	return Observable<T>(make_shared<recpp::processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+	return Observable<T>(std::make_shared<processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
 }
 
 template <typename T>

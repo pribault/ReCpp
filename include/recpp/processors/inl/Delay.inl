@@ -1,5 +1,7 @@
 #pragma once
 
+#include <recpp/async/Schedulable.h>
+#include <recpp/async/Scheduler.h>
 #include <recpp/subscriptions/ForwardSubscription.h>
 
 template <typename T, typename Rep, typename Period>
