@@ -4,6 +4,7 @@ var classrecpp_1_1rx_1_1_observable =
     [ "OnErrorMethod", "classrecpp_1_1rx_1_1_observable.html#a23ae02be86a21a0ac61b0ada1b85dca7", null ],
     [ "OnNextMethod", "classrecpp_1_1rx_1_1_observable.html#a72087edf313ea71ebb21bd7af7c439a1", null ],
     [ "Observable", "classrecpp_1_1rx_1_1_observable.html#a7678cfedf717a8bbc08d50691ac00509", null ],
+    [ "delay", "classrecpp_1_1rx_1_1_observable.html#a3eccef2fb064fbf220f251b33e9421c3", null ],
     [ "doOnComplete", "classrecpp_1_1rx_1_1_observable.html#a2a06c42e1702e3e1048252850fd3d324", null ],
     [ "doOnError", "classrecpp_1_1rx_1_1_observable.html#adcb098a42e8eedba85007b3829d5d7af", null ],
     [ "doOnNext", "classrecpp_1_1rx_1_1_observable.html#ae13b62dac400d02ad3855d808582938a", null ],

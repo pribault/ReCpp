@@ -3,6 +3,7 @@ var classrecpp_1_1async_1_1_schedulable_queue =
     [ "Clock", "classrecpp_1_1async_1_1_schedulable_queue.html#ad95f8b21d94f057ae6ca365c3ba83c90", null ],
     [ "Duration", "classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237", null ],
     [ "TimePoint", "classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3", null ],
+    [ "SchedulableQueue", "classrecpp_1_1async_1_1_schedulable_queue.html#a25c59644bbd82e1fdde79b0f958c5ac1", null ],
     [ "blockingPop", "classrecpp_1_1async_1_1_schedulable_queue.html#afa00d3739c33cdd26f1b726e2782e584", null ],
     [ "notifyAll", "classrecpp_1_1async_1_1_schedulable_queue.html#a00f9673dc4617916b5d6430abb554e8b", null ],
     [ "pop", "classrecpp_1_1async_1_1_schedulable_queue.html#aa80bb689f8cef9d3ce382d7d366f892a", null ],

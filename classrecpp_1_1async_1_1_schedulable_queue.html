@@ -114,6 +114,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a25c59644bbd82e1fdde79b0f958c5ac1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a25c59644bbd82e1fdde79b0f958c5ac1">SchedulableQueue</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">Duration</a> &amp;idleTime=std::chrono::milliseconds(1))</td></tr>
+<tr class="memdesc:a25c59644bbd82e1fdde79b0f958c5ac1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> instance.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a25c59644bbd82e1fdde79b0f958c5ac1">More...</a><br /></td></tr>
+<tr class="separator:a25c59644bbd82e1fdde79b0f958c5ac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc3066c1b25786390eecb8218a59aa3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#afc3066c1b25786390eecb8218a59aa3b">push</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;timePoint, const <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &amp;schedulable)</td></tr>
 <tr class="memdesc:afc3066c1b25786390eecb8218a59aa3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> to execute after the specified time point.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#afc3066c1b25786390eecb8218a59aa3b">More...</a><br /></td></tr>
 <tr class="separator:afc3066c1b25786390eecb8218a59aa3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,7 +143,34 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> priority queue. </p>
 <p>This class is made to be used with the a <a class="el" href="classrecpp_1_1async_1_1_scheduler.html">Scheduler</a>. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a25c59644bbd82e1fdde79b0f958c5ac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c59644bbd82e1fdde79b0f958c5ac1">&#9670;&nbsp;</a></span>SchedulableQueue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">recpp::async::SchedulableQueue::SchedulableQueue </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a22a963584e199430b530208de4a7c237">Duration</a> &amp;&#160;</td>
+          <td class="paramname"><em>idleTime</em> = <code>std::chrono::milliseconds(1)</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html">SchedulableQueue</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idleTime</td><td>The minimum duration to wait before checking for tasks when there is no schedulable to run. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="afa00d3739c33cdd26f1b726e2782e584"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa00d3739c33cdd26f1b726e2782e584">&#9670;&nbsp;</a></span>blockingPop()</h2>
 

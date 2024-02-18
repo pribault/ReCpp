@@ -5,6 +5,7 @@ var hierarchy =
     [ "recpp::subscribers::ObservableSubscriber< T >", "classrecpp_1_1subscribers_1_1_observable_subscriber.html", null ],
     [ "rscpp::Publisher< T >", "classrscpp_1_1_publisher.html", [
       [ "rscpp::Processor< T, T >", "classrscpp_1_1_processor.html", [
+        [ "recpp::processors::Delay< T, Rep, Period >", "classrecpp_1_1processors_1_1_delay.html", null ],
         [ "recpp::processors::Filter< T >", "classrecpp_1_1processors_1_1_filter.html", null ],
         [ "recpp::processors::ObserveOn< T >", "classrecpp_1_1processors_1_1_observe_on.html", null ],
         [ "recpp::processors::SubscribeOn< T >", "classrecpp_1_1processors_1_1_subscribe_on.html", null ],

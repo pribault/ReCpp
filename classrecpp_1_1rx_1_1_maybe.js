@@ -4,6 +4,7 @@ var classrecpp_1_1rx_1_1_maybe =
     [ "OnErrorMethod", "classrecpp_1_1rx_1_1_maybe.html#a15e02aca1586e7feecb87ae97ef941be", null ],
     [ "OnNextMethod", "classrecpp_1_1rx_1_1_maybe.html#a089cbf4300710743f6bca2b8bd452bc2", null ],
     [ "Maybe", "classrecpp_1_1rx_1_1_maybe.html#a83347ed5d9e1ad415b576da864b0672a", null ],
+    [ "delay", "classrecpp_1_1rx_1_1_maybe.html#a4c33037b1af08277d7ee014cea9a987c", null ],
     [ "doOnComplete", "classrecpp_1_1rx_1_1_maybe.html#a2c7dd9d09a12affedda252281c2320f6", null ],
     [ "doOnError", "classrecpp_1_1rx_1_1_maybe.html#a78d832c6ea2475b288bdffddcf772a92", null ],
     [ "doOnNext", "classrecpp_1_1rx_1_1_maybe.html#a351a56db63788673698207d8e7aece16", null ],

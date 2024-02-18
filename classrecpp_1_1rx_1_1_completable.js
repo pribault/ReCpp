@@ -7,6 +7,7 @@ var classrecpp_1_1rx_1_1_completable =
     [ "andThen", "classrecpp_1_1rx_1_1_completable.html#a3bc5453f32b0eeba5194be9cca0221a4", null ],
     [ "andThen", "classrecpp_1_1rx_1_1_completable.html#a3766c53ed6fd2b51ff72ada03a45e962", null ],
     [ "andThen", "classrecpp_1_1rx_1_1_completable.html#a2db91e2b7fecd9d971fa172e1aa1561e", null ],
+    [ "delay", "classrecpp_1_1rx_1_1_completable.html#a89461d7169118c3ee4c8736a3c10c60e", null ],
     [ "doOnComplete", "classrecpp_1_1rx_1_1_completable.html#ae82e9d688b9f21caadcdaea5cb3fb37c", null ],
     [ "doOnError", "classrecpp_1_1rx_1_1_completable.html#a6109145606e0827f77982364b1d3b3be", null ],
     [ "doOnTerminate", "classrecpp_1_1rx_1_1_completable.html#ab5a3b3dad5a9c54c4708fae5962bc3a9", null ],

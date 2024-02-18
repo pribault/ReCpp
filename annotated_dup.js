@@ -12,6 +12,7 @@ var annotated_dup =
       ] ],
       [ "processors", null, [
         [ "AndThen", "classrecpp_1_1processors_1_1_and_then.html", "classrecpp_1_1processors_1_1_and_then" ],
+        [ "Delay", "classrecpp_1_1processors_1_1_delay.html", "classrecpp_1_1processors_1_1_delay" ],
         [ "Filter", "classrecpp_1_1processors_1_1_filter.html", "classrecpp_1_1processors_1_1_filter" ],
         [ "FlatMap", "classrecpp_1_1processors_1_1_flat_map.html", "classrecpp_1_1processors_1_1_flat_map" ],
         [ "IgnoreElements", "classrecpp_1_1processors_1_1_ignore_elements.html", "classrecpp_1_1processors_1_1_ignore_elements" ],

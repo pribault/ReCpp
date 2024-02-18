@@ -87,7 +87,8 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">Overview </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_resources_doxygen_index"></a> Welcome to <b>ReCpp</b>, a sophisticated C++ library for reactive programming that builds on the <a href="https://www.reactive-streams.org/">Reactive Streams standard</a> and leverages the <a href="https://reactivex.io/">ReactiveX</a> model.</p>
+<div class="textblock"><p><a class="anchor" id="md_resources_doxygen_index"></a> <a href="https://github.com/pribault/ReCpp/actions"><img src="https://img.shields.io/github/actions/workflow/status/pribault/ReCpp/cmake-multi-platform.yml?branch=develop" alt="GitHub Actions Workflow Status" class="inline"/></a> <a href="https://github.com/pribault/ReCpp/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintenance" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pribault/ReCpp/blob/develop/LICENSE"><img src="https://img.shields.io/github/license/pribault/ReCpp" alt="GitHub License" class="inline"/></a> <img src="https://img.shields.io/badge/C%2B%2B-17-blue" alt="" class="inline"/></p>
+<p>Welcome to <b>ReCpp</b>, a sophisticated C++ library for reactive programming that builds on the <a href="https://www.reactive-streams.org/">Reactive Streams standard</a> and leverages the <a href="https://reactivex.io/">ReactiveX</a> model.</p>
 <p>This library, powered by the <a href="https://github.com/pribault/RsCpp">RsCpp</a> implementation of the Reactive Streams standard, empowers developers to create clean, concise, and efficient asynchronous and event-driven code with ease.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Features</h1>
@@ -99,14 +100,140 @@ Features</h1>
 <li><b>Extensibility:</b> Easily extend the library with your own custom operators or integrate it with existing codebases.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
-Getting started</h1>
+Why use ReCpp over other asynchronous technologies ?</h1>
 <h2><a class="anchor" id="autotoc_md3"></a>
+Callback hell</h2>
+<p>ReCpp avoid the callback hell, when multiple callbacks are nested into each other. ReCpp allows you to chain your callbacks in a linear way and handle errors more easily. For exemple :</p>
+<div class="fragment"><div class="line"><span class="comment">// Callback hell</span></div>
+<div class="line">asyncFunction1(</div>
+<div class="line">    []()</div>
+<div class="line">    {</div>
+<div class="line">        asyncFunction2(</div>
+<div class="line">            []()</div>
+<div class="line">            {</div>
+<div class="line">                doSomething();</div>
+<div class="line">            },</div>
+<div class="line">            [](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;error)</div>
+<div class="line">            {</div>
+<div class="line">                std::cerr &lt;&lt; error.what() &lt;&lt; std::endl;</div>
+<div class="line">            });</div>
+<div class="line">    },</div>
+<div class="line">    [](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;error)</div>
+<div class="line">    {</div>
+<div class="line">        std::cerr &lt;&lt; error.what() &lt;&lt; std::endl;</div>
+<div class="line">    });</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// ReCpp chaining</span></div>
+<div class="line">rxAsyncFunction1()</div>
+<div class="line">    .andThen(rxAsyncFunction2())</div>
+<div class="line">    .subscribe(</div>
+<div class="line">        []()</div>
+<div class="line">        {</div>
+<div class="line">            doSomething();</div>
+<div class="line">        },</div>
+<div class="line">        [](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;error)</div>
+<div class="line">        {</div>
+<div class="line">            std::cerr &lt;&lt; error.what() &lt;&lt; std::endl;</div>
+<div class="line">        });</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md4"></a>
+Coroutines</h2>
+<p>Even if c++20 coroutines offers a really great standard solution for asynchronous programming, ReCpp has some advantages over them:</p><ul>
+<li>natively forward errors which leads to a higher resiliency</li>
+<li>faster to write</li>
+<li>easier to read</li>
+<li>bring powerful operators to create highly performant asynchronous code that would be hard to create with coroutines</li>
+<li>backpressure handling</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Supported platforms</h1>
+<ul>
+<li>Windows</li>
+<li>MacOS</li>
+<li>Ubuntu</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Getting started</h1>
+<h2><a class="anchor" id="autotoc_md7"></a>
 Installation</h2>
 <p>You want to integrate ReCpp to your project ? Check our <a href="https://github.com/pribault/ReCpp/blob/develop/INSTALL.md">installation guide</a></p>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
+Documentation</h2>
+<p>Explore the <a href="https://pribault.github.io/ReCpp/index.html">Documentation</a> to learn more about ReCpp.</p>
+<h2><a class="anchor" id="autotoc_md9"></a>
+Interoperability</h2>
+<p>ReCpp can easily interoperate with other asynchronous programming systems. Here are some exemples:</p>
+<h3><a class="anchor" id="autotoc_md10"></a>
+Callbacks</h3>
+<div class="fragment"><div class="line"><span class="comment">// The async function that uses callbacks</span></div>
+<div class="line"><span class="keywordtype">void</span> asyncFunction(<span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">int</span>)&gt; &amp;onSuccess, <span class="keyword">const</span> std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::exception_ptr &amp;)&gt; onError);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// The ReCpp equivalent</span></div>
+<div class="line">recpp::Single&lt;int&gt; rxAsyncFunctionWrapper()</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordflow">return</span> recpp::Single&lt;int&gt;::create(</div>
+<div class="line">        [](<span class="keyword">auto</span> &amp;subscriber) <span class="comment">// Lambda called on subscription</span></div>
+<div class="line">        {</div>
+<div class="line">            asyncFunction(</div>
+<div class="line">                [subscriber](<span class="keywordtype">int</span> result) <span class="comment">// Lambda called on asyncFunction success</span></div>
+<div class="line">                {</div>
+<div class="line">                    subscriber.onNext(result); <span class="comment">// Emit the value and complete the Single</span></div>
+<div class="line">                },</div>
+<div class="line">                [](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;error) <span class="comment">// Lambda called on asyncFunction error</span></div>
+<div class="line">                {</div>
+<div class="line">                    subscriber.onError(error); <span class="comment">// Emit the error</span></div>
+<div class="line">                });</div>
+<div class="line">        });</div>
+<div class="line">}</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
+Coroutines</h3>
+<div class="fragment"><div class="line"><span class="comment">// The async function that uses coroutines</span></div>
+<div class="line">task&lt;std::expected&lt;int, std::exception_ptr&gt;&gt; asyncFunction();</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// The ReCpp equivalent</span></div>
+<div class="line">recpp::Single&lt;int&gt; rxAsyncFunctionWrapper()</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordflow">return</span> recpp::Single&lt;int&gt;::create(</div>
+<div class="line">        [](<span class="keyword">auto</span> &amp;subscriber) <span class="comment">// Lambda called on subscription</span></div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">const</span> <span class="keyword">auto</span> result = asyncFunction().get();</div>
+<div class="line">            <span class="keywordflow">if</span> (result.has_value())</div>
+<div class="line">                subscriber.onNext(result.value());</div>
+<div class="line">            <span class="keywordflow">else</span></div>
+<div class="line">                subscriber.onError(result.error());</div>
+<div class="line">        });</div>
+<div class="line">}</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md12"></a>
+RxCpp</h3>
+<div class="fragment"><div class="line"><span class="comment">// The rxcpp function</span></div>
+<div class="line">rxcpp::observable&lt;int&gt; rxcppAsyncFunction();</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// The ReCpp equivalent</span></div>
+<div class="line">recpp::Observable&lt;int&gt; recppAsyncFunction()</div>
+<div class="line">{</div>
+<div class="line">    <span class="keywordflow">return</span> recpp::Observable&lt;int&gt;::create(</div>
+<div class="line">        [](<span class="keyword">auto</span> &amp;subscriber) <span class="comment">// Lambda called on subscription</span></div>
+<div class="line">        {</div>
+<div class="line">            rxcppAsyncFunction()</div>
+<div class="line">                .subscribe(</div>
+<div class="line">                    [subscriber](<span class="keyword">auto</span> value)</div>
+<div class="line">                    {</div>
+<div class="line">                        subscriber.onNext(value);</div>
+<div class="line">                    },</div>
+<div class="line">                    [subscriber](<span class="keyword">auto</span> error)</div>
+<div class="line">                    {</div>
+<div class="line">                        subscriber.onError(error);</div>
+<div class="line">                    },</div>
+<div class="line">                    [subscriber]()</div>
+<div class="line">                    {</div>
+<div class="line">                        subscriber.onComplete();</div>
+<div class="line">                    }</div>
+<div class="line">                );</div>
+<div class="line">        });</div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md13"></a>
 License</h1>
 <p>ReCpp is licensed under the MIT License. See the <a href="https://github.com/pribault/ReCpp/blob/develop/LICENSE">LICENSE</a> file for details.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Contributing</h1>
 <p>We welcome contributions from the community! Whether you want to report a bug, request a feature, or submit a pull request, please follow our <a href="https://github.com/pribault/ReCpp/blob/develop/CODE_OF_CONDUCT.md">Contribution Guidelines</a>. </p>
 </div></div><!-- PageDoc -->

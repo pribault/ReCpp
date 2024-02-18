@@ -4,6 +4,7 @@ var classrecpp_1_1rx_1_1_single =
     [ "OnErrorMethod", "classrecpp_1_1rx_1_1_single.html#a1155be205c17024b32ee1244bab1a5f6", null ],
     [ "OnSuccessMethod", "classrecpp_1_1rx_1_1_single.html#a9407a87edf2360d3999b040d7d8e2270", null ],
     [ "Single", "classrecpp_1_1rx_1_1_single.html#a4b98a638b142b581664ca65407f4b5ec", null ],
+    [ "delay", "classrecpp_1_1rx_1_1_single.html#ae90c84c54be0819e3e9045d240cc0302", null ],
     [ "doOnError", "classrecpp_1_1rx_1_1_single.html#a19ff09fcfca55ffe6cf0631432f14d5d", null ],
     [ "doOnSuccess", "classrecpp_1_1rx_1_1_single.html#a6f1a2d091653b98689fe1e0147201916", null ],
     [ "doOnTerminate", "classrecpp_1_1rx_1_1_single.html#adc2d668019bde816d4a3ec740ffc79d1", null ],

@@ -27,11 +27,22 @@ var NAVTREE =
   [ "ReCpp", "index.html", [
     [ "Overview", "index.html", [
       [ "Features", "index.html#autotoc_md1", null ],
-      [ "Getting started", "index.html#autotoc_md2", [
-        [ "Installation", "index.html#autotoc_md3", null ]
+      [ "Why use ReCpp over other asynchronous technologies ?", "index.html#autotoc_md2", [
+        [ "Callback hell", "index.html#autotoc_md3", null ],
+        [ "Coroutines", "index.html#autotoc_md4", null ]
       ] ],
-      [ "License", "index.html#autotoc_md4", null ],
-      [ "Contributing", "index.html#autotoc_md5", null ]
+      [ "Supported platforms", "index.html#autotoc_md5", null ],
+      [ "Getting started", "index.html#autotoc_md6", [
+        [ "Installation", "index.html#autotoc_md7", null ],
+        [ "Documentation", "index.html#autotoc_md8", null ],
+        [ "Interoperability", "index.html#autotoc_md9", [
+          [ "Callbacks", "index.html#autotoc_md10", null ],
+          [ "Coroutines", "index.html#autotoc_md11", null ],
+          [ "RxCpp", "index.html#autotoc_md12", null ]
+        ] ]
+      ] ],
+      [ "License", "index.html#autotoc_md13", null ],
+      [ "Contributing", "index.html#autotoc_md14", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -53,7 +64,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_and_then_8h_source.html",
-"dir_5ef6da8e4b3a9f87fd8b6369163c833a.html"
+"classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
