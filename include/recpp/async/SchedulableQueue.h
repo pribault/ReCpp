@@ -36,6 +36,13 @@ namespace recpp::async
 		using TimePoint = Clock::time_point;
 
 		/**
+		 * @brief Construct a new {@link SchedulableQueue} instance.
+		 *
+		 * @param idleTime The minimum duration to wait before checking for tasks when there is no schedulable to run.
+		 */
+		SchedulableQueue(const Duration &idleTime = std::chrono::milliseconds(1));
+
+		/**
 		 * @brief Push a {@link Schedulable} to execute after the specified time point.
 		 *
 		 * @param timePoint The time point to execute the {@link Schedulable} after.
@@ -97,6 +104,21 @@ namespace recpp::async
 		std::optional<Schedulable> tryPop(const TimePoint &timePoint);
 
 		/**
+		 * @brief Check if there are some schedulables to pop.
+		 *
+		 * @param timePoint The timepoint before which we would like to pop a {@link Schedulable}.
+		 * @return True if items can be popped from the queue, false otherwise.
+		 */
+		bool canPop(const TimePoint &timePoint);
+
+		/**
+		 * @brief Wait until the given predicate returns true.
+		 *
+		 * @param predicate The predicate to use.
+		 */
+		void wait(const std::function<bool()> &predicate);
+
+		/**
 		 * @brief The {@link Schedulable} objects queue.
 		 */
 		std::multimap<TimePoint, Schedulable> m_schedulables;
@@ -120,5 +142,11 @@ namespace recpp::async
 		 * @brief Is this queue stopped ?
 		 */
 		std::atomic_bool m_stop = false;
+
+		/**
+		 * @brief The minimum duration to wait before checking for tasks when there is no schedulable to run. This attribute will be used by the
+		 * {@link SchedulableQueue::wait} method.
+		 */
+		Duration m_idleTime;
 	};
 } // namespace recpp::async

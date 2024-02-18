@@ -4,7 +4,7 @@
 
 template <typename T, typename R>
 recpp::processors::IgnoreElements<T, R>::IgnoreElements(const rscpp::Publisher<T> &source)
-	: rscpp::Processor<T, R>(std::shared_ptr<rscpp::Processor<T, R>>(new Impl(*this, source)))
+	: rscpp::Processor<T, R>(std::make_shared<Impl>(*this, source))
 {
 }
 

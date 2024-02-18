@@ -5,6 +5,11 @@
 using namespace recpp::async;
 using namespace std;
 
+SchedulableQueue::SchedulableQueue(const Duration &idleTime)
+	: m_idleTime(idleTime)
+{
+}
+
 void SchedulableQueue::push(const TimePoint &timePoint, const Schedulable &schedulable)
 {
 	{
@@ -26,31 +31,18 @@ optional<Schedulable> SchedulableQueue::pop(const Duration &duration)
 
 optional<Schedulable> SchedulableQueue::pop(const TimePoint &until)
 {
-	auto result = tryPop(Clock::now());
-	if (result)
-		return result;
-
-	if (m_stop)
-		return {};
-
-	unique_lock<mutex> lock(m_cvMutex);
-	m_cv.wait_until(lock, until);
-
+	wait(
+		[this, until]() -> bool
+		{
+			const auto now = Clock::now();
+			return until <= now || m_stop || canPop(now);
+		});
 	return tryPop(Clock::now());
 }
 
 optional<Schedulable> SchedulableQueue::blockingPop()
 {
-	auto result = tryPop(Clock::now());
-	if (result)
-		return result;
-
-	if (m_stop)
-		return {};
-
-	unique_lock<mutex> lock(m_cvMutex);
-	m_cv.wait(lock);
-
+	wait([this]() -> bool { return m_stop || canPop(Clock::now()); });
 	return tryPop(Clock::now());
 }
 
@@ -86,4 +78,19 @@ optional<Schedulable> SchedulableQueue::tryPop(const TimePoint &timePoint)
 	}
 
 	return {};
+}
+
+bool SchedulableQueue::canPop(const TimePoint &timePoint)
+{
+	lock_guard<mutex> lock(m_dataMutex);
+
+	const auto it = find_if(m_schedulables.begin(), m_schedulables.end(), [&timePoint](const auto &pair) { return pair.first <= timePoint; });
+	return it != m_schedulables.end();
+}
+
+void SchedulableQueue::wait(const function<bool()> &predicate)
+{
+	unique_lock<mutex> lock(m_cvMutex);
+	while (!predicate())
+		m_cv.wait_for(lock, m_idleTime);
 }

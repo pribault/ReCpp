@@ -2,7 +2,7 @@
 
 template <typename T>
 recpp::subscriptions::EmptySubscription<T>::EmptySubscription(const rscpp::Subscriber<T> &subscriber)
-	: rscpp::Subscription(std::shared_ptr<rscpp::Subscription>(new Impl(subscriber)))
+	: rscpp::Subscription(std::make_shared<Impl>(subscriber))
 {
 }
 

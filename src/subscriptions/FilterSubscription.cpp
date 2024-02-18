@@ -5,7 +5,7 @@ using namespace rscpp;
 using namespace std;
 
 FilterSubscription::FilterSubscription(const Subscription &subscription)
-	: Subscription(shared_ptr<Subscription>(new Impl(subscription)))
+	: Subscription(std::make_shared<Impl>(subscription))
 {
 }
 

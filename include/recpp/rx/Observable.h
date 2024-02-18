@@ -228,6 +228,19 @@ namespace recpp::rx
 		 */
 		Observable<T> subscribeOn(async::Scheduler &scheduler);
 
+		/**
+		 * @brief Delay this {@link Observable} emissions.
+		 *
+		 * @tparam Rep The duration arithmetic type representing the number of ticks of the delay duration.
+		 * @tparam Period The duration period type representing the tick period (i.e. the number of second's fractions per tick) of the delay duration.
+		 * @param scheduler The {@link async::Scheduler} to delay emissions on.
+		 * @param delay The minimum duration before emissions will be received.
+		 * @param delayError Boolean defining if error emissions should also be delayed.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename Rep, typename Period>
+		Observable<T> delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.

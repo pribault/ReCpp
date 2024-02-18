@@ -18,6 +18,9 @@ namespace
 	constexpr auto				 sleepDuration = chrono::milliseconds(10);
 	constexpr int				 defaultValue = 42;
 	constexpr std::array<int, 3> defaultValues({1, 2, 3});
+	constexpr auto				 delayTolerance = chrono::milliseconds(10);
+	constexpr auto				 delayDuration = chrono::milliseconds(100);
+	constexpr auto				 sleepDurationForDelay = chrono::milliseconds(150);
 } // namespace
 
 TEST(Observable, create)
@@ -742,4 +745,71 @@ TEST(Observable, subscribeOn)
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
+}
+
+TEST(Observable, delay)
+{
+	WorkerThread worker;
+	const auto	 workerThreadId = worker.threadId();
+	const auto	 mainThreadId = this_thread::get_id();
+
+	bool				completed = false;
+	bool				testFailed = false;
+	auto				startTime = SchedulableQueue::Clock::now();
+	decltype(startTime) afterDelayTime;
+	Observable<int>::just(defaultValue)
+		.doOnComplete(
+			[&testFailed, mainThreadId]()
+			{
+				if (this_thread::get_id() != mainThreadId)
+					testFailed = true;
+			})
+		.delay(worker, delayDuration, true)
+		.subscribe(
+			[&completed, &testFailed, &afterDelayTime, workerThreadId](const auto value)
+			{
+				if (completed)
+					testFailed = true;
+				completed = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+				if (value != defaultValue)
+					testFailed = true;
+				afterDelayTime = SchedulableQueue::Clock::now();
+			},
+			[&testFailed](const auto &exception) { testFailed = true; });
+	this_thread::sleep_for(sleepDurationForDelay);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(testFailed);
+	auto timeDiff = afterDelayTime - startTime;
+	auto gap = timeDiff - delayDuration;
+	EXPECT_LT(chrono::abs(gap), delayTolerance);
+
+	bool errored = false;
+	testFailed = false;
+	startTime = SchedulableQueue::Clock::now();
+	Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
+		.doOnError(
+			[&testFailed, mainThreadId](const auto &exception)
+			{
+				if (this_thread::get_id() != mainThreadId)
+					testFailed = true;
+			})
+		.delay(worker, delayDuration, true)
+		.subscribe([&testFailed](const auto value) { testFailed = true; },
+				   [&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
+				   {
+					   if (errored)
+						   testFailed = true;
+					   errored = true;
+					   if (this_thread::get_id() != workerThreadId)
+						   testFailed = true;
+					   afterDelayTime = SchedulableQueue::Clock::now();
+				   });
+	this_thread::sleep_for(sleepDurationForDelay);
+	EXPECT_TRUE(errored);
+	EXPECT_FALSE(testFailed);
+	timeDiff = afterDelayTime - startTime;
+	gap = timeDiff - delayDuration;
+	EXPECT_LT(chrono::abs(gap), delayTolerance);
 }

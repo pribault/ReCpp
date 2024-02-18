@@ -2,7 +2,7 @@
 
 template <typename T>
 recpp::processors::Filter<T>::Filter(const rscpp::Publisher<T> &publisher, const std::function<bool(const T & /* value */)> &method)
-	: rscpp::Processor<T, T>(std::shared_ptr<rscpp::Processor<T, T>>(new Impl(*this, publisher, method)))
+	: rscpp::Processor<T, T>(std::make_shared<Impl>(*this, publisher, method))
 {
 }
 

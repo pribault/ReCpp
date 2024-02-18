@@ -5,7 +5,7 @@
 template <typename T>
 recpp::subscribers::DefaultSubscriber<T>::DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod,
 															const OnCompleteMethod &onCompleteMethod)
-	: rscpp::Subscriber<T>(std::shared_ptr<rscpp::Subscriber<T>>(new Impl(onNextMethod, onErrorMethod, onCompleteMethod)))
+	: rscpp::Subscriber<T>(std::make_shared<Impl>(onNextMethod, onErrorMethod, onCompleteMethod))
 {
 }
 
