@@ -20,6 +20,8 @@ namespace recpp::rx
 {
 	class Completable;
 	template <typename T>
+	class Maybe;
+	template <typename T>
 	class Observable;
 	template <typename T>
 	class Single;
@@ -33,9 +35,13 @@ namespace recpp::rx
 	template <typename T>
 	class Maybe : public rscpp::Publisher<T>
 	{
+		friend class Completable;
 		template <typename R>
 		friend class Maybe;
-		friend class Completable;
+		template <typename R>
+		friend class Observable;
+		template <typename R>
+		friend class Single;
 
 	public:
 		/**

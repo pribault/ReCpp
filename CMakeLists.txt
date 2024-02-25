@@ -9,6 +9,11 @@ project(ReCpp
 	LANGUAGES		CXX
 )
 
+option(RECPP_BUILD_EXAMPLES "Compile RsCpp examples" ON)
+option(RECPP_BUILD_TESTS "Compile RsCpp tests" ON)
+
+include(FetchContent)
+
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/EventLoop.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/Schedulable.h
@@ -93,9 +98,14 @@ add_library(ReCpp ${SOURCES})
 
 target_include_directories(ReCpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(ReCpp PRIVATE RsCpp)
+target_link_libraries(ReCpp PUBLIC RsCpp)
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 
-include(CTest)
-add_subdirectory(tests)
+if(RECPP_BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
+
+if(RECPP_BUILD_TESTS)
+	add_subdirectory(tests)
+endif()

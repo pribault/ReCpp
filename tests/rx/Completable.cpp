@@ -36,7 +36,10 @@ TEST(Completable, complete)
 				throw runtime_error("completion handler called twice");
 			completed = true;
 		},
-		[](const auto &exception) { throw runtime_error("error handler called"); }));
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		}));
 	EXPECT_TRUE(completed);
 }
 
@@ -59,7 +62,10 @@ TEST(Completable, create)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(completed);
 
 	bool errored = false;
@@ -72,24 +78,39 @@ TEST(Completable, create)
 							// Try to complete, should not be forwarded
 							subscriber.onComplete();
 						})
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(
-		Completable::create([](auto &subscriber) {})
-			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::create([](auto &subscriber) {})
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 }
 
 TEST(Completable, defer)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::defer([]() { return Completable::complete(); })
+	EXPECT_NO_THROW(Completable::defer(
+						[]()
+						{
+							return Completable::complete();
+						})
 						.subscribe(
 							[&completed]()
 							{
@@ -97,43 +118,76 @@ TEST(Completable, defer)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(completed);
 
 	bool errored = false;
-	EXPECT_NO_THROW(Completable::defer([]() { return Completable::error(make_exception_ptr(runtime_error("unexpected error!"))); })
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+	EXPECT_NO_THROW(Completable::defer(
+						[]()
+						{
+							return Completable::error(make_exception_ptr(runtime_error("unexpected error!")));
+						})
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(
-		Completable::defer([]() { return Completable::never(); })
-			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::defer(
+						[]()
+						{
+							return Completable::never();
+						})
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 }
 
 TEST(Completable, error)
 {
 	bool errored = false;
 	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(errored);
 }
 
 TEST(Completable, never)
 {
-	EXPECT_NO_THROW(Completable::never().subscribe([]() { throw runtime_error("completion handler called"); },
-												   [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::never().subscribe(
+		[]()
+		{
+			throw runtime_error("completion handler called");
+		},
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		}));
 }
 
 TEST(Completable, doOnComplete)
@@ -151,10 +205,20 @@ TEST(Completable, doOnComplete)
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete([]() { throw runtime_error("completion handler called"); })
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 
-	EXPECT_NO_THROW(Completable::never().doOnComplete([]() { throw runtime_error("completion handler called"); }).subscribe());
+	EXPECT_NO_THROW(Completable::never()
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
+						.subscribe());
 }
 
 TEST(Completable, doOnError)
@@ -171,9 +235,21 @@ TEST(Completable, doOnError)
 						.subscribe());
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(Completable::complete().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Completable::complete()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Completable::never().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Completable::never()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 }
 
 TEST(Completable, doOnTerminate)
@@ -202,7 +278,13 @@ TEST(Completable, doOnTerminate)
 						.subscribe());
 	EXPECT_TRUE(terminated);
 
-	EXPECT_NO_THROW(Completable::never().doOnTerminate([]() { throw runtime_error("termination handler called"); }).subscribe());
+	EXPECT_NO_THROW(Completable::never()
+						.doOnTerminate(
+							[]()
+							{
+								throw runtime_error("termination handler called");
+							})
+						.subscribe());
 }
 
 TEST(Completable, tap)
@@ -216,26 +298,40 @@ TEST(Completable, tap)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); })
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
 						.subscribe());
 	EXPECT_TRUE(completed);
 
 	bool errored = false;
 	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap([]() { throw runtime_error("completion handler called"); },
-							 [&errored](const auto &exception)
-							 {
-								 if (errored)
-									 throw runtime_error("error handler called twice");
-								 errored = true;
-							 })
+						.tap(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							})
 						.subscribe());
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(
-		Completable::never()
-			.tap([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); })
-			.subscribe());
+	EXPECT_NO_THROW(Completable::never()
+						.tap(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 }
 
 TEST(Completable, observeOn)
@@ -263,7 +359,10 @@ TEST(Completable, observeOn)
 				if (this_thread::get_id() != workerThreadId)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -278,15 +377,19 @@ TEST(Completable, observeOn)
 					testFailed = true;
 			})
 		.observeOn(worker)
-		.subscribe([&testFailed]() { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed]()
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -317,7 +420,10 @@ TEST(Completable, subscribeOn)
 				if (this_thread::get_id() != workerThreadId)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -332,15 +438,19 @@ TEST(Completable, subscribeOn)
 					testFailed = true;
 			})
 		.subscribeOn(worker)
-		.subscribe([&testFailed]() { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed]()
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -351,36 +461,58 @@ TEST(Completable, andThen)
 	bool errored = false;
 	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
 						.andThen(Completable::complete())
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(errored);
 
 	errored = false;
 	EXPECT_NO_THROW(Completable::complete()
 						.andThen(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))))
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(
-		Completable::never()
-			.andThen(Completable::complete())
-			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::never()
+						.andThen(Completable::complete())
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 
-	EXPECT_NO_THROW(
-		Completable::never()
-			.andThen(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))))
-			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::never()
+						.andThen(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))))
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 
 	bool deferCalled = false;
 	bool completed = false;
@@ -400,7 +532,10 @@ TEST(Completable, andThen)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(deferCalled);
 	EXPECT_TRUE(completed);
 
@@ -415,28 +550,39 @@ TEST(Completable, andThen)
 								deferCalled = true;
 								return Completable::error(make_exception_ptr(runtime_error("unexpected error!")));
 							}))
-						.subscribe([]() { throw runtime_error("completion handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   }));
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
 	EXPECT_TRUE(deferCalled);
 	EXPECT_TRUE(errored);
 
 	deferCalled = false;
-	EXPECT_NO_THROW(
-		Completable::complete()
-			.andThen(Completable::defer(
-				[&deferCalled]()
-				{
-					if (deferCalled)
-						throw runtime_error("defer handler called twice");
-					deferCalled = true;
-					return Completable::never();
-				}))
-			.subscribe([]() { throw runtime_error("completion handler called"); }, [](const auto &exception) { throw runtime_error("error handler called"); }));
+	EXPECT_NO_THROW(Completable::complete()
+						.andThen(Completable::defer(
+							[&deferCalled]()
+							{
+								if (deferCalled)
+									throw runtime_error("defer handler called twice");
+								deferCalled = true;
+								return Completable::never();
+							}))
+						.subscribe(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(deferCalled);
 
 	bool succeeded = false;
@@ -452,7 +598,10 @@ TEST(Completable, andThen)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -474,7 +623,10 @@ TEST(Completable, andThen)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(succeeded);
 
 	size_t valuesCount = 0;
@@ -490,7 +642,10 @@ TEST(Completable, andThen)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -529,7 +684,10 @@ TEST(Completable, delay)
 					testFailed = true;
 				afterDelayTime = SchedulableQueue::Clock::now();
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -548,16 +706,20 @@ TEST(Completable, delay)
 					testFailed = true;
 			})
 		.delay(worker, delayDuration, true)
-		.subscribe([&testFailed]() { testFailed = true; },
-				   [&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-					   afterDelayTime = SchedulableQueue::Clock::now();
-				   });
+		.subscribe(
+			[&testFailed]()
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+				afterDelayTime = SchedulableQueue::Clock::now();
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);

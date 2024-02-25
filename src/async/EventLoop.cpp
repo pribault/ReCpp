@@ -7,9 +7,12 @@ void EventLoop::run()
 {
 	while (!m_stop)
 	{
-		auto schedulable = m_queue.blockingPop();
-		if (schedulable)
-			schedulable.value()();
+		while (m_queue.canPop(SchedulableQueue::Clock::now()))
+		{
+			auto schedulable = m_queue.blockingPop();
+			if (schedulable)
+				schedulable.value()();
+		}
 	}
 }
 
@@ -34,7 +37,7 @@ void EventLoop::runFor(const Duration &duration)
 
 void EventLoop::stop()
 {
-	m_stop = true;
 	m_queue.stop();
 	m_queue.notifyAll();
+	m_stop = true;
 }

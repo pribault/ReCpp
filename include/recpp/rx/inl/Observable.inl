@@ -67,7 +67,7 @@ template <typename T>
 template <class R>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::range(R &&range)
 {
-	return Observable<T>::range(range.begin(), range.end());
+	return Observable<T>::range(std::begin(range), std::end(range));
 }
 
 template <typename T>
@@ -86,7 +86,7 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::filter(const std::function<bo
 template <typename T>
 recpp::rx::Completable recpp::rx::Observable<T>::ignoreElements()
 {
-	return Completable(std::make_shared<processors::IgnoreElements<int, int>>(*this));
+	return Completable(std::make_shared<processors::IgnoreElements<T, int>>(*this));
 }
 
 template <typename T>

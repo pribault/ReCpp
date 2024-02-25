@@ -30,8 +30,11 @@ void WorkerThread::run()
 {
 	while (!m_stop)
 	{
-		auto schedulable = m_queue.blockingPop();
-		if (schedulable)
-			schedulable.value()();
+		while (m_queue.canPop(SchedulableQueue::Clock::now()))
+		{
+			auto schedulable = m_queue.blockingPop();
+			if (schedulable)
+				schedulable.value()();
+		}
 	}
 }

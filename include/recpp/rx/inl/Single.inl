@@ -14,6 +14,8 @@
 #include <recpp/publishers/JustPublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/rx/Completable.h>
+#include <recpp/rx/Maybe.h>
+#include <recpp/rx/Observable.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/SingleSubscriber.h>
 
@@ -69,9 +71,29 @@ recpp::rx::Single<R> recpp::rx::Single<T>::flatMap(const std::function<Single<R>
 }
 
 template <typename T>
+recpp::rx::Completable recpp::rx::Single<T>::flatMapCompletable(const std::function<Completable(const T & /* value */)> &method)
+{
+	return Completable(std::make_shared<processors::FlatMap<T, int>>(*this, method));
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Maybe<R> recpp::rx::Single<T>::flatMapMaybe(const std::function<Maybe<R>(const T & /* value */)> &method)
+{
+	return Maybe<R>(std::make_shared<processors::FlatMap<T, R>>(*this, method));
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Observable<R> recpp::rx::Single<T>::flatMapObservable(const std::function<Observable<R>(const T & /* value */)> &method)
+{
+	return Observable<R>(std::make_shared<processors::FlatMap<T, R>>(*this, method));
+}
+
+template <typename T>
 recpp::rx::Completable recpp::rx::Single<T>::ignoreElement()
 {
-	return Completable(std::make_shared<processors::IgnoreElements<int, int>>(*this));
+	return Completable(std::make_shared<processors::IgnoreElements<T, int>>(*this));
 }
 
 template <typename T>

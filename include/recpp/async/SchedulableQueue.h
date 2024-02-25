@@ -76,6 +76,14 @@ namespace recpp::async
 		std::optional<Schedulable> blockingPop();
 
 		/**
+		 * @brief Check if there are some schedulables to pop.
+		 *
+		 * @param timePoint The timepoint before which we would like to pop a {@link Schedulable}.
+		 * @return True if items can be popped from the queue, false otherwise.
+		 */
+		bool canPop(const TimePoint &timePoint);
+
+		/**
 		 * @brief Get the queue size.
 		 *
 		 * @return size_t The queue size
@@ -102,14 +110,6 @@ namespace recpp::async
 		 * @return std::optional<Schedulable> An optional {@link Schedulable}.
 		 */
 		std::optional<Schedulable> tryPop(const TimePoint &timePoint);
-
-		/**
-		 * @brief Check if there are some schedulables to pop.
-		 *
-		 * @param timePoint The timepoint before which we would like to pop a {@link Schedulable}.
-		 * @return True if items can be popped from the queue, false otherwise.
-		 */
-		bool canPop(const TimePoint &timePoint);
 
 		/**
 		 * @brief Wait until the given predicate returns true.
