@@ -131,6 +131,27 @@ namespace recpp::rx
 		static Observable<T> range(R &&range);
 
 		/**
+		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Observable} instances.
+		 *
+		 * @tparam I The range iterator type.
+		 * @param first The first iterator.
+		 * @param last The last iterator.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <class I>
+		static Observable<T> merge(I first, I last);
+
+		/**
+		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Observable} instances.
+		 *
+		 * @tparam R The range type.
+		 * @param range The range.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <class R>
+		static Observable<T> merge(R &&range);
+
+		/**
 		 * @brief Subscribe to this {@link Observable} with the given methods.
 		 *
 		 * @param onNext The method to call when the {@link Observable} emits a value.

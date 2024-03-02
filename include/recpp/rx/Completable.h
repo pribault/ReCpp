@@ -94,6 +94,27 @@ namespace recpp::rx
 		static Completable never();
 
 		/**
+		 * @brief Construct a new {@link Completable} instance resulting of the merge of the given {@link Completable} instances.
+		 *
+		 * @tparam I The range iterator type.
+		 * @param first The first iterator.
+		 * @param last The last iterator.
+		 * @return The new {@link Completable} instance.
+		 */
+		template <class I>
+		static Completable merge(I first, I last);
+
+		/**
+		 * @brief Construct a new {@link Completable} instance resulting of the merge of the given {@link Completable} instances.
+		 *
+		 * @tparam R The range type.
+		 * @param range The range.
+		 * @return The new {@link Completable} instance.
+		 */
+		template <class R>
+		static Completable merge(R &&range);
+
+		/**
 		 * @brief Subscribe to this {@link Completable} with the given methods.
 		 *
 		 * @param onComplete The method to call when the {@link Completable} completes.

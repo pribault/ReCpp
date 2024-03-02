@@ -18,12 +18,12 @@ using namespace std;
 
 namespace
 {
-	constexpr auto				 sleepDuration = chrono::milliseconds(10);
-	constexpr int				 defaultValue = 42;
-	constexpr std::array<int, 3> defaultValues({1, 2, 3});
-	constexpr auto				 delayTolerance = chrono::milliseconds(10);
-	constexpr auto				 delayDuration = chrono::milliseconds(100);
-	constexpr auto				 sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr auto			sleepDuration = chrono::milliseconds(10);
+	constexpr int			defaultValue = 42;
+	constexpr array<int, 3> defaultValues({1, 2, 3});
+	constexpr auto			delayTolerance = chrono::milliseconds(10);
+	constexpr auto			delayDuration = chrono::milliseconds(100);
+	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
 } // namespace
 
 TEST(Completable, complete)
@@ -188,6 +188,42 @@ TEST(Completable, never)
 		{
 			throw runtime_error("error handler called");
 		}));
+}
+
+TEST(Completable, merge)
+{
+	vector<Completable> completableList = {Completable::complete(), Completable::complete(), Completable::complete()};
+	bool				completed = false;
+	EXPECT_NO_THROW(Completable::merge(completableList)
+						.subscribe(
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
+	EXPECT_TRUE(completed);
+
+	vector<Completable> completableWithErrorList = {Completable::complete(), Completable::error(make_exception_ptr(runtime_error("unexpected error!"))),
+													Completable::complete()};
+	bool				errored = false;
+	EXPECT_NO_THROW(Completable::merge(completableWithErrorList)
+						.subscribe(
+							[&completed]()
+							{
+								throw runtime_error("completion handler called twice");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							}));
+	EXPECT_TRUE(errored);
 }
 
 TEST(Completable, doOnComplete)

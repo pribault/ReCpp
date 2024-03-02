@@ -14,6 +14,7 @@
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
+#include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/publishers/RangePublisher.h>
 #include <recpp/rx/Completable.h>
@@ -71,6 +72,20 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::range(R &&range)
 }
 
 template <typename T>
+template <class I>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(I first, I last)
+{
+	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, I>>(first, last));
+}
+
+template <typename T>
+template <class R>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(R &&range)
+{
+	return Observable<T>::merge(std::begin(range), std::end(range));
+}
+
+template <typename T>
 void recpp::rx::Observable<T>::subscribe(const OnNextMethod &onNext, const OnErrorMethod &onError, const OnCompleteMethod &onComplete)
 {
 	auto subscriber = recpp::subscribers::DefaultSubscriber<T>(onNext, onError, onComplete);
@@ -125,7 +140,12 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnTerminate(const OnCompleteMethod &method)
 {
 	return Observable<T>(std::make_shared<processors::Tap<T>>(
-		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method));
+		*this, nullptr,
+		[method](const std::exception_ptr &)
+		{
+			method();
+		},
+		method));
 }
 
 template <typename T>

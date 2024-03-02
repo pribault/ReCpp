@@ -15,12 +15,12 @@ using namespace std;
 
 namespace
 {
-	constexpr auto				 sleepDuration = chrono::milliseconds(10);
-	constexpr int				 defaultValue = 42;
-	constexpr std::array<int, 3> defaultValues({1, 2, 3});
-	constexpr auto				 delayTolerance = chrono::milliseconds(10);
-	constexpr auto				 delayDuration = chrono::milliseconds(100);
-	constexpr auto				 sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr auto			sleepDuration = chrono::milliseconds(10);
+	constexpr int			defaultValue = 42;
+	constexpr array<int, 3> defaultValues({1, 2, 3});
+	constexpr auto			delayTolerance = chrono::milliseconds(10);
+	constexpr auto			delayDuration = chrono::milliseconds(100);
+	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
 } // namespace
 
 TEST(Observable, create)
@@ -339,22 +339,21 @@ TEST(Observable, range)
 							}));
 	EXPECT_TRUE(completed);
 	EXPECT_EQ(valuesCount, defaultValues.size());
+}
 
-	valuesCount = 0;
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::range(defaultValues.begin(), defaultValues.end());
-						})
+TEST(Observable, merge)
+{
+	vector<Observable<int>> observableList = {Observable<int>::range(defaultValues), Observable<int>::range(defaultValues),
+											  Observable<int>::range(defaultValues)};
+	size_t					valuesCount = 0;
+	bool					completed = false;
+	EXPECT_NO_THROW(Observable<int>::merge(observableList)
 						.subscribe(
 							[&valuesCount](const auto value)
 							{
-								if (valuesCount >= defaultValues.size())
+								if (valuesCount >= defaultValues.size() * 3)
 									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
+								valuesCount++;
 							},
 							[](const auto &exception)
 							{
@@ -367,14 +366,40 @@ TEST(Observable, range)
 								completed = true;
 							}));
 	EXPECT_TRUE(completed);
+	EXPECT_EQ(valuesCount, defaultValues.size() * 3);
+
+	vector<Observable<int>> observableWithErrorList = {Observable<int>::range(defaultValues),
+													   Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))),
+													   Observable<int>::range(defaultValues)};
+	valuesCount = 0;
+	bool errored = false;
+	EXPECT_NO_THROW(Observable<int>::merge(observableWithErrorList)
+						.subscribe(
+							[&valuesCount](const auto value)
+							{
+								if (valuesCount >= defaultValues.size())
+									throw runtime_error("too much values forwarded: " + to_string(valuesCount));
+								valuesCount++;
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
+	EXPECT_TRUE(errored);
 	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
 TEST(Observable, filter)
 {
-	const std::vector<float> expectedValues({1, 3});
-	size_t					 valuesCount = 0;
-	bool					 completed = false;
+	const vector<float> expectedValues({1, 3});
+	size_t				valuesCount = 0;
+	bool				completed = false;
 	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
 						.filter(
 							[](const auto value)
@@ -561,9 +586,9 @@ TEST(Observable, map)
 
 TEST(Observable, flatMap)
 {
-	const std::vector<float> expectedValues({2, 3, 4, 3, 4, 5, 4, 5, 6});
-	size_t					 valuesCount = 0;
-	bool					 completed = false;
+	const vector<float> expectedValues({2, 3, 4, 3, 4, 5, 4, 5, 6});
+	size_t				valuesCount = 0;
+	bool				completed = false;
 	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
 						.flatMap<float>(
 							[](const auto value)
