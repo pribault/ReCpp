@@ -192,8 +192,15 @@ TEST(Completable, never)
 
 TEST(Completable, merge)
 {
-	vector<Completable> completableList = {Completable::complete(), Completable::complete(), Completable::complete()};
-	bool				completed = false;
+	Observable<Completable> completableList = Observable<Completable>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Completable::complete());
+			subscriber.onNext(Completable::complete());
+			subscriber.onNext(Completable::complete());
+			subscriber.onComplete();
+		});
+	bool completed = false;
 	EXPECT_NO_THROW(Completable::merge(completableList)
 						.subscribe(
 							[&completed]()
@@ -208,9 +215,15 @@ TEST(Completable, merge)
 							}));
 	EXPECT_TRUE(completed);
 
-	vector<Completable> completableWithErrorList = {Completable::complete(), Completable::error(make_exception_ptr(runtime_error("unexpected error!"))),
-													Completable::complete()};
-	bool				errored = false;
+	Observable<Completable> completableWithErrorList = Observable<Completable>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Completable::complete());
+			subscriber.onNext(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))));
+			subscriber.onNext(Completable::complete());
+			subscriber.onComplete();
+		});
+	bool errored = false;
 	EXPECT_NO_THROW(Completable::merge(completableWithErrorList)
 						.subscribe(
 							[&completed]()

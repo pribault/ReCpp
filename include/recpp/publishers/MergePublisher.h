@@ -6,22 +6,21 @@ namespace recpp::publishers
 {
 	/**
 	 * @class MergePublisher MergePublisher.h <recpp/publishers/MergePublisher.h>
-	 * @brief {@link rscpp::Publisher} that will emit a range of values from other {@link rscpp::Publisher} instances using given iterators.
+	 * @brief {@link rscpp::Publisher} that will subscribe to a given {@link rscpp::Publisher} source and merge the results.
 	 *
 	 * @tparam T The type of element signaled by the {@link rscpp::Publisher}.
-	 * @tparam I The iterators type.
+	 * @tparam P The {@link rscpp::Publisher}.
 	 */
-	template <typename T, class I>
+	template <typename T, typename P>
 	class MergePublisher : public rscpp::Publisher<T>
 	{
 	public:
 		/**
 		 * @brief Construct a new {@link MergePublisher} instance.
 		 *
-		 * @param first The begin iterator.
-		 * @param last The end iterator.
+		 * @param publisherSource The publisher source.
 		 */
-		MergePublisher(I first, I last);
+		MergePublisher(rscpp::Publisher<P> &publisherSource);
 
 		/**
 		 * @brief Request {@link rscpp::Publisher} to start streaming data.
@@ -40,8 +39,7 @@ namespace recpp::publishers
 		void subscribe(rscpp::Subscriber<T> &subscriber) override;
 
 	private:
-		I m_first;
-		I m_last;
+		rscpp::Publisher<P> m_publisherSource;
 	};
 } // namespace recpp::publishers
 

@@ -14,13 +14,14 @@
 using namespace recpp;
 using namespace recpp::async;
 using namespace recpp::rx;
+using namespace std;
 
-#define LOG(message) std::cout << "[thread " << std::this_thread::get_id() << "] " << message << std::endl
+#define LOG(message) cout << "[thread " << this_thread::get_id() << "] " << message << endl
 
 class Timer
 {
 public:
-	using Chrono = std::chrono::high_resolution_clock;
+	using Chrono = chrono::high_resolution_clock;
 
 	void start()
 	{
@@ -33,17 +34,17 @@ public:
 	size_t elapsedSeconds() const
 	{
 		const auto now = Chrono::now();
-		return std::chrono::duration_cast<std::chrono::seconds>(m_end.value_or(now) - m_start.value_or(now)).count();
+		return chrono::duration_cast<chrono::seconds>(m_end.value_or(now) - m_start.value_or(now)).count();
 	}
 	size_t elapsedMilliSeconds() const
 	{
 		const auto now = Chrono::now();
-		return std::chrono::duration_cast<std::chrono::milliseconds>(m_end.value_or(now) - m_start.value_or(now)).count();
+		return chrono::duration_cast<chrono::milliseconds>(m_end.value_or(now) - m_start.value_or(now)).count();
 	}
 
 private:
-	std::optional<Chrono::time_point> m_start;
-	std::optional<Chrono::time_point> m_end;
+	optional<Chrono::time_point> m_start;
+	optional<Chrono::time_point> m_end;
 };
 
 struct Context
@@ -52,15 +53,15 @@ struct Context
 	EventLoop  mainThreadLoop;
 };
 
-Completable standardResourcesLoad(const std::filesystem::path &path)
+Completable standardResourcesLoad(Context &context, const filesystem::path &path)
 {
 	return Completable::defer(
 		[path]() -> Completable
 		{
-			std::error_code error;
-			const auto		dirIterator = std::filesystem::directory_iterator(path, error);
+			error_code error;
+			const auto dirIterator = filesystem::directory_iterator(path, error);
 			if (error)
-				return Completable::error(std::make_exception_ptr(std::runtime_error(error.message())));
+				return Completable::error(make_exception_ptr(runtime_error(error.message())));
 
 			for (const auto &entry : dirIterator)
 			{
@@ -68,37 +69,80 @@ Completable standardResourcesLoad(const std::filesystem::path &path)
 					continue;
 
 				const auto				entryPath = entry.path();
-				std::ifstream			stream(entryPath, std::ios_base::in | std::ios_base::binary);
+				ifstream				stream(entryPath, ios_base::in | ios_base::binary);
 				Json::Value				root;
 				Json::CharReaderBuilder builder;
 				builder["collectComments"] = true;
 				JSONCPP_STRING errs;
-				LOG("loading " << entryPath.filename());
 				if (!parseFromStream(builder, stream, &root, &errs))
 				{
-					std::cout << errs << std::endl;
-					return Completable::error(std::make_exception_ptr(std::runtime_error(errs)));
+					cout << errs << endl;
+					return Completable::error(make_exception_ptr(runtime_error(errs)));
 				}
 			}
 			return Completable::complete();
 		});
 }
 
-Completable rxRunTest(const std::filesystem::path &path, const std::function<Completable(const std::filesystem::path &)> &test)
+Completable rxResourcesLoad(Context &context, const filesystem::path &path)
+{
+	Observable<Completable> completableSource = Observable<Completable>::create(
+		[&context, path](auto &subscriber)
+		{
+			error_code error;
+			const auto dirIterator = filesystem::directory_iterator(path, error);
+			if (error)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(error.message())));
+				return;
+			}
+
+			for (const auto &entry : dirIterator)
+			{
+				if (!entry.is_regular_file())
+					continue;
+
+				const auto entryPath = entry.path();
+				subscriber.onNext(Completable::defer(
+									  [entryPath]()
+									  {
+										  ifstream				  stream(entryPath, ios_base::in | ios_base::binary);
+										  Json::Value			  root;
+										  Json::CharReaderBuilder builder;
+										  builder["collectComments"] = true;
+										  JSONCPP_STRING errs;
+										  if (!parseFromStream(builder, stream, &root, &errs))
+										  {
+											  cout << errs << endl;
+											  return Completable::error(make_exception_ptr(runtime_error(errs)));
+										  }
+										  return Completable::complete();
+									  })
+									  .subscribeOn(context.workerPool)
+									  .observeOn(context.mainThreadLoop));
+			}
+			subscriber.onComplete();
+		});
+	return Completable::merge(completableSource);
+}
+
+Completable rxRunTest(Context &context, const string &testName, const filesystem::path &path,
+					  const function<Completable(Context &, const filesystem::path &)> &test)
 {
 	return Completable::defer(
-		[path, test]()
+		[&context, testName, path, test]()
 		{
 			Timer timer;
 
-			LOG("starting test");
+			LOG("starting '" << testName << "' test");
 			timer.start();
-			return test(path).doOnComplete(
-				[timer]() mutable
-				{
-					timer.stop();
-					LOG("test ended, took " << timer.elapsedMilliSeconds() << "ms");
-				});
+			return test(context, path)
+				.doOnComplete(
+					[timer]() mutable
+					{
+						timer.stop();
+						LOG("test ended, took " << timer.elapsedMilliSeconds() << "ms");
+					});
 		});
 }
 
@@ -106,14 +150,19 @@ int main(int argc, char **argv)
 {
 	Context context;
 
-	LOG("");
-	LOG("main thread id: " << std::this_thread::get_id());
+	LOG("main thread id: " << this_thread::get_id());
 	LOG("");
 
-	const std::filesystem::path runCmd = argv[0];
-	const auto					directory = runCmd.parent_path();
+	const filesystem::path runCmd = argv[0];
+	const auto			   directory = runCmd.parent_path();
 
-	rxRunTest(directory / "resources", &standardResourcesLoad)
+	rxRunTest(context, "standard", directory / "resources", &standardResourcesLoad)
+		.doOnComplete(
+			[]()
+			{
+				LOG("");
+			})
+		.andThen(rxRunTest(context, "reactive", directory / "resources", &rxResourcesLoad))
 		.doOnTerminate(
 			[&context]()
 			{
@@ -124,9 +173,9 @@ int main(int argc, char **argv)
 				   {
 					   try
 					   {
-						   std::rethrow_exception(exceptionPtr);
+						   rethrow_exception(exceptionPtr);
 					   }
-					   catch (const std::exception &exception)
+					   catch (const exception &exception)
 					   {
 						   LOG("error: " << exception.what());
 					   }

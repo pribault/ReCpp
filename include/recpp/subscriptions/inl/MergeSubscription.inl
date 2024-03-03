@@ -5,71 +5,85 @@
 #include <algorithm>
 #include <iterator>
 
-template <typename T, class I>
-recpp::subscriptions::MergeSubscription<T, I>::MergeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last)
-	: rscpp::Subscription(std::make_shared<Impl>(subscriber, first, last))
+template <typename T, typename P>
+recpp::subscriptions::MergeSubscription<T, P>::MergeSubscription(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource)
+	: rscpp::Subscription(std::make_shared<Impl>(subscriber, publisherSource))
 {
 }
 
-template <typename T, class I>
-recpp::subscriptions::MergeSubscription<T, I>::Impl::Impl(const rscpp::Subscriber<T> &subscriber, I first, I last)
+template <typename T, typename P>
+recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource)
 	: m_subscriber(subscriber)
 {
-	m_remaining = std::distance(first, last);
-	size_t index = 0;
-	for (auto it = first; it != last; it++)
-	{
-		auto &publisher = *it;
-		index++;
-		publisher.Publisher<T>::subscribe(recpp::subscribers::DefaultSubscriber<T>(
-			[this](const T &value)
+	publisherSource.subscribe(recpp::subscribers::DefaultSubscriber<P>(
+		[this](P publisher)
+		{
+			m_remaining++;
+			const auto publisherId = m_currentId++;
+			publisher.Publisher<T>::subscribe(recpp::subscribers::DefaultSubscriber<T>(
+				[this](const T &value)
+				{
+					onPublisherNextValue(value);
+				},
+				[this, publisherId](const std::exception_ptr &exceptionPtr)
+				{
+					onPublisherError(publisherId, exceptionPtr);
+				},
+				[this, publisherId]()
+				{
+					onPublisherComplete(publisherId);
+				},
+				[this, publisherId](rscpp::Subscription &subscription)
+				{
+					m_subscriptions[publisherId] = subscription;
+				}));
+		},
+		[this](const std::exception_ptr &exceptionPtr)
+		{
+			cancel();
+			m_subscriber.onError(exceptionPtr);
+		},
+		[this]()
+		{
+			sourceCompleted = true;
+			if (!m_remaining)
 			{
-				onPublisherNextValue(value);
-			},
-			[this, index](const std::exception_ptr &exceptionPtr)
-			{
-				onPublisherError(index, exceptionPtr);
-			},
-			[this, index]()
-			{
-				onPublisherComplete(index);
-			},
-			[this, index](rscpp::Subscription &subscription)
-			{
-				m_subscriptions[index] = subscription;
-			}));
-	};
+				m_completed = true;
+				if (!m_canceled)
+					m_subscriber.onComplete();
+			}
+		}));
 }
 
-template <typename T, class I>
-void recpp::subscriptions::MergeSubscription<T, I>::Impl::request(size_t count)
+template <typename T, typename P>
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::request(size_t count)
 {
-	for (size_t i = 0; i < count; i++)
+	/*for (size_t i = 0; i < count; i++)
 	{
 		if (!m_remaining || m_canceled)
 			return;
 
 		m_subscriptions[m_currentIndex++].request(count);
-	}
+	}*/
 }
 
-template <typename T, class I>
-void recpp::subscriptions::MergeSubscription<T, I>::Impl::cancel()
+template <typename T, typename P>
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::cancel()
 {
 	m_canceled = true;
 	for (auto &[publisher, subscription] : m_subscriptions)
 		subscription.cancel();
 }
 
-template <typename T, class I>
-void recpp::subscriptions::MergeSubscription<T, I>::Impl::onPublisherNextValue(const T &value)
+template <typename T, typename P>
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherNextValue(const T &value)
 {
 	if (!m_canceled)
 		m_subscriber.onNext(value);
 }
 
-template <typename T, class I>
-void recpp::subscriptions::MergeSubscription<T, I>::Impl::onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr)
+template <typename T, typename P>
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr)
 {
 	const auto it = m_subscriptions.find(publisherId);
 	if (it != std::end(m_subscriptions))
@@ -85,8 +99,8 @@ void recpp::subscriptions::MergeSubscription<T, I>::Impl::onPublisherError(size_
 	m_subscriber.onError(exceptionPtr);
 }
 
-template <typename T, class I>
-void recpp::subscriptions::MergeSubscription<T, I>::Impl::onPublisherComplete(size_t publisherId)
+template <typename T, typename P>
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(size_t publisherId)
 {
 	const auto it = m_subscriptions.find(publisherId);
 	if (it != std::end(m_subscriptions))
@@ -98,7 +112,7 @@ void recpp::subscriptions::MergeSubscription<T, I>::Impl::onPublisherComplete(si
 	}
 	if (m_remaining)
 		m_remaining--;
-	if (!m_remaining)
+	if (!m_remaining && sourceCompleted)
 	{
 		m_completed = true;
 		if (!m_canceled)

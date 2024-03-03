@@ -16,18 +16,18 @@ namespace recpp::subscriptions
 {
 	/**
 	 * @class MergeSubscription MergeSubscription.h <recpp/subscriptions/MergeSubscription.h>
-	 * @brief {@link rscpp::Subscription} that will emit a range of items from other {@link rscpp::Publisher} instances when requested.
+	 * @brief {@link rscpp::Subscription} that will subscribe to a given {@link rscpp::Publisher} source and merge the results.
 	 *
 	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber}.
-	 * @tparam I The type of the range iterator.
+	 * @tparam P The {@link rscpp::Publisher}.
 	 */
-	template <typename T, class I>
+	template <typename T, typename P>
 	class MergeSubscription : public rscpp::Subscription
 	{
 		class Impl : public rscpp::Subscription
 		{
 		public:
-			Impl(const rscpp::Subscriber<T> &subscriber, I first, I last);
+			Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource);
 
 			void request(size_t count) override;
 			void cancel() override;
@@ -39,7 +39,9 @@ namespace recpp::subscriptions
 
 			rscpp::Subscriber<T>				  m_subscriber;
 			std::map<size_t, rscpp::Subscription> m_subscriptions;
+			size_t								  m_currentId = 0;
 			int									  m_currentIndex = 0;
+			bool								  sourceCompleted = false;
 			bool								  m_completed = false;
 			bool								  m_canceled = false;
 			size_t								  m_remaining = 0;
@@ -50,10 +52,9 @@ namespace recpp::subscriptions
 		 * @brief Construct a new {@link MergeSubscription} instance.
 		 *
 		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Subscription}.
-		 * @param first The first iterator.
-		 * @param last The last iterator.
+		 * @param publisherSource The publisher source.
 		 */
-		MergeSubscription(const rscpp::Subscriber<T> &subscriber, I first, I last);
+		MergeSubscription(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource);
 	};
 } // namespace recpp::subscriptions
 

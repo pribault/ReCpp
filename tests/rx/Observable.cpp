@@ -343,10 +343,16 @@ TEST(Observable, range)
 
 TEST(Observable, merge)
 {
-	vector<Observable<int>> observableList = {Observable<int>::range(defaultValues), Observable<int>::range(defaultValues),
-											  Observable<int>::range(defaultValues)};
-	size_t					valuesCount = 0;
-	bool					completed = false;
+	Observable<Observable<int>> observableList = Observable<Observable<int>>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onComplete();
+		});
+	size_t valuesCount = 0;
+	bool   completed = false;
 	EXPECT_NO_THROW(Observable<int>::merge(observableList)
 						.subscribe(
 							[&valuesCount](const auto value)
@@ -368,9 +374,14 @@ TEST(Observable, merge)
 	EXPECT_TRUE(completed);
 	EXPECT_EQ(valuesCount, defaultValues.size() * 3);
 
-	vector<Observable<int>> observableWithErrorList = {Observable<int>::range(defaultValues),
-													   Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))),
-													   Observable<int>::range(defaultValues)};
+	Observable<Observable<int>> observableWithErrorList = Observable<Observable<int>>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onComplete();
+		});
 	valuesCount = 0;
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::merge(observableWithErrorList)

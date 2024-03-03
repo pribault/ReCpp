@@ -72,17 +72,9 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::range(R &&range)
 }
 
 template <typename T>
-template <class I>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(I first, I last)
+recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(recpp::rx::Observable<recpp::rx::Observable<T>> &observableSource)
 {
-	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, I>>(first, last));
-}
-
-template <typename T>
-template <class R>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(R &&range)
-{
-	return Observable<T>::merge(std::begin(range), std::end(range));
+	return Observable<T>(make_shared<recpp::publishers::MergePublisher<T, Observable<T>>>(observableSource));
 }
 
 template <typename T>
