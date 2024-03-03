@@ -15,32 +15,33 @@ template <typename T, typename P>
 recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource)
 	: m_subscriber(subscriber)
 {
-	publisherSource.subscribe(recpp::subscribers::DefaultSubscriber<P>(
+	auto sourceSubscriber = recpp::subscribers::DefaultSubscriber<P>(
 		[this](P publisher)
 		{
 			m_remaining++;
 			const auto publisherId = m_currentId++;
-			publisher.Publisher<T>::subscribe(recpp::subscribers::DefaultSubscriber<T>(
-				[this](const T &value)
-				{
-					onPublisherNextValue(value);
-				},
-				[this, publisherId](const std::exception_ptr &exceptionPtr)
-				{
-					onPublisherError(publisherId, exceptionPtr);
-				},
-				[this, publisherId]()
-				{
-					onPublisherComplete(publisherId);
-				},
-				[this, publisherId](rscpp::Subscription &subscription)
-				{
-					m_mutex.lock();
-					m_subscriptions.emplace_back(publisherId, subscription);
-					m_mutex.unlock();
-					tryRequest();
-				},
-				false));
+			auto	   subscriber = recpp::subscribers::DefaultSubscriber<T>(
+				  [this](const T &value)
+				  {
+					  onPublisherNextValue(value);
+				  },
+				  [this, publisherId](const std::exception_ptr &exceptionPtr)
+				  {
+					  onPublisherError(publisherId, exceptionPtr);
+				  },
+				  [this, publisherId]()
+				  {
+					  onPublisherComplete(publisherId);
+				  },
+				  [this, publisherId](rscpp::Subscription &subscription)
+				  {
+					  m_mutex.lock();
+					  m_subscriptions.emplace_back(publisherId, subscription);
+					  m_mutex.unlock();
+					  tryRequest();
+				  },
+				  false);
+			publisher.rscpp::template Publisher<T>::subscribe(subscriber);
 		},
 		[this](const std::exception_ptr &exceptionPtr)
 		{
@@ -64,7 +65,8 @@ recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscribe
 			}
 			else
 				m_mutex.unlock();
-		}));
+		});
+	publisherSource.subscribe(sourceSubscriber);
 }
 
 template <typename T, typename P>
