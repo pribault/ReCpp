@@ -1,4 +1,4 @@
-This example demonstrates the use of ReCpp to download in parallel multiple json files.
+This example demonstrates the use of ReCpp to download in parallel multiple json files, and how it can improve resource loading.
 
 Running this example should output something as follows:
 ```

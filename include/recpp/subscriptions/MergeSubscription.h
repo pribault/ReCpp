@@ -4,7 +4,8 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-#include <map>
+#include <list>
+#include <utility>
 
 namespace recpp::subscribers
 {
@@ -37,14 +38,14 @@ namespace recpp::subscriptions
 			void onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr);
 			void onPublisherComplete(size_t publisherId);
 
-			rscpp::Subscriber<T>				  m_subscriber;
-			std::map<size_t, rscpp::Subscription> m_subscriptions;
-			size_t								  m_currentId = 0;
-			int									  m_currentIndex = 0;
-			bool								  sourceCompleted = false;
-			bool								  m_completed = false;
-			bool								  m_canceled = false;
-			size_t								  m_remaining = 0;
+			rscpp::Subscriber<T>							  m_subscriber;
+			std::list<std::pair<size_t, rscpp::Subscription>> m_subscriptions;
+			size_t											  m_currentId = 0;
+			int												  m_currentIndex = 0;
+			bool											  sourceCompleted = false;
+			bool											  m_completed = false;
+			bool											  m_canceled = false;
+			size_t											  m_remaining = 0;
 		};
 
 	public:

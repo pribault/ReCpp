@@ -35,7 +35,7 @@ recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscribe
 				},
 				[this, publisherId](rscpp::Subscription &subscription)
 				{
-					m_subscriptions[publisherId] = subscription;
+					m_subscriptions.emplace_back(publisherId, subscription);
 				}));
 		},
 		[this](const std::exception_ptr &exceptionPtr)
@@ -85,7 +85,11 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherNextValue(c
 template <typename T, typename P>
 void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr)
 {
-	const auto it = m_subscriptions.find(publisherId);
+	const auto it = std::find_if(std::begin(m_subscriptions), std::end(m_subscriptions),
+								 [publisherId](const auto &pair)
+								 {
+									 return pair.first == publisherId;
+								 });
 	if (it != std::end(m_subscriptions))
 	{
 		const auto index = std::distance(std::begin(m_subscriptions), it);
@@ -102,7 +106,11 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(size_
 template <typename T, typename P>
 void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(size_t publisherId)
 {
-	const auto it = m_subscriptions.find(publisherId);
+	const auto it = std::find_if(std::begin(m_subscriptions), std::end(m_subscriptions),
+								 [publisherId](const auto &pair)
+								 {
+									 return pair.first == publisherId;
+								 });
 	if (it != std::end(m_subscriptions))
 	{
 		const auto index = std::distance(std::begin(m_subscriptions), it);
