@@ -16,6 +16,7 @@ var hierarchy =
       [ "recpp::publishers::EmptyPublisher< T >", "classrecpp_1_1publishers_1_1_empty_publisher.html", null ],
       [ "recpp::publishers::ErrorPublisher< T >", "classrecpp_1_1publishers_1_1_error_publisher.html", null ],
       [ "recpp::publishers::JustPublisher< T >", "classrecpp_1_1publishers_1_1_just_publisher.html", null ],
+      [ "recpp::publishers::MergePublisher< T, P >", "classrecpp_1_1publishers_1_1_merge_publisher.html", null ],
       [ "recpp::publishers::NeverPublisher< T >", "classrecpp_1_1publishers_1_1_never_publisher.html", null ],
       [ "recpp::publishers::RangePublisher< T, I >", "classrecpp_1_1publishers_1_1_range_publisher.html", null ],
       [ "recpp::rx::Maybe< T >", "classrecpp_1_1rx_1_1_maybe.html", null ],
@@ -25,6 +26,7 @@ var hierarchy =
     [ "rscpp::Publisher< int >", "classrscpp_1_1_publisher.html", [
       [ "recpp::rx::Completable", "classrecpp_1_1rx_1_1_completable.html", null ]
     ] ],
+    [ "rscpp::Publisher< P >", "classrscpp_1_1_publisher.html", null ],
     [ "rscpp::Publisher< R >", "classrscpp_1_1_publisher.html", [
       [ "rscpp::Processor< T, R >", "classrscpp_1_1_processor.html", [
         [ "recpp::processors::AndThen< T, R >", "classrecpp_1_1processors_1_1_and_then.html", null ],
@@ -53,6 +55,7 @@ var hierarchy =
       [ "recpp::subscriptions::FilterSubscription", "classrecpp_1_1subscriptions_1_1_filter_subscription.html", null ],
       [ "recpp::subscriptions::ForwardSubscription", "classrecpp_1_1subscriptions_1_1_forward_subscription.html", null ],
       [ "recpp::subscriptions::JustSubscription< T >", "classrecpp_1_1subscriptions_1_1_just_subscription.html", null ],
+      [ "recpp::subscriptions::MergeSubscription< T, P >", "classrecpp_1_1subscriptions_1_1_merge_subscription.html", null ],
       [ "recpp::subscriptions::NeverSubscription< T >", "classrecpp_1_1subscriptions_1_1_never_subscription.html", null ],
       [ "recpp::subscriptions::RangeSubscription< T, I >", "classrecpp_1_1subscriptions_1_1_range_subscription.html", null ]
     ] ],

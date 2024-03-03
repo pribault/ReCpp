@@ -129,6 +129,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa00d3739c33cdd26f1b726e2782e584"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#afa00d3739c33cdd26f1b726e2782e584">blockingPop</a> ()</td></tr>
 <tr class="memdesc:afa00d3739c33cdd26f1b726e2782e584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting indefinitely for it.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#afa00d3739c33cdd26f1b726e2782e584">More...</a><br /></td></tr>
 <tr class="separator:afa00d3739c33cdd26f1b726e2782e584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a080d82ab48b89abdbbd9224f12c9ad3f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a080d82ab48b89abdbbd9224f12c9ad3f">canPop</a> (const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;timePoint)</td></tr>
+<tr class="memdesc:a080d82ab48b89abdbbd9224f12c9ad3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if there are some schedulables to pop.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a080d82ab48b89abdbbd9224f12c9ad3f">More...</a><br /></td></tr>
+<tr class="separator:a080d82ab48b89abdbbd9224f12c9ad3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a840cde4fe66bd040ea29be9f2347b20d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a840cde4fe66bd040ea29be9f2347b20d">size</a> ()</td></tr>
 <tr class="memdesc:a840cde4fe66bd040ea29be9f2347b20d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the queue size.  <a href="classrecpp_1_1async_1_1_schedulable_queue.html#a840cde4fe66bd040ea29be9f2347b20d">More...</a><br /></td></tr>
 <tr class="separator:a840cde4fe66bd040ea29be9f2347b20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,6 +192,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Try to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a> from the queue, waiting indefinitely for it. </p>
 <p>This method is blocking until the <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a35e88ff8e5ef2e20e059da2b28008bc4">stop</a> method is called.</p>
 <dl class="section return"><dt>Returns</dt><dd>std::optional&lt;Schedulable&gt; An optional <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a080d82ab48b89abdbbd9224f12c9ad3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a080d82ab48b89abdbbd9224f12c9ad3f">&#9670;&nbsp;</a></span>canPop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool recpp::async::SchedulableQueue::canPop </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a5854ec4ff4ed5ba365e61178187a77d3">TimePoint</a> &amp;&#160;</td>
+          <td class="paramname"><em>timePoint</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if there are some schedulables to pop. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timePoint</td><td>The timepoint before which we would like to pop a <a class="el" href="classrecpp_1_1async_1_1_schedulable.html">Schedulable</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if items can be popped from the queue, false otherwise. </dd></dl>
 
 </div>
 </div>

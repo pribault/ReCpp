@@ -9,6 +9,9 @@ var classrecpp_1_1rx_1_1_single =
     [ "doOnSuccess", "classrecpp_1_1rx_1_1_single.html#a6f1a2d091653b98689fe1e0147201916", null ],
     [ "doOnTerminate", "classrecpp_1_1rx_1_1_single.html#adc2d668019bde816d4a3ec740ffc79d1", null ],
     [ "flatMap", "classrecpp_1_1rx_1_1_single.html#a8bd751f7219cd12b3443ee7c49683eff", null ],
+    [ "flatMapCompletable", "classrecpp_1_1rx_1_1_single.html#a8673ab670f5b3fcbc0cfaed21fbf0c6d", null ],
+    [ "flatMapMaybe", "classrecpp_1_1rx_1_1_single.html#ad8ff792e61583d3158c3319b79c707fc", null ],
+    [ "flatMapObservable", "classrecpp_1_1rx_1_1_single.html#aa55f4d40cb97a0debd91e1541bdf7c1a", null ],
     [ "ignoreElement", "classrecpp_1_1rx_1_1_single.html#abf9531c7d7fb86ab9672306cfc5582b8", null ],
     [ "map", "classrecpp_1_1rx_1_1_single.html#a041af3a80bed50c85931aeaa98bf0ca9", null ],
     [ "observeOn", "classrecpp_1_1rx_1_1_single.html#ac178f166217c4c90d8b02ab0e5020e02", null ],
@@ -16,5 +19,7 @@ var classrecpp_1_1rx_1_1_single =
     [ "subscribeOn", "classrecpp_1_1rx_1_1_single.html#a3f543e9d759f437c0ef2af5fa2332ac2", null ],
     [ "tap", "classrecpp_1_1rx_1_1_single.html#acaad9b90e969893947d40df09bc3b9c0", null ],
     [ "Completable", "classrecpp_1_1rx_1_1_single.html#a5f7053bea907d84db2e60646a5237957", null ],
+    [ "Maybe", "classrecpp_1_1rx_1_1_single.html#ae606ba8c3656041ee7ec7532d02a3bdb", null ],
+    [ "Observable", "classrecpp_1_1rx_1_1_single.html#a27f95a64d702be94ff1315af66ab9748", null ],
     [ "Single", "classrecpp_1_1rx_1_1_single.html#a12092baab2e5f6b0b9c2018977e7f94c", null ]
 ];

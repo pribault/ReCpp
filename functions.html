@@ -107,6 +107,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa">recpp::async::Schedulable</a>
 , <a class="el" href="classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d">rscpp::Subscription</a>
 </li>
+<li>canPop()
+: <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#a080d82ab48b89abdbbd9224f12c9ad3f">recpp::async::SchedulableQueue</a>
+</li>
 <li>Clock
 : <a class="el" href="classrecpp_1_1async_1_1_event_loop.html#ab1c1df501902392e815cf23ef7d22833">recpp::async::EventLoop</a>
 , <a class="el" href="classrecpp_1_1async_1_1_schedulable_queue.html#ad95f8b21d94f057ae6ca365c3ba83c90">recpp::async::SchedulableQueue</a>
@@ -138,7 +141,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>DefaultSubscriber()
-: <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a65b099d168a091b1d1fdad200d05fa06">recpp::subscribers::DefaultSubscriber&lt; T &gt;</a>
+: <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a1bbf73c42a11d9db8660663fe65e1c72">recpp::subscribers::DefaultSubscriber&lt; T &gt;</a>
 </li>
 <li>defer()
 : <a class="el" href="classrecpp_1_1rx_1_1_completable.html#aa9402b316af2a6afba2d1f1efaf4a6e7">recpp::rx::Completable</a>
@@ -231,6 +234,15 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a57c24c26e8b05ec2eee693dfcd0308cf">recpp::rx::Observable&lt; T &gt;</a>
 , <a class="el" href="classrecpp_1_1rx_1_1_single.html#a8bd751f7219cd12b3443ee7c49683eff">recpp::rx::Single&lt; T &gt;</a>
 </li>
+<li>flatMapCompletable()
+: <a class="el" href="classrecpp_1_1rx_1_1_single.html#a8673ab670f5b3fcbc0cfaed21fbf0c6d">recpp::rx::Single&lt; T &gt;</a>
+</li>
+<li>flatMapMaybe()
+: <a class="el" href="classrecpp_1_1rx_1_1_single.html#ad8ff792e61583d3158c3319b79c707fc">recpp::rx::Single&lt; T &gt;</a>
+</li>
+<li>flatMapObservable()
+: <a class="el" href="classrecpp_1_1rx_1_1_single.html#aa55f4d40cb97a0debd91e1541bdf7c1a">recpp::rx::Single&lt; T &gt;</a>
+</li>
 <li>ForwardSubscription()
 : <a class="el" href="classrecpp_1_1subscriptions_1_1_forward_subscription.html#a0eebbaef9b4a52169b58e0e765a7e9f3">recpp::subscriptions::ForwardSubscription</a>
 </li>
@@ -283,6 +295,16 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 </li>
 <li>MaybeSubscriber()
 : <a class="el" href="classrecpp_1_1subscribers_1_1_maybe_subscriber.html#a7df6f968042508f4aa8d546730180fbd">recpp::subscribers::MaybeSubscriber&lt; T &gt;</a>
+</li>
+<li>merge()
+: <a class="el" href="classrecpp_1_1rx_1_1_completable.html#ae47cde9090664149491a982549578502">recpp::rx::Completable</a>
+, <a class="el" href="classrecpp_1_1rx_1_1_observable.html#a72ae763f2353d803d0dbd7756833a78b">recpp::rx::Observable&lt; T &gt;</a>
+</li>
+<li>MergePublisher()
+: <a class="el" href="classrecpp_1_1publishers_1_1_merge_publisher.html#a448d76130c120109c7dcb42c02377ba8">recpp::publishers::MergePublisher&lt; T, P &gt;</a>
+</li>
+<li>MergeSubscription()
+: <a class="el" href="classrecpp_1_1subscriptions_1_1_merge_subscription.html#afb145f62df2eda2977e61874dfe2792f">recpp::subscriptions::MergeSubscription&lt; T, P &gt;</a>
 </li>
 </ul>
 
@@ -367,6 +389,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>onSubscribe()
 : <a class="el" href="classrscpp_1_1_subscriber.html#ae8e0b6f8c07f76abd4213b25407f9a56">rscpp::Subscriber&lt; T &gt;</a>
 </li>
+<li>OnSubscribeMethod
+: <a class="el" href="classrecpp_1_1subscribers_1_1_default_subscriber.html#a666e65eb6d35890f08bd3717cc37fae2">recpp::subscribers::DefaultSubscriber&lt; T &gt;</a>
+</li>
 <li>OnSuccessMethod
 : <a class="el" href="classrecpp_1_1rx_1_1_single.html#a9407a87edf2360d3999b040d7d8e2270">recpp::rx::Single&lt; T &gt;</a>
 </li>
@@ -440,6 +465,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="classrecpp_1_1publishers_1_1_empty_publisher.html#a9784cc6ee63abfaf585212530652c1f9">recpp::publishers::EmptyPublisher&lt; T &gt;</a>
 , <a class="el" href="classrecpp_1_1publishers_1_1_error_publisher.html#a14d407d345e0bac7fd46ad1a2250574d">recpp::publishers::ErrorPublisher&lt; T &gt;</a>
 , <a class="el" href="classrecpp_1_1publishers_1_1_just_publisher.html#ac72c23ec83af3b6eaee837213e8feca6">recpp::publishers::JustPublisher&lt; T &gt;</a>
+, <a class="el" href="classrecpp_1_1publishers_1_1_merge_publisher.html#a2f8f98b496ea2d08cf4330ce34d438fe">recpp::publishers::MergePublisher&lt; T, P &gt;</a>
 , <a class="el" href="classrecpp_1_1publishers_1_1_never_publisher.html#af4649dc44d963b14d423ac15e326717f">recpp::publishers::NeverPublisher&lt; T &gt;</a>
 , <a class="el" href="classrecpp_1_1publishers_1_1_range_publisher.html#a0ba66fdcef3db3ba6957ce16c75884f9">recpp::publishers::RangePublisher&lt; T, I &gt;</a>
 , <a class="el" href="classrecpp_1_1rx_1_1_completable.html#a0d9678663233aca61a1a6affb622dcb4">recpp::rx::Completable</a>

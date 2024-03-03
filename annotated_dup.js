@@ -27,6 +27,7 @@ var annotated_dup =
         [ "EmptyPublisher", "classrecpp_1_1publishers_1_1_empty_publisher.html", "classrecpp_1_1publishers_1_1_empty_publisher" ],
         [ "ErrorPublisher", "classrecpp_1_1publishers_1_1_error_publisher.html", "classrecpp_1_1publishers_1_1_error_publisher" ],
         [ "JustPublisher", "classrecpp_1_1publishers_1_1_just_publisher.html", "classrecpp_1_1publishers_1_1_just_publisher" ],
+        [ "MergePublisher", "classrecpp_1_1publishers_1_1_merge_publisher.html", "classrecpp_1_1publishers_1_1_merge_publisher" ],
         [ "NeverPublisher", "classrecpp_1_1publishers_1_1_never_publisher.html", "classrecpp_1_1publishers_1_1_never_publisher" ],
         [ "RangePublisher", "classrecpp_1_1publishers_1_1_range_publisher.html", "classrecpp_1_1publishers_1_1_range_publisher" ]
       ] ],
@@ -48,6 +49,7 @@ var annotated_dup =
         [ "FilterSubscription", "classrecpp_1_1subscriptions_1_1_filter_subscription.html", "classrecpp_1_1subscriptions_1_1_filter_subscription" ],
         [ "ForwardSubscription", "classrecpp_1_1subscriptions_1_1_forward_subscription.html", "classrecpp_1_1subscriptions_1_1_forward_subscription" ],
         [ "JustSubscription", "classrecpp_1_1subscriptions_1_1_just_subscription.html", "classrecpp_1_1subscriptions_1_1_just_subscription" ],
+        [ "MergeSubscription", "classrecpp_1_1subscriptions_1_1_merge_subscription.html", "classrecpp_1_1subscriptions_1_1_merge_subscription" ],
         [ "NeverSubscription", "classrecpp_1_1subscriptions_1_1_never_subscription.html", "classrecpp_1_1subscriptions_1_1_never_subscription" ],
         [ "RangeSubscription", "classrecpp_1_1subscriptions_1_1_range_subscription.html", "classrecpp_1_1subscriptions_1_1_range_subscription" ]
       ] ]

@@ -18,5 +18,7 @@ var classrecpp_1_1rx_1_1_observable =
     [ "subscribeOn", "classrecpp_1_1rx_1_1_observable.html#aeabbed0e3713d721a2d27ddf2bb698da", null ],
     [ "tap", "classrecpp_1_1rx_1_1_observable.html#a053f2d3b26d37cd98d3af7a6cc5f9340", null ],
     [ "Completable", "classrecpp_1_1rx_1_1_observable.html#a5f7053bea907d84db2e60646a5237957", null ],
-    [ "Observable", "classrecpp_1_1rx_1_1_observable.html#a27f95a64d702be94ff1315af66ab9748", null ]
+    [ "Maybe", "classrecpp_1_1rx_1_1_observable.html#ae606ba8c3656041ee7ec7532d02a3bdb", null ],
+    [ "Observable", "classrecpp_1_1rx_1_1_observable.html#a27f95a64d702be94ff1315af66ab9748", null ],
+    [ "Single", "classrecpp_1_1rx_1_1_observable.html#a12092baab2e5f6b0b9c2018977e7f94c", null ]
 ];

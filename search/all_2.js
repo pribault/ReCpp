@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['cancel_4',['cancel',['../classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa',1,'recpp::async::Schedulable::cancel()'],['../classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d',1,'rscpp::Subscription::cancel()']]],
+  ['cancel_3',['cancel',['../classrecpp_1_1async_1_1_schedulable.html#adaec709f3f2a2af40411e5bf719f47aa',1,'recpp::async::Schedulable::cancel()'],['../classrscpp_1_1_subscription.html#a352c062f064e8f2a61f2dfa62fb9fb1d',1,'rscpp::Subscription::cancel()']]],
+  ['canpop_4',['canPop',['../classrecpp_1_1async_1_1_schedulable_queue.html#a080d82ab48b89abdbbd9224f12c9ad3f',1,'recpp::async::SchedulableQueue']]],
   ['clock_5',['Clock',['../classrecpp_1_1async_1_1_event_loop.html#ab1c1df501902392e815cf23ef7d22833',1,'recpp::async::EventLoop::Clock()'],['../classrecpp_1_1async_1_1_schedulable_queue.html#ad95f8b21d94f057ae6ca365c3ba83c90',1,'recpp::async::SchedulableQueue::Clock()'],['../classrecpp_1_1async_1_1_scheduler.html#a3eab858c0cabe32509a192b016d65333',1,'recpp::async::Scheduler::Clock()']]],
   ['completable_6',['Completable',['../classrecpp_1_1rx_1_1_completable.html#a8a3e22483398a25056b8fbdb16e9370a',1,'recpp::rx::Completable::Completable()'],['../classrecpp_1_1rx_1_1_completable.html',1,'recpp::rx::Completable']]],
   ['completablesubscriber_7',['CompletableSubscriber',['../classrecpp_1_1subscribers_1_1_completable_subscriber.html#a1c22490fc46a66f80b6c910b1060884b',1,'recpp::subscribers::CompletableSubscriber::CompletableSubscriber()'],['../classrecpp_1_1subscribers_1_1_completable_subscriber.html',1,'recpp::subscribers::CompletableSubscriber']]],
