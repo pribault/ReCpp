@@ -25,7 +25,7 @@ namespace recpp::subscribers
 			using OnCompleteMethod = std::function<void()>;
 
 			explicit Impl(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod,
-						  const OnSubscribeMethod &onSubscribeMethod);
+						  const OnSubscribeMethod &onSubscribeMethod, bool autoRequest);
 
 			void onSubscribe(rscpp::Subscription &subscription) override;
 
@@ -42,6 +42,7 @@ namespace recpp::subscribers
 			OnCompleteMethod	m_onCompleteMethod;
 			OnSubscribeMethod	m_onSubscribeMethod;
 			size_t				m_remaining = 0;
+			bool				m_autoRequest = false;
 		};
 
 	public:
@@ -72,9 +73,10 @@ namespace recpp::subscribers
 		 * @param onErrorMethod The function to call when an error is emitted.
 		 * @param onCompleteMethod The function to call when the {@link rscpp::Publisher} completes.
 		 * @param onSubscribeMethod The function to call on subscribe.
+		 * @param autoRequest Defines if the subscriber should automatically request elements to the subscription.
 		 */
 		explicit DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod,
-								   const OnSubscribeMethod &onSubscribeMethod = nullptr);
+								   const OnSubscribeMethod &onSubscribeMethod = nullptr, bool autoRequest = true);
 	};
 } // namespace recpp::subscribers
 

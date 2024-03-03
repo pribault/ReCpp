@@ -118,8 +118,7 @@ Completable rxResourcesLoad(Context &context, const filesystem::path &path)
 										  }
 										  return Completable::complete();
 									  })
-									  .subscribeOn(context.workerPool)
-									  .observeOn(context.mainThreadLoop));
+									  .subscribeOn(context.workerPool));
 			}
 			subscriber.onComplete();
 		});

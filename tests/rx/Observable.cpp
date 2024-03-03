@@ -382,15 +382,12 @@ TEST(Observable, merge)
 			subscriber.onNext(Observable<int>::range(defaultValues));
 			subscriber.onComplete();
 		});
-	valuesCount = 0;
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::merge(observableWithErrorList)
 						.subscribe(
-							[&valuesCount](const auto value)
+							[](const auto value)
 							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded: " + to_string(valuesCount));
-								valuesCount++;
+									throw runtime_error("values forwarded");
 							},
 							[&errored](const auto &exception)
 							{
@@ -403,7 +400,6 @@ TEST(Observable, merge)
 								throw runtime_error("completion handler called");
 							}));
 	EXPECT_TRUE(errored);
-	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
 TEST(Observable, filter)

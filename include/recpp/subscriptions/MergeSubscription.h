@@ -4,7 +4,9 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-#include <list>
+#include <atomic>
+#include <deque>
+#include <mutex>
 #include <utility>
 
 namespace recpp::subscribers
@@ -37,15 +39,19 @@ namespace recpp::subscriptions
 			void onPublisherNextValue(const T &value);
 			void onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr);
 			void onPublisherComplete(size_t publisherId);
+			void removePublisher(size_t publisherId);
+			void tryRequest();
 
-			rscpp::Subscriber<T>							  m_subscriber;
-			std::list<std::pair<size_t, rscpp::Subscription>> m_subscriptions;
-			size_t											  m_currentId = 0;
-			int												  m_currentIndex = 0;
-			bool											  sourceCompleted = false;
-			bool											  m_completed = false;
-			bool											  m_canceled = false;
-			size_t											  m_remaining = 0;
+			rscpp::Subscriber<T>							   m_subscriber;
+			std::deque<std::pair<size_t, rscpp::Subscription>> m_subscriptions;
+			size_t											   m_currentId = 0;
+			int												   m_currentIndex = 0;
+			bool											   sourceCompleted = false;
+			bool											   m_completed = false;
+			std::atomic_bool								   m_canceled = false;
+			size_t											   m_remaining = 0;
+			std::atomic_size_t								   m_requested = 0;
+			std::mutex										   m_mutex;
 		};
 
 	public:
