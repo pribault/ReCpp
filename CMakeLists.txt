@@ -9,6 +9,11 @@ project(ReCpp
 	LANGUAGES		CXX
 )
 
+option(RECPP_BUILD_EXAMPLES "Compile RsCpp examples" ON)
+option(RECPP_BUILD_TESTS "Compile RsCpp tests" ON)
+
+include(FetchContent)
+
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/EventLoop.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/Schedulable.h
@@ -40,6 +45,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/EmptyPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/ErrorPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/JustPublisher.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/MergePublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/NeverPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/RangePublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/CreatePublisher.inl
@@ -47,6 +53,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/EmptyPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/ErrorPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/JustPublisher.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/MergePublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/NeverPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/RangePublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/rx/Completable.h
@@ -70,10 +77,12 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/FilterSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/ForwardSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/JustSubscription.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/MergeSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/NeverSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/RangeSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/EmptySubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/JustSubscription.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/MergeSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/NeverSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/RangeSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/src/async/EventLoop.cpp
@@ -93,9 +102,14 @@ add_library(ReCpp ${SOURCES})
 
 target_include_directories(ReCpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(ReCpp PRIVATE RsCpp)
+target_link_libraries(ReCpp PUBLIC RsCpp)
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 
-include(CTest)
-add_subdirectory(tests)
+if(RECPP_BUILD_EXAMPLES)
+	add_subdirectory(examples)
+endif()
+
+if(RECPP_BUILD_TESTS)
+	add_subdirectory(tests)
+endif()

@@ -19,11 +19,13 @@ namespace recpp::subscribers
 		class Impl : public rscpp::Subscriber<T>
 		{
 		public:
+			using OnSubscribeMethod = std::function<void(rscpp::Subscription & /* subscription */)>;
 			using OnNextMethod = std::function<void(const T & /* value */)>;
 			using OnErrorMethod = std::function<void(const std::exception_ptr & /* error */)>;
 			using OnCompleteMethod = std::function<void()>;
 
-			explicit Impl(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
+			explicit Impl(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod,
+						  const OnSubscribeMethod &onSubscribeMethod, bool autoRequest);
 
 			void onSubscribe(rscpp::Subscription &subscription) override;
 
@@ -38,10 +40,17 @@ namespace recpp::subscribers
 			OnNextMethod		m_onNextMethod;
 			OnErrorMethod		m_onErrorMethod;
 			OnCompleteMethod	m_onCompleteMethod;
+			OnSubscribeMethod	m_onSubscribeMethod;
 			size_t				m_remaining = 0;
+			bool				m_autoRequest = false;
 		};
 
 	public:
+		/**
+		 * @brief The type of the method to call on subscribe.
+		 */
+		using OnSubscribeMethod = std::function<void(rscpp::Subscription & /* subscription */)>;
+
 		/**
 		 * @brief The type of the method to call for each emitted value.
 		 */
@@ -63,8 +72,11 @@ namespace recpp::subscribers
 		 * @param onNextMethod The function to call when a value is emitted.
 		 * @param onErrorMethod The function to call when an error is emitted.
 		 * @param onCompleteMethod The function to call when the {@link rscpp::Publisher} completes.
+		 * @param onSubscribeMethod The function to call on subscribe.
+		 * @param autoRequest Defines if the subscriber should automatically request elements to the subscription.
 		 */
-		explicit DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
+		explicit DefaultSubscriber(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod,
+								   const OnSubscribeMethod &onSubscribeMethod = nullptr, bool autoRequest = true);
 	};
 } // namespace recpp::subscribers
 

@@ -14,6 +14,7 @@
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
+#include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/publishers/RangePublisher.h>
 #include <recpp/rx/Completable.h>
@@ -67,7 +68,13 @@ template <typename T>
 template <class R>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::range(R &&range)
 {
-	return Observable<T>::range(range.begin(), range.end());
+	return Observable<T>::range(std::begin(range), std::end(range));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(recpp::rx::Observable<recpp::rx::Observable<T>> &observableSource)
+{
+	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Observable<T>>>(observableSource));
 }
 
 template <typename T>
@@ -86,7 +93,7 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::filter(const std::function<bo
 template <typename T>
 recpp::rx::Completable recpp::rx::Observable<T>::ignoreElements()
 {
-	return Completable(std::make_shared<processors::IgnoreElements<int, int>>(*this));
+	return Completable(std::make_shared<processors::IgnoreElements<T, int>>(*this));
 }
 
 template <typename T>
@@ -125,7 +132,12 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::doOnTerminate(const OnCompleteMethod &method)
 {
 	return Observable<T>(std::make_shared<processors::Tap<T>>(
-		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method));
+		*this, nullptr,
+		[method](const std::exception_ptr &)
+		{
+			method();
+		},
+		method));
 }
 
 template <typename T>

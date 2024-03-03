@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.8)
 
-include(FetchContent)
+project(ReCpp-test
+	VERSION			0.0.0
+	DESCRIPTION		"ReCpp test"
+	HOMEPAGE_URL	"https://github.com/pribault/ReCpp"
+	LANGUAGES		CXX
+)
 
 FetchContent_Declare(
 	googletest
@@ -10,12 +15,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-project(ReCpp-test
-	VERSION			0.0.0
-	DESCRIPTION		"ReCpp test"
-	HOMEPAGE_URL	"https://github.com/pribault/ReCpp"
-	LANGUAGES		CXX
-)
+include(CTest)
 
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
@@ -32,4 +32,4 @@ add_test(NAME ReCpp-test COMMAND ReCpp-test)
 
 set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 17)
 
-target_link_libraries(ReCpp-test ReCpp RsCpp gtest)
+target_link_libraries(ReCpp-test ReCpp gtest)
