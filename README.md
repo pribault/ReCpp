@@ -26,7 +26,7 @@ This library, powered by the [RsCpp](https://github.com/pribault/RsCpp) implemen
 
 ### Callback hell
 
-ReCpp avoid the callback hell, when multiple callbacks are nested into each other. ReCpp allows you to chain your callbacks in a linear way and handle errors more easily. For exemple :
+ReCpp avoid the callback hell, when multiple callbacks are nested into each other. ReCpp allows you to chain your callbacks in a linear way and handle errors more easily. For example :
 
 ```cpp
 // Callback hell
@@ -89,7 +89,7 @@ Explore the [Documentation](https://pribault.github.io/ReCpp/index.html) to lear
 
 ## Interoperability
 
-ReCpp can easily interoperate with other asynchronous programming systems. Here are some exemples:
+ReCpp can easily interoperate with other asynchronous programming systems. Here are some examples:
 
 ### Callbacks
 

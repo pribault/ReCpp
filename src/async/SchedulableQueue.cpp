@@ -42,8 +42,24 @@ optional<Schedulable> SchedulableQueue::pop(const TimePoint &until)
 
 optional<Schedulable> SchedulableQueue::blockingPop()
 {
-	wait([this]() -> bool { return m_stop || canPop(Clock::now()); });
+	wait(
+		[this]() -> bool
+		{
+			return m_stop || canPop(Clock::now());
+		});
 	return tryPop(Clock::now());
+}
+
+bool SchedulableQueue::canPop(const TimePoint &timePoint)
+{
+	lock_guard<mutex> lock(m_dataMutex);
+
+	const auto it = find_if(m_schedulables.begin(), m_schedulables.end(),
+							[&timePoint](const auto &pair)
+							{
+								return pair.first <= timePoint;
+							});
+	return it != m_schedulables.end();
 }
 
 size_t SchedulableQueue::size()
@@ -69,7 +85,11 @@ optional<Schedulable> SchedulableQueue::tryPop(const TimePoint &timePoint)
 {
 	lock_guard<mutex> lock(m_dataMutex);
 
-	const auto it = find_if(m_schedulables.begin(), m_schedulables.end(), [&timePoint](const auto &pair) { return pair.first <= timePoint; });
+	const auto it = find_if(m_schedulables.begin(), m_schedulables.end(),
+							[&timePoint](const auto &pair)
+							{
+								return pair.first <= timePoint;
+							});
 	if (it != m_schedulables.end())
 	{
 		const auto schedulable = it->second;
@@ -78,14 +98,6 @@ optional<Schedulable> SchedulableQueue::tryPop(const TimePoint &timePoint)
 	}
 
 	return {};
-}
-
-bool SchedulableQueue::canPop(const TimePoint &timePoint)
-{
-	lock_guard<mutex> lock(m_dataMutex);
-
-	const auto it = find_if(m_schedulables.begin(), m_schedulables.end(), [&timePoint](const auto &pair) { return pair.first <= timePoint; });
-	return it != m_schedulables.end();
 }
 
 void SchedulableQueue::wait(const function<bool()> &predicate)

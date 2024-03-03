@@ -20,9 +20,11 @@ namespace recpp::rx
 {
 	class Completable;
 	template <typename T>
-	class Single;
+	class Maybe;
 	template <typename T>
 	class Observable;
+	template <typename T>
+	class Single;
 
 	/**
 	 * @class Single Single.h <recpp/rx/Single.h>
@@ -33,9 +35,13 @@ namespace recpp::rx
 	template <typename T>
 	class Single : public rscpp::Publisher<T>
 	{
+		friend class Completable;
+		template <typename R>
+		friend class Maybe;
+		template <typename R>
+		friend class Observable;
 		template <typename R>
 		friend class Single;
-		friend class Completable;
 
 	public:
 		/**
@@ -126,6 +132,41 @@ namespace recpp::rx
 		 */
 		template <typename R>
 		Single<R> flatMap(const std::function<Single<R>(const T & /* value */)> &method);
+
+		/**
+		 * @brief Apply the given method to the value emitted by this {@link Single}, and return a new {@link Completable} containing the result.
+		 * <p>
+		 * The method must return a {@link Completable} instance that will be subscribed to after returning.
+		 *
+		 * @tparam R The method return type.
+		 * @param method The method to apply to the value.
+		 * @return The new {@link Completable} instance.
+		 */
+		Completable flatMapCompletable(const std::function<Completable(const T & /* value */)> &method);
+
+		/**
+		 * @brief Apply the given method to the value emitted by this {@link Single}, and return a new {@link Maybe} containing the result.
+		 * <p>
+		 * The method must return a {@link Maybe} instance that will be subscribed to after returning.
+		 *
+		 * @tparam R The method return type.
+		 * @param method The method to apply to the value.
+		 * @return The new {@link Maybe} instance.
+		 */
+		template <typename R>
+		Maybe<R> flatMapMaybe(const std::function<Maybe<R>(const T & /* value */)> &method);
+
+		/**
+		 * @brief Apply the given method to the value emitted by this {@link Single}, and return a new {@link Observable} containing the result.
+		 * <p>
+		 * The method must return a {@link Observable} instance that will be subscribed to after returning.
+		 *
+		 * @tparam R The method return type.
+		 * @param method The method to apply to the value.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename R>
+		Observable<R> flatMapObservable(const std::function<Observable<R>(const T & /* value */)> &method);
 
 		/**
 		 * Convert this {@link Single} into a {@link Completable} by discarding any contained value.

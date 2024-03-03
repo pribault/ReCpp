@@ -12,4 +12,5 @@ FixNamespaceComments: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakConstructorInitializers: BeforeComma
 AllowShortFunctionsOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: Empty
 AlignConsecutiveDeclarations: Consecutive

@@ -45,7 +45,10 @@ TEST(Maybe, create)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -67,39 +70,71 @@ TEST(Maybe, create)
 							// Try to complete, should not be forwarded
 							subscriber.onComplete();
 						})
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::create([](auto &subscriber) { subscriber.onComplete(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+	EXPECT_NO_THROW(Maybe<int>::create(
+						[](auto &subscriber)
+						{
+							subscriber.onComplete();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Maybe<int>::create([](auto &subscriber) {})
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 }
 
 TEST(Maybe, defer)
 {
 	bool completed = false;
 	bool succeeded = false;
-	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::just(defaultValue); })
+	EXPECT_NO_THROW(Maybe<int>::defer(
+						[]()
+						{
+							return Maybe<int>::just(defaultValue);
+						})
 						.subscribe(
 							[&succeeded](const auto value)
 							{
@@ -109,7 +144,10 @@ TEST(Maybe, defer)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -120,46 +158,89 @@ TEST(Maybe, defer)
 	EXPECT_TRUE(succeeded);
 
 	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!"))); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Maybe<int>::defer(
+						[]()
+						{
+							return Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")));
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::never(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Maybe<int>::defer(
+						[]()
+						{
+							return Maybe<int>::never();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 
 	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::defer([]() { return Maybe<int>::empty(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+	EXPECT_NO_THROW(Maybe<int>::defer(
+						[]()
+						{
+							return Maybe<int>::empty();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 }
 
 TEST(Maybe, empty)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::empty().subscribe([](const auto value) { throw runtime_error("success handler called"); },
-												  [](const auto &exception) { throw runtime_error("error handler called"); },
-												  [&completed]()
-												  {
-													  if (completed)
-														  throw runtime_error("completion handler called twice");
-													  completed = true;
-												  }));
+	EXPECT_NO_THROW(Maybe<int>::empty().subscribe(
+		[](const auto value)
+		{
+			throw runtime_error("success handler called");
+		},
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		},
+		[&completed]()
+		{
+			if (completed)
+				throw runtime_error("completion handler called twice");
+			completed = true;
+		}));
 	EXPECT_TRUE(completed);
 }
 
@@ -167,14 +248,21 @@ TEST(Maybe, error)
 {
 	bool errored = false;
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 }
 
@@ -192,7 +280,10 @@ TEST(Maybe, just)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -205,9 +296,19 @@ TEST(Maybe, just)
 
 TEST(Maybe, never)
 {
-	EXPECT_NO_THROW(Maybe<int>::never().subscribe([](const auto value) { throw runtime_error("success handler called"); },
-												  [](const auto &exception) { throw runtime_error("error handler called"); },
-												  []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Maybe<int>::never().subscribe(
+		[](const auto value)
+		{
+			throw runtime_error("success handler called");
+		},
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		},
+		[]()
+		{
+			throw runtime_error("completion handler called");
+		}));
 }
 
 TEST(Maybe, map)
@@ -215,7 +316,11 @@ TEST(Maybe, map)
 	bool succeeded = false;
 	bool completed = false;
 	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
 						.subscribe(
 							[&succeeded](const auto value)
 							{
@@ -225,7 +330,10 @@ TEST(Maybe, map)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -237,35 +345,71 @@ TEST(Maybe, map)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	completed = false;
 	EXPECT_NO_THROW(Maybe<int>::empty()
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Maybe<int>::never()
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 }
 
 TEST(Maybe, flatMap)
@@ -273,7 +417,11 @@ TEST(Maybe, flatMap)
 	bool succeeded = false;
 	bool completed = false;
 	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>([](const auto value) { return Maybe<float>::just(static_cast<float>(value) / 1000); })
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Maybe<float>::just(static_cast<float>(value) / 1000);
+							})
 						.subscribe(
 							[&succeeded](const auto value)
 							{
@@ -283,7 +431,10 @@ TEST(Maybe, flatMap)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -295,41 +446,91 @@ TEST(Maybe, flatMap)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMap<float>([](const auto value) { return Maybe<float>::just(static_cast<float>(value) / 1000); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Maybe<float>::just(static_cast<float>(value) / 1000);
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	errored = false;
 	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>([](const auto value) { return Maybe<float>::error(make_exception_ptr(runtime_error("unexpected error!"))); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Maybe<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>([](const auto value) { return Maybe<float>::never(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Maybe<float>::never();
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 
 	EXPECT_NO_THROW(Maybe<int>::never()
-						.flatMap<float>([](const auto value) { return Maybe<float>::just(defaultValue); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Maybe<float>::just(defaultValue);
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 }
 
 TEST(Maybe, ignoreElement)
@@ -352,7 +553,10 @@ TEST(Maybe, ignoreElement)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(succeeded);
 	EXPECT_TRUE(completed);
 }
@@ -372,10 +576,20 @@ TEST(Maybe, doOnComplete)
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete([]() { throw runtime_error("completion handler called"); })
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 
-	EXPECT_NO_THROW(Maybe<int>::never().doOnComplete([]() { throw runtime_error("completion handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::never()
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
+						.subscribe());
 
 	completed = false;
 	EXPECT_NO_THROW(Maybe<int>::empty()
@@ -404,11 +618,29 @@ TEST(Maybe, doOnError)
 						.subscribe());
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue).doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Maybe<int>::never().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::never()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Maybe<int>::empty().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::empty()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 }
 
 TEST(Maybe, doOnNext)
@@ -426,12 +658,28 @@ TEST(Maybe, doOnNext)
 	EXPECT_TRUE(succeeded);
 
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnNext([](const auto value) { throw runtime_error("success handler called"); })
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
 						.subscribe());
 
-	EXPECT_NO_THROW(Maybe<int>::never().doOnNext([](const auto value) { throw runtime_error("success handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::never()
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Maybe<int>::empty().doOnNext([](const auto value) { throw runtime_error("success handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::empty()
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
+						.subscribe());
 }
 
 TEST(Maybe, doOnTerminate)
@@ -460,7 +708,13 @@ TEST(Maybe, doOnTerminate)
 						.subscribe());
 	EXPECT_TRUE(terminated);
 
-	EXPECT_NO_THROW(Maybe<int>::never().doOnTerminate([]() { throw runtime_error("termination handler called"); }).subscribe());
+	EXPECT_NO_THROW(Maybe<int>::never()
+						.doOnTerminate(
+							[]()
+							{
+								throw runtime_error("termination handler called");
+							})
+						.subscribe());
 
 	terminated = false;
 	EXPECT_NO_THROW(Maybe<int>::empty()
@@ -489,7 +743,10 @@ TEST(Maybe, tap)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -502,33 +759,57 @@ TEST(Maybe, tap)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [&errored](const auto &exception)
-							 {
-								 if (errored)
-									 throw runtime_error("error handler called twice");
-								 errored = true;
-							 },
-							 []() { throw runtime_error("completion handler called"); })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 	EXPECT_TRUE(errored);
 
 	EXPECT_NO_THROW(Maybe<int>::never()
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [](const auto &exception) { throw runtime_error("error handler called"); },
-							 []() { throw runtime_error("completion handler called"); })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 
 	completed = false;
 	EXPECT_NO_THROW(Maybe<int>::empty()
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [](const auto &exception) { throw runtime_error("error handler called"); },
-							 [&completed]()
-							 {
-								 if (completed)
-									 throw runtime_error("completion handler called twice");
-								 completed = true;
-							 })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							})
 						.subscribe());
 	EXPECT_TRUE(completed);
 }
@@ -560,7 +841,10 @@ TEST(Maybe, observeOn)
 				if (value != defaultValue)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -575,15 +859,19 @@ TEST(Maybe, observeOn)
 					testFailed = true;
 			})
 		.observeOn(worker)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -616,7 +904,10 @@ TEST(Maybe, subscribeOn)
 				if (value != defaultValue)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -631,15 +922,19 @@ TEST(Maybe, subscribeOn)
 					testFailed = true;
 			})
 		.subscribeOn(worker)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -675,7 +970,10 @@ TEST(Maybe, delay)
 					testFailed = true;
 				afterDelayTime = SchedulableQueue::Clock::now();
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -694,16 +992,20 @@ TEST(Maybe, delay)
 					testFailed = true;
 			})
 		.delay(worker, delayDuration, true)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-					   afterDelayTime = SchedulableQueue::Clock::now();
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+				afterDelayTime = SchedulableQueue::Clock::now();
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);

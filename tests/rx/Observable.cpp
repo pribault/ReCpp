@@ -15,12 +15,12 @@ using namespace std;
 
 namespace
 {
-	constexpr auto				 sleepDuration = chrono::milliseconds(10);
-	constexpr int				 defaultValue = 42;
-	constexpr std::array<int, 3> defaultValues({1, 2, 3});
-	constexpr auto				 delayTolerance = chrono::milliseconds(10);
-	constexpr auto				 delayDuration = chrono::milliseconds(100);
-	constexpr auto				 sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr auto			sleepDuration = chrono::milliseconds(10);
+	constexpr int			defaultValue = 42;
+	constexpr array<int, 3> defaultValues({1, 2, 3});
+	constexpr auto			delayTolerance = chrono::milliseconds(10);
+	constexpr auto			delayDuration = chrono::milliseconds(100);
+	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
 } // namespace
 
 TEST(Observable, create)
@@ -47,7 +47,10 @@ TEST(Observable, create)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -69,38 +72,67 @@ TEST(Observable, create)
 							// Try to complete, should not be forwarded
 							subscriber.onComplete();
 						})
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	completed = false;
-	EXPECT_NO_THROW(Observable<int>::create([](auto &subscriber) { subscriber.onComplete(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+	EXPECT_NO_THROW(Observable<int>::create(
+						[](auto &subscriber)
+						{
+							subscriber.onComplete();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Observable<int>::create([](auto &subscriber) {})
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 }
 
 TEST(Observable, defer)
 {
 	size_t valuesCount = 0;
 	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::range(defaultValues); })
+	EXPECT_NO_THROW(Observable<int>::defer(
+						[]()
+						{
+							return Observable<int>::range(defaultValues);
+						})
 						.subscribe(
 							[&valuesCount](const auto value)
 							{
@@ -110,7 +142,10 @@ TEST(Observable, defer)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -121,46 +156,89 @@ TEST(Observable, defer)
 	EXPECT_EQ(valuesCount, defaultValues.size());
 
 	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Observable<int>::defer(
+						[]()
+						{
+							return Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")));
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::never(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Observable<int>::defer(
+						[]()
+						{
+							return Observable<int>::never();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 
 	completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::empty(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+	EXPECT_NO_THROW(Observable<int>::defer(
+						[]()
+						{
+							return Observable<int>::empty();
+						})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 }
 
 TEST(Observable, empty)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Observable<int>::empty().subscribe([](const auto value) { throw runtime_error("success handler called"); },
-													   [](const auto &exception) { throw runtime_error("error handler called"); },
-													   [&completed]()
-													   {
-														   if (completed)
-															   throw runtime_error("completion handler called twice");
-														   completed = true;
-													   }));
+	EXPECT_NO_THROW(Observable<int>::empty().subscribe(
+		[](const auto value)
+		{
+			throw runtime_error("success handler called");
+		},
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		},
+		[&completed]()
+		{
+			if (completed)
+				throw runtime_error("completion handler called twice");
+			completed = true;
+		}));
 	EXPECT_TRUE(completed);
 }
 
@@ -168,14 +246,21 @@ TEST(Observable, error)
 {
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 }
 
@@ -193,7 +278,10 @@ TEST(Observable, just)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -206,16 +294,30 @@ TEST(Observable, just)
 
 TEST(Observable, never)
 {
-	EXPECT_NO_THROW(Observable<int>::never().subscribe([](const auto value) { throw runtime_error("success handler called"); },
-													   [](const auto &exception) { throw runtime_error("error handler called"); },
-													   []() { throw runtime_error("completion handler called"); }));
+	EXPECT_NO_THROW(Observable<int>::never().subscribe(
+		[](const auto value)
+		{
+			throw runtime_error("success handler called");
+		},
+		[](const auto &exception)
+		{
+			throw runtime_error("error handler called");
+		},
+		[]()
+		{
+			throw runtime_error("completion handler called");
+		}));
 }
 
 TEST(Observable, range)
 {
 	size_t valuesCount = 0;
 	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::range(defaultValues); })
+	EXPECT_NO_THROW(Observable<int>::defer(
+						[]()
+						{
+							return Observable<int>::range(defaultValues);
+						})
 						.subscribe(
 							[&valuesCount](const auto value)
 							{
@@ -225,29 +327,10 @@ TEST(Observable, range)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
-							[&completed]()
+							[](const auto &exception)
 							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
-
-	valuesCount = 0;
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer([]() { return Observable<int>::range(defaultValues.begin(), defaultValues.end()); })
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
+								throw runtime_error("error handler called");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
 							[&completed]()
 							{
 								if (completed)
@@ -258,13 +341,78 @@ TEST(Observable, range)
 	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
+TEST(Observable, merge)
+{
+	Observable<Observable<int>> observableList = Observable<Observable<int>>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onComplete();
+		});
+	size_t valuesCount = 0;
+	bool   completed = false;
+	EXPECT_NO_THROW(Observable<int>::merge(observableList)
+						.subscribe(
+							[&valuesCount](const auto value)
+							{
+								if (valuesCount >= defaultValues.size() * 3)
+									throw runtime_error("too much values forwarded");
+								valuesCount++;
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(completed);
+	EXPECT_EQ(valuesCount, defaultValues.size() * 3);
+
+	Observable<Observable<int>> observableWithErrorList = Observable<Observable<int>>::create(
+		[](auto &subscriber)
+		{
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onNext(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))));
+			subscriber.onNext(Observable<int>::range(defaultValues));
+			subscriber.onComplete();
+		});
+	bool errored = false;
+	EXPECT_NO_THROW(Observable<int>::merge(observableWithErrorList)
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("values forwarded");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
+	EXPECT_TRUE(errored);
+}
+
 TEST(Observable, filter)
 {
-	const std::vector<float> expectedValues({1, 3});
-	size_t					 valuesCount = 0;
-	bool					 completed = false;
+	const vector<float> expectedValues({1, 3});
+	size_t				valuesCount = 0;
+	bool				completed = false;
 	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.filter([](const auto value) { return value % 2 == 1; })
+						.filter(
+							[](const auto value)
+							{
+								return value % 2 == 1;
+							})
 						.subscribe(
 							[&valuesCount, &expectedValues](const auto value)
 							{
@@ -274,7 +422,10 @@ TEST(Observable, filter)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -286,15 +437,26 @@ TEST(Observable, filter)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.filter([](const auto value) { return value % 2 == 1; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.filter(
+							[](const auto value)
+							{
+								return value % 2 == 1;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 }
 
@@ -320,7 +482,10 @@ TEST(Observable, ignoreElements)
 									throw runtime_error("completion handler called twice");
 								completed = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); }));
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							}));
 	EXPECT_TRUE(completed);
 	EXPECT_EQ(valuesCount, defaultValues.size());
 }
@@ -330,7 +495,11 @@ TEST(Observable, map)
 	size_t valuesCount = 0;
 	bool   completed = false;
 	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
 						.subscribe(
 							[&valuesCount](const auto value)
 							{
@@ -340,7 +509,10 @@ TEST(Observable, map)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -352,42 +524,78 @@ TEST(Observable, map)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	completed = false;
 	EXPECT_NO_THROW(Observable<int>::empty()
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   [&completed]()
-								   {
-									   if (completed)
-										   throw runtime_error("completion handler called twice");
-									   completed = true;
-								   }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Observable<int>::never()
-						.map<float>([](const auto value) { return static_cast<float>(value) / 1000; })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.map<float>(
+							[](const auto value)
+							{
+								return static_cast<float>(value) / 1000;
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 }
 
 TEST(Observable, flatMap)
 {
-	const std::vector<float> expectedValues({2, 3, 4, 3, 4, 5, 4, 5, 6});
-	size_t					 valuesCount = 0;
-	bool					 completed = false;
+	const vector<float> expectedValues({2, 3, 4, 3, 4, 5, 4, 5, 6});
+	size_t				valuesCount = 0;
+	bool				completed = false;
 	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
 						.flatMap<float>(
 							[](const auto value)
@@ -410,7 +618,10 @@ TEST(Observable, flatMap)
 								if (value != expectedValue)
 									throw runtime_error("unexpected value");
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -422,41 +633,91 @@ TEST(Observable, flatMap)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMap<float>([](const auto value) { return Observable<float>::just(static_cast<float>(value) / 1000); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Observable<float>::just(static_cast<float>(value) / 1000);
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	errored = false;
 	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.flatMap<float>([](const auto value) { return Observable<float>::error(make_exception_ptr(runtime_error("unexpected error!"))); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception)
-								   {
-									   if (errored)
-										   throw runtime_error("error handler called twice");
-									   errored = true;
-								   },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Observable<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 	EXPECT_TRUE(errored);
 
 	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.flatMap<float>([](const auto value) { return Observable<float>::never(); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Observable<float>::never();
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 
 	EXPECT_NO_THROW(Observable<int>::never()
-						.flatMap<float>([](const auto value) { return Observable<float>::just(defaultValue); })
-						.subscribe([](const auto value) { throw runtime_error("success handler called"); },
-								   [&errored](const auto &exception) { throw runtime_error("error handler called"); },
-								   []() { throw runtime_error("completion handler called"); }));
+						.flatMap<float>(
+							[](const auto value)
+							{
+								return Observable<float>::just(defaultValue);
+							})
+						.subscribe(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							}));
 }
 
 TEST(Observable, doOnComplete)
@@ -474,10 +735,20 @@ TEST(Observable, doOnComplete)
 	EXPECT_TRUE(completed);
 
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete([]() { throw runtime_error("completion handler called"); })
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 
-	EXPECT_NO_THROW(Observable<int>::never().doOnComplete([]() { throw runtime_error("completion handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::never()
+						.doOnComplete(
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
+						.subscribe());
 
 	completed = false;
 	EXPECT_NO_THROW(Observable<int>::empty()
@@ -506,11 +777,29 @@ TEST(Observable, doOnError)
 						.subscribe());
 	EXPECT_TRUE(errored);
 
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue).doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Observable<int>::never().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::never()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Observable<int>::empty().doOnError([](const auto &exception) { throw runtime_error("error handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::empty()
+						.doOnError(
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							})
+						.subscribe());
 }
 
 TEST(Observable, doOnNext)
@@ -528,12 +817,28 @@ TEST(Observable, doOnNext)
 	EXPECT_TRUE(succeeded);
 
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnNext([](const auto value) { throw runtime_error("success handler called"); })
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
 						.subscribe());
 
-	EXPECT_NO_THROW(Observable<int>::never().doOnNext([](const auto value) { throw runtime_error("success handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::never()
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
+						.subscribe());
 
-	EXPECT_NO_THROW(Observable<int>::empty().doOnNext([](const auto value) { throw runtime_error("success handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::empty()
+						.doOnNext(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							})
+						.subscribe());
 }
 
 TEST(Observable, doOnTerminate)
@@ -562,7 +867,13 @@ TEST(Observable, doOnTerminate)
 						.subscribe());
 	EXPECT_TRUE(terminated);
 
-	EXPECT_NO_THROW(Observable<int>::never().doOnTerminate([]() { throw runtime_error("termination handler called"); }).subscribe());
+	EXPECT_NO_THROW(Observable<int>::never()
+						.doOnTerminate(
+							[]()
+							{
+								throw runtime_error("termination handler called");
+							})
+						.subscribe());
 
 	terminated = false;
 	EXPECT_NO_THROW(Observable<int>::empty()
@@ -591,7 +902,10 @@ TEST(Observable, tap)
 									throw runtime_error("invalid value");
 								succeeded = true;
 							},
-							[](const auto &exception) { throw runtime_error("error handler called"); },
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
 							[&completed]()
 							{
 								if (completed)
@@ -604,33 +918,57 @@ TEST(Observable, tap)
 
 	bool errored = false;
 	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [&errored](const auto &exception)
-							 {
-								 if (errored)
-									 throw runtime_error("error handler called twice");
-								 errored = true;
-							 },
-							 []() { throw runtime_error("completion handler called"); })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[&errored](const auto &exception)
+							{
+								if (errored)
+									throw runtime_error("error handler called twice");
+								errored = true;
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 	EXPECT_TRUE(errored);
 
 	EXPECT_NO_THROW(Observable<int>::never()
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [](const auto &exception) { throw runtime_error("error handler called"); },
-							 []() { throw runtime_error("completion handler called"); })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[]()
+							{
+								throw runtime_error("completion handler called");
+							})
 						.subscribe());
 
 	completed = false;
 	EXPECT_NO_THROW(Observable<int>::empty()
-						.tap([](const auto value) { throw runtime_error("success handler called"); },
-							 [](const auto &exception) { throw runtime_error("error handler called"); },
-							 [&completed]()
-							 {
-								 if (completed)
-									 throw runtime_error("completion handler called twice");
-								 completed = true;
-							 })
+						.tap(
+							[](const auto value)
+							{
+								throw runtime_error("success handler called");
+							},
+							[](const auto &exception)
+							{
+								throw runtime_error("error handler called");
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							})
 						.subscribe());
 	EXPECT_TRUE(completed);
 }
@@ -662,7 +1000,10 @@ TEST(Observable, observeOn)
 				if (value != defaultValue)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -677,15 +1018,19 @@ TEST(Observable, observeOn)
 					testFailed = true;
 			})
 		.observeOn(worker)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -718,7 +1063,10 @@ TEST(Observable, subscribeOn)
 				if (value != defaultValue)
 					testFailed = true;
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -733,15 +1081,19 @@ TEST(Observable, subscribeOn)
 					testFailed = true;
 			})
 		.subscribeOn(worker)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+			});
 	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);
@@ -777,7 +1129,10 @@ TEST(Observable, delay)
 					testFailed = true;
 				afterDelayTime = SchedulableQueue::Clock::now();
 			},
-			[&testFailed](const auto &exception) { testFailed = true; });
+			[&testFailed](const auto &exception)
+			{
+				testFailed = true;
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(testFailed);
@@ -796,16 +1151,20 @@ TEST(Observable, delay)
 					testFailed = true;
 			})
 		.delay(worker, delayDuration, true)
-		.subscribe([&testFailed](const auto value) { testFailed = true; },
-				   [&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-				   {
-					   if (errored)
-						   testFailed = true;
-					   errored = true;
-					   if (this_thread::get_id() != workerThreadId)
-						   testFailed = true;
-					   afterDelayTime = SchedulableQueue::Clock::now();
-				   });
+		.subscribe(
+			[&testFailed](const auto value)
+			{
+				testFailed = true;
+			},
+			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
+			{
+				if (errored)
+					testFailed = true;
+				errored = true;
+				if (this_thread::get_id() != workerThreadId)
+					testFailed = true;
+				afterDelayTime = SchedulableQueue::Clock::now();
+			});
 	this_thread::sleep_for(sleepDurationForDelay);
 	EXPECT_TRUE(errored);
 	EXPECT_FALSE(testFailed);

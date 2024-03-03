@@ -94,6 +94,14 @@ namespace recpp::rx
 		static Completable never();
 
 		/**
+		 * @brief Construct a new {@link Completable} instance resulting of the merge of the given {@link Completable} instances.
+		 *
+		 * @param completableSource The source providing the {@link Completable} instances to merge.
+		 * @return The new {@link Completable} instance.
+		 */
+		static Completable merge(Observable<Completable> &completableSource);
+
+		/**
 		 * @brief Subscribe to this {@link Completable} with the given methods.
 		 *
 		 * @param onComplete The method to call when the {@link Completable} completes.

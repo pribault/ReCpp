@@ -22,6 +22,8 @@ namespace recpp::rx
 	template <typename T>
 	class Maybe;
 	template <typename T>
+	class Observable;
+	template <typename T>
 	class Single;
 
 	/**
@@ -33,9 +35,13 @@ namespace recpp::rx
 	template <typename T>
 	class Observable : public rscpp::Publisher<T>
 	{
+		friend class Completable;
+		template <typename R>
+		friend class Maybe;
 		template <typename R>
 		friend class Observable;
-		friend class Completable;
+		template <typename R>
+		friend class Single;
 
 	public:
 		/**
@@ -123,6 +129,14 @@ namespace recpp::rx
 		 */
 		template <class R>
 		static Observable<T> range(R &&range);
+
+		/**
+		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Observable} instances.
+		 *
+		 * @param observableSource The source providing the {@link Observable} instances to merge.
+		 * @return The new {@link Observable} instance.
+		 */
+		static Observable<T> merge(Observable<Observable<T>> &observableSource);
 
 		/**
 		 * @brief Subscribe to this {@link Observable} with the given methods.

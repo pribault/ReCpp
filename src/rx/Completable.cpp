@@ -9,7 +9,9 @@
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
+#include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
+#include <recpp/rx/Observable.h>
 #include <recpp/subscribers/CompletableSubscriber.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 
@@ -46,6 +48,11 @@ Completable Completable::never()
 	return Completable(make_shared<recpp::publishers::NeverPublisher<int>>());
 }
 
+Completable Completable::merge(Observable<Completable> &completableSource)
+{
+	return Completable(make_shared<recpp::publishers::MergePublisher<int, Completable>>(completableSource));
+}
+
 void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, const Completable::OnErrorMethod &onError)
 {
 	auto subscriber = DefaultSubscriber<int>(nullptr, onError, onComplete);
@@ -65,7 +72,12 @@ Completable Completable::doOnError(const Completable::OnErrorMethod &method)
 Completable Completable::doOnTerminate(const Completable::OnCompleteMethod &method)
 {
 	return Completable(make_shared<Tap<int>>(
-		*this, nullptr, [method](const exception_ptr &) { method(); }, method));
+		*this, nullptr,
+		[method](const exception_ptr &)
+		{
+			method();
+		},
+		method));
 }
 
 Completable Completable::tap(const Completable::OnCompleteMethod &onCompleteMethod, const Completable::OnErrorMethod &onErrorMethod)
