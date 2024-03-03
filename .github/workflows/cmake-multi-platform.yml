@@ -90,10 +90,11 @@ jobs:
     strategy:
       matrix:
         path:
+          - 'examples'
           - 'include'
+          - 'rscpp'
           - 'src'
           - 'tests'
-          - 'rscpp'
       fail-fast: false
 
     steps:

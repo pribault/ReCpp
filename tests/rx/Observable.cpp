@@ -387,7 +387,7 @@ TEST(Observable, merge)
 						.subscribe(
 							[](const auto value)
 							{
-									throw runtime_error("values forwarded");
+								throw runtime_error("values forwarded");
 							},
 							[&errored](const auto &exception)
 							{
