@@ -122,7 +122,7 @@ Completable rxResourcesLoad(Context &context, const filesystem::path &path)
 			}
 			subscriber.onComplete();
 		});
-	return Completable::merge(completableSource);
+	return Completable::merge(completableSource, context.mainThreadLoop);
 }
 
 Completable rxRunTest(Context &context, const string &testName, const filesystem::path &path,

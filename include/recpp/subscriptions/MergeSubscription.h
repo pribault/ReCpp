@@ -4,10 +4,15 @@
 #include <rscpp/Subscriber.h>
 #include <rscpp/Subscription.h>
 
-#include <atomic>
 #include <deque>
-#include <mutex>
+#include <functional>
+#include <optional>
 #include <utility>
+
+namespace recpp::async
+{
+	class Scheduler;
+}
 
 namespace recpp::subscribers
 {
@@ -30,7 +35,8 @@ namespace recpp::subscriptions
 		class Impl : public rscpp::Subscription
 		{
 		public:
-			Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource);
+			Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource,
+				 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler);
 
 			void request(size_t count) override;
 			void cancel() override;
@@ -48,10 +54,9 @@ namespace recpp::subscriptions
 			int												   m_currentIndex = 0;
 			bool											   sourceCompleted = false;
 			bool											   m_completed = false;
-			std::atomic_bool								   m_canceled = false;
+			bool											   m_canceled = false;
 			size_t											   m_remaining = 0;
-			std::atomic_size_t								   m_requested = 0;
-			std::mutex										   m_mutex;
+			size_t											   m_requested = 0;
 		};
 
 	public:
@@ -60,8 +65,10 @@ namespace recpp::subscriptions
 		 *
 		 * @param subscriber The {@link rscpp::Subscriber} that will consume signals from this {@link rscpp::Subscription}.
 		 * @param publisherSource The publisher source.
+		 * @param scheduler The optional scheduler to merge values on.
 		 */
-		MergeSubscription(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource);
+		MergeSubscription(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource,
+						  const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler);
 	};
 } // namespace recpp::subscriptions
 

@@ -3,6 +3,7 @@
 #include <recpp/subscribers/MaybeSubscriber.h>
 #include <rscpp/Publisher.h>
 
+#include <chrono>
 #include <functional>
 
 namespace recpp::async

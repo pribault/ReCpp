@@ -25,6 +25,7 @@ namespace recpp::subscriptions
 
 		private:
 			rscpp::Subscriber<T> m_subscriber;
+			bool				 m_completed = false;
 		};
 
 	public:

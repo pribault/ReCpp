@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <functional>
+#include <optional>
 
 namespace recpp::async
 {
@@ -97,9 +98,11 @@ namespace recpp::rx
 		 * @brief Construct a new {@link Completable} instance resulting of the merge of the given {@link Completable} instances.
 		 *
 		 * @param completableSource The source providing the {@link Completable} instances to merge.
+		 * @param scheduler The optional scheduler to merge values on.
 		 * @return The new {@link Completable} instance.
 		 */
-		static Completable merge(Observable<Completable> &completableSource);
+		static Completable merge(Observable<Completable>											  &completableSource,
+								 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler = std::nullopt);
 
 		/**
 		 * @brief Subscribe to this {@link Completable} with the given methods.
