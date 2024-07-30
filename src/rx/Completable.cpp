@@ -48,9 +48,9 @@ Completable Completable::never()
 	return Completable(make_shared<recpp::publishers::NeverPublisher<int>>());
 }
 
-Completable Completable::merge(Observable<Completable> &completableSource)
+Completable Completable::merge(Observable<Completable> &completableSource, const optional<reference_wrapper<Scheduler>> &scheduler)
 {
-	return Completable(make_shared<recpp::publishers::MergePublisher<int, Completable>>(completableSource));
+	return Completable(make_shared<recpp::publishers::MergePublisher<int, Completable>>(completableSource, scheduler));
 }
 
 void Completable::subscribe(const Completable::OnCompleteMethod &onComplete, const Completable::OnErrorMethod &onError)

@@ -1,6 +1,13 @@
 #pragma once
 
+#include <functional>
+#include <optional>
 #include <rscpp/Publisher.h>
+
+namespace recpp::async
+{
+	class Scheduler;
+}
 
 namespace recpp::publishers
 {
@@ -19,8 +26,9 @@ namespace recpp::publishers
 		 * @brief Construct a new {@link MergePublisher} instance.
 		 *
 		 * @param publisherSource The publisher source.
+		 * @param scheduler The optional scheduler to merge values on.
 		 */
-		MergePublisher(rscpp::Publisher<P> &publisherSource);
+		MergePublisher(rscpp::Publisher<P> &publisherSource, const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler);
 
 		/**
 		 * @brief Request {@link rscpp::Publisher} to start streaming data.
@@ -39,7 +47,8 @@ namespace recpp::publishers
 		void subscribe(rscpp::Subscriber<T> &subscriber) override;
 
 	private:
-		rscpp::Publisher<P> m_publisherSource;
+		rscpp::Publisher<P>											   m_publisherSource;
+		std::optional<std::reference_wrapper<recpp::async::Scheduler>> m_scheduler;
 	};
 } // namespace recpp::publishers
 

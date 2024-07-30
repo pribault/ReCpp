@@ -3,7 +3,9 @@
 #include <recpp/subscribers/ObservableSubscriber.h>
 #include <rscpp/Publisher.h>
 
+#include <chrono>
 #include <functional>
+#include <optional>
 
 namespace recpp::async
 {
@@ -134,9 +136,11 @@ namespace recpp::rx
 		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Observable} instances.
 		 *
 		 * @param observableSource The source providing the {@link Observable} instances to merge.
+		 * @param scheduler The optional scheduler to merge values on.
 		 * @return The new {@link Observable} instance.
 		 */
-		static Observable<T> merge(Observable<Observable<T>> &observableSource);
+		static Observable<T> merge(Observable<Observable<T>>											&observableSource,
+								   const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler = std::nullopt);
 
 		/**
 		 * @brief Subscribe to this {@link Observable} with the given methods.

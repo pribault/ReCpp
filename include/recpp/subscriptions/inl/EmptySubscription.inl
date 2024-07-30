@@ -15,11 +15,19 @@ recpp::subscriptions::EmptySubscription<T>::Impl::Impl(const rscpp::Subscriber<T
 template <typename T>
 void recpp::subscriptions::EmptySubscription<T>::Impl::request(size_t count)
 {
-	m_subscriber.onComplete();
+	if (!m_completed)
+	{
+		m_completed = true;
+		m_subscriber.onComplete();
+	}
 }
 
 template <typename T>
 void recpp::subscriptions::EmptySubscription<T>::Impl::cancel()
 {
-	m_subscriber.onComplete();
+	if (!m_completed)
+	{
+		m_completed = true;
+		m_subscriber.onComplete();
+	}
 }

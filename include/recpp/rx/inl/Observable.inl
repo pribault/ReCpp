@@ -72,9 +72,10 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::range(R &&range)
 }
 
 template <typename T>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(recpp::rx::Observable<recpp::rx::Observable<T>> &observableSource)
+recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(recpp::rx::Observable<recpp::rx::Observable<T>>					  &observableSource,
+														 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler)
 {
-	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Observable<T>>>(observableSource));
+	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Observable<T>>>(observableSource, scheduler));
 }
 
 template <typename T>
