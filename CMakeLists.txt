@@ -9,8 +9,8 @@ project(ReCpp
 	LANGUAGES		CXX
 )
 
-option(RECPP_BUILD_EXAMPLES "Compile RsCpp examples" ON)
-option(RECPP_BUILD_TESTS "Compile RsCpp tests" ON)
+option(RECPP_BUILD_EXAMPLES "Compile ReCpp examples" ON)
+option(RECPP_BUILD_TESTS "Compile ReCpp tests" ON)
 
 include(FetchContent)
 
