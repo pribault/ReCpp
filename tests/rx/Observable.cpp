@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 // recpp
+#include <recpp/async/EventLoop.h>
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Observable.h>
 
@@ -400,6 +401,36 @@ TEST(Observable, merge)
 								throw runtime_error("completion handler called");
 							}));
 	EXPECT_TRUE(errored);
+}
+
+TEST(Observable, interval)
+{
+	recpp::async::EventLoop eventLoop;
+	vector<size_t>			expected({0, 1, 2, 3, 4});
+	vector<size_t>			values;
+	size_t					valuesCount = 0;
+	bool					errored = false;
+	bool					completed = false;
+	EXPECT_NO_THROW(Observable<int>::interval(chrono::milliseconds(10), eventLoop)
+						.subscribe(
+							[&eventLoop, &values](const auto value)
+							{
+								values.push_back(value);
+								if (value == 4)
+									eventLoop.stop();
+							},
+							[&errored](const auto &exception)
+							{
+								errored = true;
+							},
+							[&completed]()
+							{
+								completed = true;
+							}));
+	eventLoop.runFor(std::chrono::seconds(1));
+	EXPECT_FALSE(completed);
+	EXPECT_FALSE(errored);
+	EXPECT_EQ(values, expected);
 }
 
 TEST(Observable, filter)

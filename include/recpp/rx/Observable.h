@@ -143,6 +143,26 @@ namespace recpp::rx
 								   const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler = std::nullopt);
 
 		/**
+		 * @brief Construct a new {@link Observable} instance that will emit values at a specified interval.
+		 *
+		 * @param period The period at which to emit the values.
+		 * @param scheduler The scheduler to emit values on.
+		 * @return The new {@link Observable} instance.
+		 */
+		static Observable<T> interval(const recpp::async::Scheduler::Duration &period, recpp::async::Scheduler &scheduler);
+
+		/**
+		 * @brief Construct a new {@link Observable} instance that will emit values at a specified interval.
+		 *
+		 * @param start The time point at which to start emitting values.
+		 * @param period The period at which to emit the values.
+		 * @param scheduler The scheduler to emit values on.
+		 * @return The new {@link Observable} instance.
+		 */
+		static Observable<T> interval(const recpp::async::Scheduler::TimePoint &start, const recpp::async::Scheduler::Duration &period,
+									  recpp::async::Scheduler &scheduler);
+
+		/**
 		 * @brief Subscribe to this {@link Observable} with the given methods.
 		 *
 		 * @param onNext The method to call when the {@link Observable} emits a value.

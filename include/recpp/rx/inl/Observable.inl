@@ -13,6 +13,7 @@
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
+#include <recpp/publishers/IntervalPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
 #include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
@@ -76,6 +77,19 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::merge(recpp::rx::Observable<r
 														 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler)
 {
 	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Observable<T>>>(observableSource, scheduler));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::interval(const recpp::async::Scheduler::Duration &period, recpp::async::Scheduler &scheduler)
+{
+	return recpp::rx::Observable<T>::interval(recpp::async::Scheduler::Clock::now(), period, scheduler);
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::interval(const recpp::async::Scheduler::TimePoint &start, const recpp::async::Scheduler::Duration &period,
+															recpp::async::Scheduler &scheduler)
+{
+	return Observable<T>(std::make_shared<recpp::publishers::IntervalPublisher<T>>(start, period, scheduler));
 }
 
 template <typename T>
