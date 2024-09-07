@@ -317,6 +317,25 @@ namespace recpp::rx
 		template <typename R>
 		Observable<bool> noneOf(R predicate);
 
+		/**
+		 * @brief Accumulate this {@link Observable} values and emit the result.
+		 *
+		 * @param init The initial value.
+		 * @return The new {@link Observable} instance.
+		 */
+		Observable<T> reduce(T init = 0);
+
+		/**
+		 * @brief Accumulate this {@link Observable} values and emit the result.
+		 *
+		 * @tparam R The operation type.
+		 * @param operation The operation to use to add two values.
+		 * @param init The initial value.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename R>
+		Observable<T> reduce(R operation, T init = 0);
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.

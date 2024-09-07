@@ -19,7 +19,7 @@ namespace
 	constexpr auto			sleepDuration = chrono::milliseconds(10);
 	constexpr int			defaultValue = 42;
 	constexpr array<int, 3> defaultValues({1, 2, 3});
-	constexpr array<int, 3> evenValues({2, 4, 8});
+	constexpr array<int, 3> evenValues({2, 4, 6});
 	constexpr array<int, 3> oddValues({1, 3, 5});
 	constexpr auto			delayTolerance = chrono::milliseconds(10);
 	constexpr auto			delayDuration = chrono::milliseconds(100);
@@ -1494,6 +1494,121 @@ TEST(Observable, noneOf)
 				throw runtime_error("completion handler called twice");
 			completed = true;
 		}));
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+}
+
+TEST(Observable, reduce)
+{
+	bool completed = false;
+	bool errored = false;
+	bool gotValue = false;
+	EXPECT_NO_THROW(Observable<int>::range(evenValues)
+						.reduce()
+						.subscribe(
+							[&gotValue](const auto value)
+							{
+								if (gotValue)
+									throw runtime_error("success handler called twice");
+								gotValue = true;
+								if (value != 12)
+									throw runtime_error("invalid value");
+							},
+							[&errored](const auto &exception)
+							{
+								errored = true;
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+
+	completed = false;
+	errored = false;
+	gotValue = false;
+	EXPECT_NO_THROW(Observable<int>::range(evenValues)
+						.reduce(10)
+						.subscribe(
+							[&gotValue](const auto value)
+							{
+								if (gotValue)
+									throw runtime_error("success handler called twice");
+								gotValue = true;
+								if (value != 22)
+									throw runtime_error("invalid value");
+							},
+							[&errored](const auto &exception)
+							{
+								errored = true;
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+
+	completed = false;
+	errored = false;
+	gotValue = false;
+	EXPECT_NO_THROW(Observable<int>::range(evenValues)
+						.reduce(std::minus<int>())
+						.subscribe(
+							[&gotValue](const auto value)
+							{
+								if (gotValue)
+									throw runtime_error("success handler called twice");
+								gotValue = true;
+								if (value != -12)
+									throw runtime_error("invalid value");
+							},
+							[&errored](const auto &exception)
+							{
+								errored = true;
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+
+	completed = false;
+	errored = false;
+	gotValue = false;
+	EXPECT_NO_THROW(Observable<int>::range(evenValues)
+						.reduce(std::minus<int>(), 10)
+						.subscribe(
+							[&gotValue](const auto value)
+							{
+								if (gotValue)
+									throw runtime_error("success handler called twice");
+								gotValue = true;
+								if (value != -2)
+									throw runtime_error("invalid value");
+							},
+							[&errored](const auto &exception)
+							{
+								errored = true;
+							},
+							[&completed]()
+							{
+								if (completed)
+									throw runtime_error("completion handler called twice");
+								completed = true;
+							}));
 	EXPECT_TRUE(gotValue);
 	EXPECT_TRUE(completed);
 	EXPECT_FALSE(errored);
