@@ -11,6 +11,7 @@
 #include <recpp/processors/Map.h>
 #include <recpp/processors/NoneOf.h>
 #include <recpp/processors/ObserveOn.h>
+#include <recpp/processors/Reduce.h>
 #include <recpp/processors/SubscribeOn.h>
 #include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
@@ -210,6 +211,19 @@ template <typename R>
 recpp::rx::Observable<bool> recpp::rx::Observable<T>::noneOf(R predicate)
 {
 	return Observable<bool>(std::make_shared<processors::NoneOf<T, R>>(*this, predicate));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::reduce(T init)
+{
+	return recpp::rx::Observable<T>::reduce(std::plus<T>(), init);
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::reduce(R operation, T init)
+{
+	return Observable<T>(std::make_shared<processors::Reduce<T, R>>(*this, init, operation));
 }
 
 template <typename T>

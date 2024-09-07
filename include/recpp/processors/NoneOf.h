@@ -8,7 +8,7 @@ namespace recpp::processors
 {
 	/**
 	 * @class NoneOf NoneOf.h <recpp/processors/NoneOf.h>
-	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} check that a given predicate returns true for all emited values.
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} check that a given predicate returns false for all emited values.
 	 *
 	 * @param T The type of element signaled to the {@link rscpp::Subscriber}.
 	 * @param R The type of the predicate to call on each value.
