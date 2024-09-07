@@ -287,6 +287,36 @@ namespace recpp::rx
 		 */
 		Observable<T> defaultIfEmpty(const T &defaultValue);
 
+		/**
+		 * @brief Checks if the given predicate pred returns true for all emited values.
+		 *
+		 * @tparam R The predicate type.
+		 * @param predicate The predicate to apply to the values.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename R>
+		Observable<bool> allOf(R predicate);
+
+		/**
+		 * @brief Checks if the given predicate pred returns true for any emited values.
+		 *
+		 * @tparam R The predicate type.
+		 * @param predicate The predicate to apply to the values.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename R>
+		Observable<bool> anyOf(R predicate);
+
+		/**
+		 * @brief Checks if the given predicate pred returns false for all emited values.
+		 *
+		 * @tparam R The predicate type.
+		 * @param predicate The predicate to apply to the values.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename R>
+		Observable<bool> noneOf(R predicate);
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.
