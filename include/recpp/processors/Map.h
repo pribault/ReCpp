@@ -42,7 +42,7 @@ namespace recpp::processors
 		/**
 		 * @brief Construct a new {@link Map} instance.
 		 *
-		 * @param publisher The source {@link rscpp::Publisher} the {@link FlatMap} {@link rscpp::Processor} subscribes to.
+		 * @param publisher The source {@link rscpp::Publisher} the {@link Map} {@link rscpp::Processor} subscribes to.
 		 * @param method The function to apply to the {@link rscpp::Publisher} values.
 		 */
 		explicit Map(const rscpp::Publisher<T> &publisher, const std::function<R(const T & /* value */)> &method);
