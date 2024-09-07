@@ -1203,3 +1203,62 @@ TEST(Observable, delay)
 	gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
 }
+
+TEST(Observable, defaultIfEmpty)
+{
+	bool completed = false;
+	bool errored = false;
+	bool gotValue = false;
+	Observable<int>::empty()
+		.defaultIfEmpty(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				if (gotValue)
+					throw runtime_error("success handler called twice");
+				gotValue = true;
+				if (value != defaultValue)
+					throw runtime_error("invalid value");
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			},
+			[&completed]()
+			{
+				if (completed)
+					throw runtime_error("completion handler called twice");
+				completed = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+
+	completed = false;
+	errored = false;
+	gotValue = false;
+	Observable<int>::just(defaultValue)
+		.defaultIfEmpty(66)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				if (gotValue)
+					throw runtime_error("success handler called twice");
+				gotValue = true;
+				if (value != defaultValue)
+					throw runtime_error("invalid value");
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			},
+			[&completed]()
+			{
+				if (completed)
+					throw runtime_error("completion handler called twice");
+				completed = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+}

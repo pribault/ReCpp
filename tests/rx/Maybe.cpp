@@ -1013,3 +1013,62 @@ TEST(Maybe, delay)
 	gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
 }
+
+TEST(Maybe, switchIfEmpty)
+{
+	bool completed = false;
+	bool errored = false;
+	bool gotValue = false;
+	Maybe<int>::empty()
+		.switchIfEmpty(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				if (gotValue)
+					throw runtime_error("success handler called twice");
+				gotValue = true;
+				if (value != defaultValue)
+					throw runtime_error("invalid value");
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			},
+			[&completed]()
+			{
+				if (completed)
+					throw runtime_error("completion handler called twice");
+				completed = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+
+	completed = false;
+	errored = false;
+	gotValue = false;
+	Maybe<int>::just(defaultValue)
+		.switchIfEmpty(66)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				if (gotValue)
+					throw runtime_error("success handler called twice");
+				gotValue = true;
+				if (value != defaultValue)
+					throw runtime_error("invalid value");
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			},
+			[&completed]()
+			{
+				if (completed)
+					throw runtime_error("completion handler called twice");
+				completed = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_TRUE(completed);
+	EXPECT_FALSE(errored);
+}

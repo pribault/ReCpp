@@ -1,6 +1,7 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/DefaultIfEmpty.h>
 #include <recpp/processors/Delay.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
@@ -103,7 +104,12 @@ template <typename T>
 recpp::rx::Maybe<T> recpp::rx::Maybe<T>::doOnTerminate(const OnCompleteMethod &method)
 {
 	return Maybe<T>(std::make_shared<processors::Tap<T>>(
-		*this, nullptr, [method](const std::exception_ptr &) { method(); }, method));
+		*this, nullptr,
+		[method](const std::exception_ptr &)
+		{
+			method();
+		},
+		method));
 }
 
 template <typename T>
@@ -129,6 +135,12 @@ template <typename Rep, typename Period>
 recpp::rx::Maybe<T> recpp::rx::Maybe<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
 {
 	return Maybe<T>(std::make_shared<processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+}
+
+template <typename T>
+recpp::rx::Maybe<T> recpp::rx::Maybe<T>::switchIfEmpty(const T &defaultValue)
+{
+	return Maybe<T>(std::make_shared<processors::DefaultIfEmpty<T>>(*this, defaultValue));
 }
 
 template <typename T>

@@ -220,6 +220,14 @@ namespace recpp::rx
 		template <typename Rep, typename Period>
 		Maybe<T> delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
 
+		/**
+		 * @brief Emit the given value in case this {@link Maybe} is empty.
+		 *
+		 * @param defaultValue The default value to emit.
+		 * @return The new {@link Maybe} instance.
+		 */
+		Maybe<T> switchIfEmpty(const T &defaultValue);
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Maybe} instance with the given private implementation.

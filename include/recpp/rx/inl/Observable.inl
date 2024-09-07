@@ -1,6 +1,7 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/DefaultIfEmpty.h>
 #include <recpp/processors/Delay.h>
 #include <recpp/processors/Filter.h>
 #include <recpp/processors/FlatMap.h>
@@ -179,6 +180,12 @@ template <typename Rep, typename Period>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::delay(recpp::async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError)
 {
 	return Observable<T>(std::make_shared<processors::Delay<int, Rep, Period>>(*this, scheduler, delay, delayError));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::defaultIfEmpty(const T &defaultValue)
+{
+	return Observable<T>(std::make_shared<processors::DefaultIfEmpty<T>>(*this, defaultValue));
 }
 
 template <typename T>
