@@ -19,7 +19,7 @@ namespace recpp::async
 		 *
 		 * @param function the action to execute
 		 */
-		Schedulable(const std::function<void(void)> &function);
+		Schedulable(const std::function<void()> &function);
 
 		/**
 		 * @brief Run this Schedulable action
@@ -35,7 +35,7 @@ namespace recpp::async
 		/**
 		 * @brief The action to execute
 		 */
-		std::function<void(void)> m_task;
+		std::function<void()> m_task;
 
 		/**
 		 * @brief Is this action canceled ?

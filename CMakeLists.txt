@@ -44,6 +44,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/DeferPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/EmptyPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/ErrorPublisher.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/IntervalPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/JustPublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/MergePublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/NeverPublisher.h
@@ -52,6 +53,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/DeferPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/EmptyPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/ErrorPublisher.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/IntervalPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/JustPublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/MergePublisher.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/inl/NeverPublisher.inl
@@ -76,11 +78,13 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/EmptySubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/FilterSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/ForwardSubscription.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/IntervalSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/JustSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/MergeSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/NeverSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/RangeSubscription.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/EmptySubscription.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/IntervalSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/JustSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/MergeSubscription.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscriptions/inl/NeverSubscription.inl
