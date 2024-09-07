@@ -8,8 +8,8 @@ namespace recpp::processors
 {
 	/**
 	 * @class DefaultIfEmpty DefaultIfEmpty.h <recpp/processors/DefaultIfEmpty.h>
-	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and emit a given default value in case the {@link
-	 * rscpp::Publisher} completes without emiting any value.
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and emit a given default value in case the
+	 * {@link rscpp::Publisher} completes without emiting any value.
 	 *
 	 * @param T The type of element signaled to the {@link rscpp::Subscriber} and by the {@link rscpp::Publisher}.
 	 */
