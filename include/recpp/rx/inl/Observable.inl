@@ -1,12 +1,15 @@
 #pragma once
 
 #include <recpp/async/Scheduler.h>
+#include <recpp/processors/AllOf.h>
+#include <recpp/processors/AnyOf.h>
 #include <recpp/processors/DefaultIfEmpty.h>
 #include <recpp/processors/Delay.h>
 #include <recpp/processors/Filter.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
 #include <recpp/processors/Map.h>
+#include <recpp/processors/NoneOf.h>
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/SubscribeOn.h>
 #include <recpp/processors/Tap.h>
@@ -186,6 +189,27 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::defaultIfEmpty(const T &defaultValue)
 {
 	return Observable<T>(std::make_shared<processors::DefaultIfEmpty<T>>(*this, defaultValue));
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Observable<bool> recpp::rx::Observable<T>::allOf(R predicate)
+{
+	return Observable<bool>(std::make_shared<processors::AllOf<T, R>>(*this, predicate));
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Observable<bool> recpp::rx::Observable<T>::anyOf(R predicate)
+{
+	return Observable<bool>(std::make_shared<processors::AnyOf<T, R>>(*this, predicate));
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Observable<bool> recpp::rx::Observable<T>::noneOf(R predicate)
+{
+	return Observable<bool>(std::make_shared<processors::NoneOf<T, R>>(*this, predicate));
 }
 
 template <typename T>

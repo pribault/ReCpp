@@ -22,23 +22,29 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/ThreadPool.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/ThreadPoolWorker.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/async/WorkerThread.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AllOf.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AndThen.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AnyOf.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/DefaultIfEmpty.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Delay.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Map.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/NoneOf.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ObserveOn.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/SubscribeOn.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Tap.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AllOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AndThen.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AnyOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/DefaultIfEmpty.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Delay.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Map.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/NoneOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ObserveOn.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/SubscribeOn.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Tap.inl
