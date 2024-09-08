@@ -295,7 +295,7 @@ namespace recpp::rx
 		 * @return The new {@link Observable} instance.
 		 */
 		template <typename R>
-		Observable<bool> allOf(R predicate);
+		Single<bool> allOf(R predicate);
 
 		/**
 		 * @brief Checks if the given predicate pred returns true for any emited values.
@@ -305,7 +305,7 @@ namespace recpp::rx
 		 * @return The new {@link Observable} instance.
 		 */
 		template <typename R>
-		Observable<bool> anyOf(R predicate);
+		Single<bool> anyOf(R predicate);
 
 		/**
 		 * @brief Checks if the given predicate pred returns false for all emited values.
@@ -315,7 +315,7 @@ namespace recpp::rx
 		 * @return The new {@link Observable} instance.
 		 */
 		template <typename R>
-		Observable<bool> noneOf(R predicate);
+		Single<bool> noneOf(R predicate);
 
 		/**
 		 * @brief Accumulate this {@link Observable} values and emit the result.
@@ -323,7 +323,7 @@ namespace recpp::rx
 		 * @param init The initial value.
 		 * @return The new {@link Observable} instance.
 		 */
-		Observable<T> reduce(T init = 0);
+		Single<T> reduce(T init = 0);
 
 		/**
 		 * @brief Accumulate this {@link Observable} values and emit the result.
@@ -334,7 +334,48 @@ namespace recpp::rx
 		 * @return The new {@link Observable} instance.
 		 */
 		template <typename R>
-		Observable<T> reduce(R operation, T init = 0);
+		Single<T> reduce(R operation, T init = 0);
+
+		/**
+		 * @brief Retrieve the maximum value of this stream and return the result as a {@link Single}.
+		 *
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> max();
+
+		/**
+		 * @brief Retrieve the maximum value of this stream and return the result as a {@link Single}.
+		 *
+		 * @tparam R The comparator type.
+		 * @param comparator The comparator to use to compare two values;
+		 * @return The new {@link Single} instance.
+		 */
+		template <typename R>
+		Single<T> max(R comparator);
+
+		/**
+		 * @brief Retrieve the minimum value of this stream and return the result as a {@link Single}.
+		 *
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> min();
+
+		/**
+		 * @brief Retrieve the minimum value of this stream and return the result as a {@link Single}.
+		 *
+		 * @tparam R The comparator type.
+		 * @param comparator The comparator to use to compare two values;
+		 * @return The new {@link Single} instance.
+		 */
+		template <typename R>
+		Single<T> min(R comparator);
+
+		/**
+		 * @brief Count the number of values of this stream and return the result as a {@link Single}.
+		 *
+		 * @return The new {@link Single} instance.
+		 */
+		Single<std::size_t> count();
 
 	protected:
 		/**

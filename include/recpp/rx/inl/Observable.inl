@@ -3,12 +3,15 @@
 #include <recpp/async/Scheduler.h>
 #include <recpp/processors/AllOf.h>
 #include <recpp/processors/AnyOf.h>
+#include <recpp/processors/Count.h>
 #include <recpp/processors/DefaultIfEmpty.h>
 #include <recpp/processors/Delay.h>
 #include <recpp/processors/Filter.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
 #include <recpp/processors/Map.h>
+#include <recpp/processors/Max.h>
+#include <recpp/processors/Min.h>
 #include <recpp/processors/NoneOf.h>
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/Reduce.h>
@@ -194,36 +197,68 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::defaultIfEmpty(const T &defau
 
 template <typename T>
 template <typename R>
-recpp::rx::Observable<bool> recpp::rx::Observable<T>::allOf(R predicate)
+recpp::rx::Single<bool> recpp::rx::Observable<T>::allOf(R predicate)
 {
-	return Observable<bool>(std::make_shared<processors::AllOf<T, R>>(*this, predicate));
+	return Single<bool>(std::make_shared<processors::AllOf<T, R>>(*this, predicate));
 }
 
 template <typename T>
 template <typename R>
-recpp::rx::Observable<bool> recpp::rx::Observable<T>::anyOf(R predicate)
+recpp::rx::Single<bool> recpp::rx::Observable<T>::anyOf(R predicate)
 {
-	return Observable<bool>(std::make_shared<processors::AnyOf<T, R>>(*this, predicate));
+	return Single<bool>(std::make_shared<processors::AnyOf<T, R>>(*this, predicate));
 }
 
 template <typename T>
 template <typename R>
-recpp::rx::Observable<bool> recpp::rx::Observable<T>::noneOf(R predicate)
+recpp::rx::Single<bool> recpp::rx::Observable<T>::noneOf(R predicate)
 {
-	return Observable<bool>(std::make_shared<processors::NoneOf<T, R>>(*this, predicate));
+	return Single<bool>(std::make_shared<processors::NoneOf<T, R>>(*this, predicate));
 }
 
 template <typename T>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::reduce(T init)
+recpp::rx::Single<T> recpp::rx::Observable<T>::reduce(T init)
 {
 	return recpp::rx::Observable<T>::reduce(std::plus<T>(), init);
 }
 
 template <typename T>
 template <typename R>
-recpp::rx::Observable<T> recpp::rx::Observable<T>::reduce(R operation, T init)
+recpp::rx::Single<T> recpp::rx::Observable<T>::reduce(R operation, T init)
 {
-	return Observable<T>(std::make_shared<processors::Reduce<T, R>>(*this, init, operation));
+	return Single<T>(std::make_shared<processors::Reduce<T, R>>(*this, init, operation));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Observable<T>::max()
+{
+	return recpp::rx::Observable<T>::max(std::less<T>());
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Single<T> recpp::rx::Observable<T>::max(R comparator)
+{
+	return Single<T>(std::make_shared<processors::Max<T, R>>(*this, comparator));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Observable<T>::min()
+{
+	return recpp::rx::Observable<T>::min(std::less<T>());
+}
+
+template <typename T>
+template <typename R>
+recpp::rx::Single<T> recpp::rx::Observable<T>::min(R comparator)
+{
+	return Single<T>(std::make_shared<processors::Min<T, R>>(*this, comparator));
+}
+
+template <typename T>
+recpp::rx::Single<std::size_t> recpp::rx::Observable<T>::count()
+{
+	return Single<std::size_t>(std::make_shared<processors::Count<T>>(*this));
 }
 
 template <typename T>
