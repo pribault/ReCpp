@@ -2,6 +2,7 @@
 
 #include <rscpp/Processor.h>
 
+#include <atomic>
 #include <functional>
 
 namespace recpp::processors
@@ -37,7 +38,7 @@ namespace recpp::processors
 			rscpp::Subscriber<bool>	   m_subscriber;
 			rscpp::Subscription		   m_subscription;
 			R						   m_predicate;
-			bool					   m_gotTrue = false;
+			std::atomic_bool		   m_gotTrue = false;
 		};
 
 	public:

@@ -3,6 +3,7 @@
 #include <rscpp/Processor.h>
 
 #include <functional>
+#include <mutex>
 
 namespace recpp::processors
 {
@@ -37,6 +38,7 @@ namespace recpp::processors
 			rscpp::Subscriber<T>	m_subscriber;
 			T						m_current;
 			R						m_operation;
+			std::mutex				m_mutex;
 		};
 
 	public:

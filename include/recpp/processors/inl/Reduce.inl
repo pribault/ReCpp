@@ -27,6 +27,7 @@ void recpp::processors::Reduce<T, R>::Impl::onSubscribe(rscpp::Subscription &sub
 template <typename T, typename R>
 void recpp::processors::Reduce<T, R>::Impl::onNext(const T &value)
 {
+	std::lock_guard<std::mutex> lock(m_mutex);
 	m_current = m_operation(m_current, value);
 }
 

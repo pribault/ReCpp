@@ -30,6 +30,6 @@ add_executable(ReCpp-test ${SOURCES})
 
 add_test(NAME ReCpp-test COMMAND ReCpp-test)
 
-set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 17)
+set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 20)
 
 target_link_libraries(ReCpp-test ReCpp gtest)

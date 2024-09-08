@@ -25,12 +25,15 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AllOf.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AndThen.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/AnyOf.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Count.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/DefaultIfEmpty.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Delay.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Map.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Max.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Min.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/NoneOf.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ObserveOn.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Reduce.h
@@ -39,12 +42,15 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AllOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AndThen.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AnyOf.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Count.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/DefaultIfEmpty.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Delay.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Map.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Max.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Min.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/NoneOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ObserveOn.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Reduce.inl
