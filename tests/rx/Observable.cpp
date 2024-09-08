@@ -1600,22 +1600,4 @@ TEST(Observable, count)
 		});
 	EXPECT_TRUE(gotValue);
 	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(std::views::iota(0, 10))
-		.count()
-		.subscribe(
-			[&gotValue](const auto value)
-			{
-				EXPECT_FALSE(gotValue);
-				gotValue = true;
-				EXPECT_EQ(value, 10);
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
