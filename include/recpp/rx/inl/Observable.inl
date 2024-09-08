@@ -27,6 +27,7 @@
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/publishers/RangePublisher.h>
 #include <recpp/rx/Completable.h>
+#include <recpp/rx/Single.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/ObservableSubscriber.h>
 
