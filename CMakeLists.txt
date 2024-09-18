@@ -28,9 +28,12 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Count.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/DefaultIfEmpty.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Delay.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ElementAt.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/First.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Last.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Map.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Max.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Min.h
@@ -45,9 +48,12 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Count.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/DefaultIfEmpty.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Delay.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ElementAt.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/First.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Last.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Map.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Max.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Min.inl
@@ -123,6 +129,9 @@ add_library(ReCpp ${SOURCES})
 target_include_directories(ReCpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(ReCpp PUBLIC RsCpp)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	target_link_options(ReCpp PUBLIC "-latomic")
+endif()
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 

@@ -6,9 +6,12 @@
 #include <recpp/processors/Count.h>
 #include <recpp/processors/DefaultIfEmpty.h>
 #include <recpp/processors/Delay.h>
+#include <recpp/processors/ElementAt.h>
 #include <recpp/processors/Filter.h>
+#include <recpp/processors/First.h>
 #include <recpp/processors/FlatMap.h>
 #include <recpp/processors/IgnoreElements.h>
+#include <recpp/processors/Last.h>
 #include <recpp/processors/Map.h>
 #include <recpp/processors/Max.h>
 #include <recpp/processors/Min.h>
@@ -260,6 +263,24 @@ template <typename T>
 recpp::rx::Single<std::size_t> recpp::rx::Observable<T>::count()
 {
 	return Single<std::size_t>(std::make_shared<processors::Count<T>>(*this));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Observable<T>::elementAt(std::size_t index)
+{
+	return Single<T>(std::make_shared<processors::ElementAt<T>>(*this, index));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Observable<T>::first()
+{
+	return Single<T>(std::make_shared<processors::First<T>>(*this));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Observable<T>::last()
+{
+	return Single<T>(std::make_shared<processors::Last<T>>(*this));
 }
 
 template <typename T>

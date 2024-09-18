@@ -377,6 +377,28 @@ namespace recpp::rx
 		 */
 		Single<std::size_t> count();
 
+		/**
+		 * @brief Retrieve the element at the specified index as a {@link Single}.
+		 *
+		 * @param index The element index.
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> elementAt(std::size_t index);
+
+		/**
+		 * @brief Retrieve the first element as a {@link Single}.
+		 *
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> first();
+
+		/**
+		 * @brief Retrieve the last element as a {@link Single}.
+		 *
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> last();
+
 	protected:
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.
