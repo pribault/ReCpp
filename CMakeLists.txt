@@ -129,6 +129,9 @@ add_library(ReCpp ${SOURCES})
 target_include_directories(ReCpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(ReCpp PUBLIC RsCpp)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+	target_link_options(ReCpp PUBLIC "-latomic")
+endif()
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 
