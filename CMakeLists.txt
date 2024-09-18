@@ -30,8 +30,10 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Delay.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ElementAt.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/First.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Last.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Map.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Max.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Min.h
@@ -48,8 +50,10 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Delay.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ElementAt.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/First.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Last.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Map.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Max.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Min.inl

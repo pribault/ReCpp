@@ -1638,3 +1638,77 @@ TEST(Observable, elementAt)
 	EXPECT_TRUE(gotValue);
 	EXPECT_FALSE(errored);
 }
+
+TEST(Observable, first)
+{
+	bool errored = false;
+	bool gotValue = false;
+	Observable<int>::range(evenValues)
+		.first()
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+				EXPECT_EQ(value, 2);
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+
+	errored = false;
+	gotValue = false;
+	Observable<int>::empty().elementAt(1).subscribe(
+		[&gotValue](const auto value)
+		{
+			EXPECT_FALSE(gotValue);
+			gotValue = true;
+			EXPECT_EQ(value, 0);
+		},
+		[&errored](const auto &exception)
+		{
+			errored = true;
+		});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+}
+
+TEST(Observable, last)
+{
+	bool errored = false;
+	bool gotValue = false;
+	Observable<int>::range(evenValues)
+		.last()
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+				EXPECT_EQ(value, 6);
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+
+	errored = false;
+	gotValue = false;
+	Observable<int>::empty().elementAt(1).subscribe(
+		[&gotValue](const auto value)
+		{
+			EXPECT_FALSE(gotValue);
+			gotValue = true;
+			EXPECT_EQ(value, 0);
+		},
+		[&errored](const auto &exception)
+		{
+			errored = true;
+		});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+}
