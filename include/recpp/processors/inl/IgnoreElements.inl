@@ -19,7 +19,7 @@ template <typename T, typename R>
 void recpp::processors::IgnoreElements<T, R>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
 	m_subscription = subscription;
-	m_remaining = std::numeric_limits<size_t>::max();
+	m_remaining = std::numeric_limits<std::size_t>::max();
 	m_subscription.request(m_remaining);
 }
 
@@ -29,7 +29,7 @@ void recpp::processors::IgnoreElements<T, R>::Impl::onNext(const T &)
 	m_remaining--;
 	if (!m_remaining)
 	{
-		m_remaining = std::numeric_limits<size_t>::max();
+		m_remaining = std::numeric_limits<std::size_t>::max();
 		m_subscription.request(m_remaining);
 	}
 }

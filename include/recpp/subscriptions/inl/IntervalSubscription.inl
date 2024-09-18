@@ -18,7 +18,7 @@ recpp::subscriptions::IntervalSubscription<T>::Impl::Impl(const rscpp::Subscribe
 }
 
 template <typename T>
-void recpp::subscriptions::IntervalSubscription<T>::Impl::request(size_t count)
+void recpp::subscriptions::IntervalSubscription<T>::Impl::request(std::size_t count)
 {
 	m_requested += count;
 	if (!m_running && !m_canceled)

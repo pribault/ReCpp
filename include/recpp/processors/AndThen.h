@@ -37,7 +37,7 @@ namespace recpp::processors
 			rscpp::Publisher<R>		m_dest;
 			rscpp::Subscriber<R>	m_subscriber;
 			rscpp::Subscription		m_subscription;
-			size_t					m_remaining = 0;
+			std::size_t				m_remaining = 0;
 		};
 
 	public:

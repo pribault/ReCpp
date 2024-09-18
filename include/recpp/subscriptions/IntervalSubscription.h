@@ -37,7 +37,7 @@ namespace recpp::subscriptions
 			Impl(const rscpp::Subscriber<T> &subscriber, const recpp::async::Scheduler::TimePoint &start, const recpp::async::Scheduler::Duration &period,
 				 recpp::async::Scheduler &scheduler);
 
-			void request(size_t count) override;
+			void request(std::size_t count) override;
 			void cancel() override;
 
 		private:
@@ -49,7 +49,7 @@ namespace recpp::subscriptions
 			recpp::async::Scheduler			  &m_scheduler;
 			bool							   m_running = false;
 			bool							   m_canceled = false;
-			size_t							   m_requested = 0;
+			std::size_t						   m_requested = 0;
 		};
 
 	public:

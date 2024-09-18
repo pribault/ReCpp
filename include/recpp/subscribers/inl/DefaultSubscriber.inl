@@ -29,7 +29,7 @@ void recpp::subscribers::DefaultSubscriber<T>::Impl::onSubscribe(rscpp::Subscrip
 		m_onSubscribeMethod(subscription);
 	if (m_autoRequest)
 	{
-		m_remaining = std::numeric_limits<size_t>::max();
+		m_remaining = std::numeric_limits<std::size_t>::max();
 		m_subscription.request(m_remaining);
 	}
 }
@@ -43,7 +43,7 @@ void recpp::subscribers::DefaultSubscriber<T>::Impl::onNext(const T &value)
 		m_onNextMethod(value);
 	if (m_autoRequest && !m_remaining)
 	{
-		m_remaining = std::numeric_limits<size_t>::max();
+		m_remaining = std::numeric_limits<std::size_t>::max();
 		m_subscription.request(m_remaining);
 	}
 }

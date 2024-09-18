@@ -13,7 +13,7 @@ recpp::subscriptions::NeverSubscription<T>::Impl::Impl(const rscpp::Subscriber<T
 }
 
 template <typename T>
-void recpp::subscriptions::NeverSubscription<T>::Impl::request(size_t count)
+void recpp::subscriptions::NeverSubscription<T>::Impl::request(std::size_t count)
 {
 }
 

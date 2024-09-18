@@ -15,9 +15,9 @@ recpp::subscriptions::RangeSubscription<T, I>::Impl::Impl(const rscpp::Subscribe
 }
 
 template <typename T, class I>
-void recpp::subscriptions::RangeSubscription<T, I>::Impl::request(size_t count)
+void recpp::subscriptions::RangeSubscription<T, I>::Impl::request(std::size_t count)
 {
-	for (size_t i = 0; i < count; i++)
+	for (std::size_t i = 0; i < count; i++)
 	{
 		if (m_completed || m_canceled)
 			break;
