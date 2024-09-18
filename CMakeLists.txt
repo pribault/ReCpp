@@ -28,6 +28,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Count.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/DefaultIfEmpty.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Delay.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ElementAt.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Filter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/FlatMap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/IgnoreElements.h
@@ -45,6 +46,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Count.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/DefaultIfEmpty.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Delay.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ElementAt.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Filter.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/FlatMap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/IgnoreElements.inl

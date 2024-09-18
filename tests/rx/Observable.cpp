@@ -1601,3 +1601,40 @@ TEST(Observable, count)
 	EXPECT_TRUE(gotValue);
 	EXPECT_FALSE(errored);
 }
+
+TEST(Observable, elementAt)
+{
+	bool errored = false;
+	bool gotValue = false;
+	Observable<int>::range(evenValues)
+		.elementAt(1)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+				EXPECT_EQ(value, 4);
+			},
+			[&errored](const auto &exception)
+			{
+				errored = true;
+			});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+
+	errored = false;
+	gotValue = false;
+	Observable<int>::empty().elementAt(1).subscribe(
+		[&gotValue](const auto value)
+		{
+			EXPECT_FALSE(gotValue);
+			gotValue = true;
+			EXPECT_EQ(value, 0);
+		},
+		[&errored](const auto &exception)
+		{
+			errored = true;
+		});
+	EXPECT_TRUE(gotValue);
+	EXPECT_FALSE(errored);
+}
