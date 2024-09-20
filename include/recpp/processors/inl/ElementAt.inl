@@ -42,7 +42,8 @@ void recpp::processors::ElementAt<T>::Impl::onError(const std::exception_ptr &er
 template <typename T>
 void recpp::processors::ElementAt<T>::Impl::onComplete()
 {
-	m_subscriber.onNext(m_result ? *m_result : T{});
+	if (m_result)
+		m_subscriber.onNext(*m_result);
 	m_subscriber.onComplete();
 }
 

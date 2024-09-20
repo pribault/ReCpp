@@ -1,4 +1,5 @@
 // gtest
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 // recpp
@@ -19,1696 +20,2134 @@ namespace
 {
 	constexpr auto			sleepDuration = chrono::milliseconds(10);
 	constexpr int			defaultValue = 42;
-	constexpr array<int, 3> defaultValues({1, 2, 3});
+	constexpr int			otherValue = 55;
+	const vector<int>		defaultValues = {1, 2, 3};
+	constexpr int			defaultValuesMin = 1;
+	constexpr int			defaultValuesMax = 3;
+	constexpr int			defaultValuesCount = 3;
+	const vector<int>		mergedDefaultValues = {1, 1, 1, 2, 2, 2, 3, 3, 3};
 	constexpr array<int, 3> evenValues({2, 4, 6});
+	constexpr int			evenValuesSum = 12;
 	constexpr array<int, 3> oddValues({1, 3, 5});
-	constexpr auto			delayTolerance = chrono::milliseconds(10);
-	constexpr auto			delayDuration = chrono::milliseconds(100);
+	constexpr auto			delayTolerance = chrono::milliseconds(1);
+	constexpr auto			delayDuration = chrono::milliseconds(10);
 	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr string_view	runtimeErrorMessage = "unexpected error!";
+
+	bool isOdd(int value)
+	{
+		return value % 2 == 1;
+	}
 
 	bool isEven(int value)
 	{
 		return value % 2 == 0;
 	}
+
+	float divideByTen(int value)
+	{
+		return value / 10.f;
+	}
+
+	class WorkerThreadBasedTest : public testing::Test
+	{
+	protected:
+		void SetUp() final
+		{
+			m_worker = make_unique<WorkerThread>();
+			m_mainThreadId = this_thread::get_id();
+			m_workerThreadId = m_worker->threadId();
+		}
+
+		void TearDown() final
+		{
+			m_worker.reset();
+			m_mainThreadId = {};
+			m_workerThreadId = {};
+		}
+
+		unique_ptr<WorkerThread> m_worker;
+		thread::id				 m_mainThreadId;
+		thread::id				 m_workerThreadId;
+	};
+
+	class EventLoopBasedTest : public testing::Test
+	{
+	protected:
+		void SetUp() final
+		{
+			m_eventLoop = make_unique<recpp::async::EventLoop>();
+		}
+
+		void TearDown() final
+		{
+			m_eventLoop.reset();
+		}
+
+		unique_ptr<recpp::async::EventLoop> m_eventLoop;
+	};
 } // namespace
 
-TEST(Observable, create)
+class ObservableCreate : public testing::Test
 {
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::create(
-						[](auto &subscriber)
-						{
-							for (const auto value : defaultValues)
-								subscriber.onNext(value);
-							subscriber.onComplete();
-							// Try to complete again, should not be forwared
-							subscriber.onComplete();
-							// Try to send an error, should not be forwared
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
+protected:
+	static Observable<int> listOfValues()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				for (const auto value : defaultValues)
+					subscriber.onNext(value);
+				subscriber.onComplete();
+			});
+	}
+	static Observable<int> completesTwice()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				for (const auto value : defaultValues)
+					subscriber.onNext(value);
+				subscriber.onComplete();
+				subscriber.onComplete();
+			});
+	}
+	static Observable<int> valueAfterCompletion()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+				subscriber.onNext(42);
+			});
+	}
+	static Observable<int> errored()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Observable<int> valueAfterError()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onNext(42);
+			});
+	}
+	static Observable<int> doubleError()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Observable<int> completeAfterError()
+	{
+		return Observable<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onComplete();
+			});
+	}
+};
 
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to emit another error, should not be forwarded
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to send value, should not be forwarded
-							subscriber.onNext(defaultValue);
-							// Try to complete, should not be forwarded
-							subscriber.onComplete();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onComplete();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Observable<int>::create([](auto &subscriber) {})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-}
-
-TEST(Observable, defer)
+TEST_F(ObservableCreate, checkEmitedValues)
 {
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::range(defaultValues);
-						})
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
-
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::never();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::empty();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
+	vector<int> result;
+	bool		completed = false;
+	listOfValues() //
+		.subscribe(
+			[&result](const auto value)
+			{
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result, defaultValues);
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Observable, empty)
+TEST_F(ObservableCreate, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Observable<int>::empty().subscribe(
-		[](const auto value)
-		{
-			throw runtime_error("success handler called");
-		},
-		[](const auto &exception)
-		{
-			throw runtime_error("error handler called");
-		},
-		[&completed]()
-		{
-			if (completed)
-				throw runtime_error("completion handler called twice");
-			completed = true;
-		}));
+	listOfValues() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
 	EXPECT_TRUE(completed);
 }
 
-TEST(Observable, error)
+TEST_F(ObservableCreate, checkOnCompleteIsNotCalledTwice)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-}
-
-TEST(Observable, just)
-{
-	bool succeeded = false;
 	bool completed = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(succeeded);
+	completesTwice() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+}
+
+TEST_F(ObservableCreate, checkValuesAfterCompleteArentEmited)
+{
+	valueAfterCompletion() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {});
+}
+
+TEST_F(ObservableCreate, checkEmitedError)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableCreate, checkErrorIsNotCalledTwice)
+{
+	bool gotError = false;
+	doubleError() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableCreate, checkValuesAfterErrorArentEmited)
+{
+	valueAfterError() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {});
+}
+
+TEST_F(ObservableCreate, checkCompleteAfterErrorIsntEmited)
+{
+	completeAfterError() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableDefer : public testing::Test
+{
+protected:
+	static Observable<int> deferredRange()
+	{
+		return Observable<int>::defer(
+			[]()
+			{
+				return Observable<int>::range(defaultValues);
+			});
+	}
+	static Observable<int> deferredEmpty()
+	{
+		return Observable<int>::defer(
+			[]()
+			{
+				return Observable<int>::empty();
+			});
+	}
+	static Observable<int> deferredError()
+	{
+		return Observable<int>::defer(
+			[]()
+			{
+				return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+};
+
+TEST_F(ObservableDefer, checkEmitedValues)
+{
+	vector<int> result;
+	bool		completed = false;
+	deferredRange() //
+		.subscribe(
+			[&result](const auto value)
+			{
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result, defaultValues);
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Observable, never)
+TEST_F(ObservableDefer, checkOnCompleteIsEmited)
 {
-	EXPECT_NO_THROW(Observable<int>::never().subscribe(
-		[](const auto value)
+	bool completed = false;
+	deferredEmpty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableDefer, checkEmitedError)
+{
+	bool gotError = false;
+	deferredError() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableEmpty : public testing::Test
+{
+};
+
+TEST_F(ObservableEmpty, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Observable<int>::empty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableEmpty, checkOnCompleteIsNotCalledTwice)
+{
+	bool completed = false;
+	Observable<int>::empty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+}
+
+TEST_F(ObservableEmpty, checkNoValueIsEmited)
+{
+	Observable<int>::empty() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {});
+}
+
+TEST_F(ObservableEmpty, checkNoErrorIsEmited)
+{
+	Observable<int>::empty() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+class ObservableError : public testing::Test
+{
+protected:
+	static Observable<int> errored()
+	{
+		return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+	}
+};
+
+TEST_F(ObservableError, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableError, checkOnlyOneErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableError, checkNoValueIsEmited)
+{
+	errored() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {});
+}
+
+TEST_F(ObservableError, checkOnCompleteIsntEmited)
+{
+	errored() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableJust : public testing::Test
+{
+};
+
+TEST_F(ObservableJust, checkValueIsEmitted)
+{
+	bool gotValue = false;
+	Observable<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				gotValue = true;
+			},
+			[](const auto &) {}, []() {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableJust, checkOnlyOneValueIsEmitted)
+{
+	bool gotValue = false;
+	Observable<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+			},
+			[](const auto &) {}, []() {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableJust, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Observable<int>::just(defaultValue)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableJust, checkNoError)
+{
+	Observable<int>::just(defaultValue)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+class ObservableNever : public testing::Test
+{
+};
+
+TEST_F(ObservableNever, checkNothingIsEmited)
+{
+	Observable<int>::never().subscribe(
+		[](const auto)
 		{
-			throw runtime_error("success handler called");
+			ADD_FAILURE();
 		},
-		[](const auto &exception)
+		[](const auto &)
 		{
-			throw runtime_error("error handler called");
+			ADD_FAILURE();
 		},
 		[]()
 		{
-			throw runtime_error("completion handler called");
-		}));
-}
-
-TEST(Observable, range)
-{
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::defer(
-						[]()
-						{
-							return Observable<int>::range(defaultValues);
-						})
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
-}
-
-TEST(Observable, merge)
-{
-	Observable<Observable<int>> observableList = Observable<Observable<int>>::create(
-		[](auto &subscriber)
-		{
-			subscriber.onNext(Observable<int>::range(defaultValues));
-			subscriber.onNext(Observable<int>::range(defaultValues));
-			subscriber.onNext(Observable<int>::range(defaultValues));
-			subscriber.onComplete();
+			ADD_FAILURE();
 		});
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::merge(observableList)
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size() * 3)
-									throw runtime_error("too much values forwarded");
-								valuesCount++;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size() * 3);
-
-	Observable<Observable<int>> observableWithErrorList = Observable<Observable<int>>::create(
-		[](auto &subscriber)
-		{
-			subscriber.onNext(Observable<int>::range(defaultValues));
-			subscriber.onNext(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!"))));
-			subscriber.onNext(Observable<int>::range(defaultValues));
-			subscriber.onComplete();
-		});
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::merge(observableWithErrorList)
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("values forwarded");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
 }
 
-TEST(Observable, interval)
+class ObservableRange : public testing::Test
 {
-	recpp::async::EventLoop eventLoop;
-	vector<size_t>			expected({0, 1, 2, 3, 4});
-	vector<size_t>			values;
-	size_t					valuesCount = 0;
-	bool					errored = false;
-	bool					completed = false;
-	EXPECT_NO_THROW(Observable<int>::interval(chrono::milliseconds(10), eventLoop)
-						.subscribe(
-							[&eventLoop, &values](const auto value)
-							{
-								values.push_back(value);
-								if (value == 4)
-									eventLoop.stop();
-							},
-							[&errored](const auto &exception)
-							{
-								errored = true;
-							},
-							[&completed]()
-							{
-								completed = true;
-							}));
-	eventLoop.runFor(std::chrono::seconds(1));
-	EXPECT_FALSE(completed);
-	EXPECT_FALSE(errored);
+};
+
+TEST_F(ObservableRange, checkEmitedValues)
+{
+	vector<int> result;
+	bool		completed = false;
+	Observable<int>::range(defaultValues) //
+		.subscribe(
+			[&result](const auto value)
+			{
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result, defaultValues);
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableRange, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Observable<int>::range(defaultValues) //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableRange, checkNoErrorIsEmited)
+{
+	Observable<int>::range(defaultValues) //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+class ObservableMerge : public testing::Test
+{
+protected:
+	static Observable<Observable<int>> observableOfObservable()
+	{
+		return Observable<Observable<int>>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Observable<int>::range(defaultValues));
+				subscriber.onNext(Observable<int>::range(defaultValues));
+				subscriber.onNext(Observable<int>::range(defaultValues));
+				subscriber.onComplete();
+			});
+	}
+	static Observable<Observable<int>> observableOfObservableWithError()
+	{
+		return Observable<Observable<int>>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Observable<int>::range(defaultValues));
+				subscriber.onNext(Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))));
+				subscriber.onNext(Observable<int>::range(defaultValues));
+				subscriber.onComplete();
+			});
+	}
+};
+
+TEST_F(ObservableMerge, checkEmitedValues)
+{
+	vector<int> result;
+	bool		completed = false;
+	auto		source = observableOfObservable();
+	Observable<int>::merge(source) //
+		.subscribe(
+			[&result](const auto value)
+			{
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result, mergedDefaultValues);
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableMerge, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	auto source = observableOfObservable();
+	Observable<int>::merge(source) //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableMerge, checkNoErrorIsEmited)
+{
+	auto source = observableOfObservable();
+	Observable<int>::merge(source) //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+TEST_F(ObservableMerge, checkErrorCanBeEmited)
+{
+	bool gotError = false;
+	auto source = observableOfObservableWithError();
+	Observable<int>::merge(source) //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableInterval : public EventLoopBasedTest
+{
+};
+
+TEST_F(ObservableInterval, checkEmitedValues)
+{
+	const vector<int> expected = {0, 1, 2, 3, 4};
+	vector<int>		  values;
+	Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop) //
+		.subscribe(
+			[this, &values](const auto value)
+			{
+				values.push_back(value);
+				if (value == 4)
+					m_eventLoop->stop();
+			},
+			[](const auto &) {}, []() {});
+	m_eventLoop->run();
 	EXPECT_EQ(values, expected);
 }
 
-TEST(Observable, filter)
+TEST_F(ObservableInterval, checkNoErrorIsEmited)
 {
-	const vector<float> expectedValues({1, 3});
-	size_t				valuesCount = 0;
-	bool				completed = false;
-	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.filter(
-							[](const auto value)
-							{
-								return value % 2 == 1;
-							})
-						.subscribe(
-							[&valuesCount, &expectedValues](const auto value)
-							{
-								if (valuesCount >= expectedValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = expectedValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, expectedValues.size());
-
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.filter(
-							[](const auto value)
-							{
-								return value % 2 == 1;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
+	Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop) //
+		.subscribe(
+			[this](const auto value)
+			{
+				if (value == 4)
+					m_eventLoop->stop();
+			},
+			[](const auto &)
+			{
+				ADD_FAILURE();
+			},
+			[]() {});
+	m_eventLoop->run();
 }
 
-TEST(Observable, ignoreElements)
+class ObservableFilter : public testing::Test
 {
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.doOnNext(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							})
-						.ignoreElements()
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+};
+
+TEST_F(ObservableFilter, checkEmitedValues)
+{
+	bool			  completed = false;
+	const vector<int> expected = {1, 3};
+	vector<int>		  values;
+	Observable<int>::range(defaultValues) //
+		.filter(&isOdd)
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {},
+			[&values, &expected, &completed]()
+			{
+				EXPECT_EQ(values, expected);
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
-TEST(Observable, map)
+TEST_F(ObservableFilter, checkNoErrorIsEmited)
 {
-	size_t valuesCount = 0;
-	bool   completed = false;
-	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = static_cast<float>(defaultValues[valuesCount++]) / 1000;
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
-
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
+	Observable<int>::range(defaultValues) //
+		.filter(&isOdd)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
 }
 
-TEST(Observable, flatMap)
+TEST_F(ObservableFilter, checkErrorsAreForwarded)
 {
-	const vector<float> expectedValues({2, 3, 4, 3, 4, 5, 4, 5, 6});
-	size_t				valuesCount = 0;
-	bool				completed = false;
-	EXPECT_NO_THROW(Observable<int>::range(defaultValues)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Observable<float>::create(
-									[value](auto &subscriber)
-									{
-										subscriber.onNext(value + 1.f);
-										subscriber.onNext(value + 2.f);
-										subscriber.onNext(value + 3.f);
-										subscriber.onComplete();
-									});
-							})
-						.subscribe(
-							[&valuesCount, &expectedValues](const auto value)
-							{
-								if (valuesCount >= expectedValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = expectedValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, expectedValues.size());
-
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Observable<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Observable<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Observable<float>::never();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Observable<float>::just(defaultValue);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.filter(&isOdd)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
 }
 
-TEST(Observable, doOnComplete)
+TEST_F(ObservableFilter, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.filter(&isOdd)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableIgnoreElements : public testing::Test
+{
+};
+
+TEST_F(ObservableIgnoreElements, checkCompletes)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.doOnComplete(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.doOnComplete(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
+	Observable<int>::range(defaultValues) //
+		.ignoreElements()
+		.subscribe(
+			[&completed]()
+			{
+				completed = true;
+			},
+			[](const auto &) {});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Observable, doOnError)
+TEST_F(ObservableIgnoreElements, checkNoErrorIsEmited)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnError(
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
+	Observable<int>::range(defaultValues) //
+		.ignoreElements()
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
 }
 
-TEST(Observable, doOnNext)
+TEST_F(ObservableIgnoreElements, checkErrorsAreForwarded)
 {
-	bool succeeded = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.doOnNext(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								succeeded = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(succeeded);
-
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElements()
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
 }
 
-TEST(Observable, doOnTerminate)
+TEST_F(ObservableIgnoreElements, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElements()
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {});
+}
+
+class ObservableMap : public testing::Test
+{
+};
+
+TEST_F(ObservableMap, checkEmitedValues)
+{
+	bool				completed = false;
+	const vector<float> expected = {0.1f, 0.2f, 0.3f};
+	vector<float>		values;
+	Observable<int>::range(defaultValues) //
+		.map<float>(&divideByTen)
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {},
+			[&values, &expected, &completed]()
+			{
+				EXPECT_EQ(values, expected);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableMap, checkNoErrorIsEmited)
+{
+	Observable<int>::range(defaultValues) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+TEST_F(ObservableMap, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableMap, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableFlatMap : public testing::Test
+{
+protected:
+	static Observable<float> transformedValues()
+	{
+		return Observable<int>::range(defaultValues) //
+			.flatMap<float>(
+				[](const auto value)
+				{
+					return Observable<float>::create(
+						[value](auto &subscriber)
+						{
+							subscriber.onNext(value + 1.f);
+							subscriber.onNext(value + 2.f);
+							subscriber.onNext(value + 3.f);
+							subscriber.onComplete();
+						});
+				});
+	}
+};
+
+TEST_F(ObservableFlatMap, checkEmitedValues)
+{
+	bool				completed = false;
+	const vector<float> expected({2.f, 3.f, 4.f, 3.f, 4.f, 5.f, 4.f, 5.f, 6.f});
+	vector<float>		values;
+	transformedValues() //
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {},
+			[&values, &expected, &completed]()
+			{
+				EXPECT_EQ(values, expected);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableFlatMap, checkNoErrorIsEmited)
+{
+	transformedValues() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   []() {});
+}
+
+TEST_F(ObservableFlatMap, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Observable<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableFlatMap, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Observable<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(ObservableFlatMap, checkCanEmitErrors)
+{
+	bool gotError = false;
+	Observable<int>::just(defaultValue) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Observable<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableDoOnComplete : public testing::Test
+{
+};
+
+TEST_F(ObservableDoOnComplete, checkDoOnCompleteIsCalledOnce)
+{
+	bool completed = false;
+	Observable<int>::range(defaultValues) //
+		.doOnComplete(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			})
+		.subscribe();
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableDoOnComplete, checkDoOnCompleteIsNotCalledOnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnComplete(
+			[]()
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class ObservableDoOnError : public testing::Test
+{
+};
+
+TEST_F(ObservableDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Observable<int>::range(defaultValues) //
+		.doOnError(
+			[](const auto &)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+TEST_F(ObservableDoOnError, checkDoOnErrorIsCalledOnError)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnError(
+			[&gotError](const auto &exception)
+			{
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableDoOnNext : public testing::Test
+{
+};
+
+TEST_F(ObservableDoOnNext, checkDoOnNextIsCalledForEachValue)
+{
+	bool		completed = false;
+	vector<int> values;
+	Observable<int>::range(defaultValues) //
+		.doOnNext(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			})
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&values, &completed]()
+				   {
+					   EXPECT_EQ(values, defaultValues);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableDoOnNext, checkDoOnNextIsNotCalledInCaseOfAnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnNext(
+			[](const auto value)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class ObservableDoOnTerminate : public testing::Test
+{
+};
+
+TEST_F(ObservableDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 {
 	bool terminated = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(terminated);
-
-	terminated = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(terminated);
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.doOnTerminate(
-							[]()
-							{
-								throw runtime_error("termination handler called");
-							})
-						.subscribe());
-
-	terminated = false;
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+	Observable<int>::range(defaultValues) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
 }
 
-TEST(Observable, tap)
+TEST_F(ObservableDoOnTerminate, checkDoOnTerminateIsCalledOnError)
+{
+	bool terminated = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
+	EXPECT_TRUE(terminated);
+}
+
+class ObservableTap : public testing::Test
+{
+};
+
+TEST_F(ObservableTap, checkTapDoOnCompleteIsCalledOnce)
 {
 	bool completed = false;
-	bool succeeded = false;
-	EXPECT_NO_THROW(Observable<int>::just(defaultValue)
-						.tap(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(completed);
-	EXPECT_TRUE(succeeded);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Observable<int>::never()
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	completed = false;
-	EXPECT_NO_THROW(Observable<int>::empty()
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
+	Observable<int>::range(defaultValues) //
+		.tap([](const auto) {}, [](const auto &) {},
+			 [&completed]()
+			 {
+				 EXPECT_FALSE(completed);
+				 completed = true;
+			 })
+		.subscribe();
 	EXPECT_TRUE(completed);
 }
 
-TEST(Observable, observeOn)
+TEST_F(ObservableTap, checkTapDoOnCompleteIsNotCalledOnError)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([](const auto) {}, [](const auto &) {},
+			 []()
+			 {
+				 ADD_FAILURE();
+			 })
+		.subscribe();
+}
 
-	bool completed = false;
-	bool testFailed = false;
-	Observable<int>::just(defaultValue)
+TEST_F(ObservableTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Observable<int>::range(defaultValues) //
+		.tap([](const auto) {},
+			 [](const auto &)
+			 {
+				 ADD_FAILURE();
+			 },
+			 []() {})
+		.subscribe();
+}
+
+TEST_F(ObservableTap, checkTapDoOnErrorIsCalledOnError)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([](const auto) {},
+			 [&gotError](const auto &exception)
+			 {
+				 gotError = true;
+				 try
+				 {
+					 rethrow_exception(exception);
+				 }
+				 catch (runtime_error &runtimeError)
+				 {
+					 EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				 }
+			 },
+			 []() {})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableTap, checkTapDoOnNextIsCalledForEachValue)
+{
+	bool		completed = false;
+	vector<int> values;
+	Observable<int>::range(defaultValues) //
+		.tap(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {}, []() {})
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&values, &completed]()
+				   {
+					   EXPECT_EQ(values, defaultValues);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
+{
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap(
+			[](const auto value)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {})
+		.subscribe();
+}
+
+class ObservableObserveOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(ObservableObserveOn, checkSubscribeOnMainThread)
+{
+	bool deferCalled = false;
+	Observable<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_mainThreadId);
+			deferCalled = true;
+			return Observable<int>::empty();
+		}) //
+		.observeOn(*m_worker)
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(ObservableObserveOn, checkDoOnNextCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Observable<int>::just(defaultValue) //
+		.observeOn(*m_worker)
 		.doOnNext(
-			[&testFailed, mainThreadId](const auto value)
+			[this, &doOnNextCalled](const auto value)
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
 			})
-		.observeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
+		.subscribe();
 	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+	EXPECT_TRUE(doOnNextCalled);
 }
 
-TEST(Observable, subscribeOn)
+TEST_F(ObservableObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool completed = false;
-	bool testFailed = false;
-	Observable<int>::just(defaultValue)
-		.doOnNext(
-			[&testFailed, workerThreadId](const auto value)
-			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
+	bool doOnErrorCalled = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.observeOn(*m_worker)
 		.doOnError(
-			[&testFailed, workerThreadId](const auto &exception)
+			[this, &doOnErrorCalled](const auto &exception)
 			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
 			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
+		.subscribe();
 	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+	EXPECT_TRUE(doOnErrorCalled);
 }
 
-TEST(Observable, delay)
+TEST_F(ObservableObserveOn, checkDoOnCompleteCalledOnWorkerThread)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool				completed = false;
-	bool				testFailed = false;
-	auto				startTime = SchedulableQueue::Clock::now();
-	decltype(startTime) afterDelayTime;
-	Observable<int>::just(defaultValue)
+	bool doOnCompleteCalled = false;
+	Observable<int>::empty() //
+		.observeOn(*m_worker)
 		.doOnComplete(
-			[&testFailed, mainThreadId]()
+			[this, &doOnCompleteCalled]()
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnCompleteCalled = true;
 			})
-		.delay(worker, delayDuration, true)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnCompleteCalled);
+}
+
+class ObservableSubscribeOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(ObservableSubscribeOn, checkSubscribeOnWorkerThread)
+{
+	bool deferCalled = false;
+	Observable<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+			deferCalled = true;
+			return Observable<int>::empty();
+		}) //
+		.subscribeOn(*m_worker)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(ObservableSubscribeOn, checkDoOnNextCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Observable<int>::just(defaultValue) //
+		.subscribeOn(*m_worker)
+		.doOnNext(
+			[this, &doOnNextCalled](const auto value)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnNextCalled);
+}
+
+TEST_F(ObservableSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool doOnErrorCalled = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribeOn(*m_worker)
+		.doOnError(
+			[this, &doOnErrorCalled](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnErrorCalled);
+}
+
+TEST_F(ObservableSubscribeOn, checkDoOnCompleteCalledOnWorkerThread)
+{
+	bool doOnCompleteCalled = false;
+	Observable<int>::empty() //
+		.subscribeOn(*m_worker)
+		.doOnComplete(
+			[this, &doOnCompleteCalled]()
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnCompleteCalled = true;
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnCompleteCalled);
+}
+
+class ObservableDelay : public EventLoopBasedTest
+{
+};
+
+TEST_F(ObservableDelay, checkOnNextDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Observable<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Observable<int>::just(defaultValue);
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe(
-			[&completed, &testFailed, &afterDelayTime, workerThreadId](const auto value)
+			[this, &end](const auto)
 			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
+				end = recpp::async::Scheduler::Clock::now();
+				m_eventLoop->stop();
 			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-	auto timeDiff = afterDelayTime - startTime;
+			[](const auto &) {}, []() {});
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
 	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
 
-	bool errored = false;
-	testFailed = false;
-	startTime = SchedulableQueue::Clock::now();
-	Observable<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.delay(worker, delayDuration, true)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
-	timeDiff = afterDelayTime - startTime;
-	gap = timeDiff - delayDuration;
+TEST_F(ObservableDelay, checkOnErrorDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Observable<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   },
+				   []() {});
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
 }
 
-TEST(Observable, defaultIfEmpty)
+TEST_F(ObservableDelay, checkNoErrorDelayMode)
 {
-	bool completed = false;
-	bool errored = false;
-	bool gotValue = false;
-	Observable<int>::empty()
-		.defaultIfEmpty(defaultValue)
-		.subscribe(
-			[&gotValue](const auto value)
-			{
-				EXPECT_FALSE(gotValue);
-				gotValue = true;
-				EXPECT_EQ(value, defaultValue);
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			},
-			[&completed]()
-			{
-				if (completed)
-					throw runtime_error("completion handler called twice");
-				completed = true;
-			});
-	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(errored);
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Observable<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   },
+				   []() {});
 
-	completed = false;
-	errored = false;
-	gotValue = false;
-	Observable<int>::just(defaultValue)
-		.defaultIfEmpty(66)
-		.subscribe(
-			[&gotValue](const auto value)
-			{
-				EXPECT_FALSE(gotValue);
-				gotValue = true;
-				EXPECT_EQ(value, defaultValue);
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			},
-			[&completed]()
-			{
-				if (completed)
-					throw runtime_error("completion handler called twice");
-				completed = true;
-			});
-	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(errored);
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	EXPECT_LT(chrono::abs(timeDiff), delayTolerance);
 }
 
-TEST(Observable, allOf)
+TEST_F(ObservableDelay, checkOnCompleteDelay)
 {
-	bool errored = false;
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Observable<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Observable<int>::just(defaultValue);
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [this, &end]()
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
+	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
+
+class ObservableDefaultIfEmpty : public testing::Test
+{
+};
+
+TEST_F(ObservableDefaultIfEmpty, checkValuesAreForwarded)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::just(defaultValue) //
+		.defaultIfEmpty(otherValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				gotValue = true;
+				EXPECT_EQ(value, defaultValue);
+			},
+			[](const auto &) {}, []() {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableDefaultIfEmpty, checkDefaultValueIsEmitedIfEmpty)
+{
+	bool gotValue = false;
+	Observable<int>::empty() //
+		.defaultIfEmpty(otherValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				gotValue = true;
+				EXPECT_EQ(value, otherValue);
+			},
+			[](const auto &) {}, []() {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableDefaultIfEmpty, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.defaultIfEmpty(otherValue)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableAllOf : public testing::Test
+{
+};
+
+TEST_F(ObservableAllOf, checkCanReturnTrue)
+{
+	bool gotValue = false;
+	Observable<int>::range(evenValues) //
 		.allOf(&isEven)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
 				EXPECT_TRUE(value);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(defaultValues)
+TEST_F(ObservableAllOf, checkCanReturnFalse)
+{
+	bool gotValue = false;
+	Observable<int>::range(defaultValues) //
 		.allOf(&isEven)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
 				EXPECT_FALSE(value);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, anyOf)
+TEST_F(ObservableAllOf, checkErrorsAreForwarded)
 {
-	bool errored = false;
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.allOf(&isEven)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableAnyOf : public testing::Test
+{
+};
+
+TEST_F(ObservableAnyOf, checkCanReturnTrue)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.anyOf(&isEven)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
 				EXPECT_TRUE(value);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(defaultValues)
+TEST_F(ObservableAnyOf, checkCanReturnFalse)
+{
+	bool gotValue = false;
+	Observable<int>::range(oddValues) //
 		.anyOf(&isEven)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
+				gotValue = true;
+				EXPECT_FALSE(value);
+			},
+			[](const auto &) {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableAnyOf, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.anyOf(&isEven)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableNoneOf : public testing::Test
+{
+};
+
+TEST_F(ObservableNoneOf, checkCanReturnTrue)
+{
+	bool gotValue = false;
+	Observable<int>::range(oddValues) //
+		.noneOf(&isEven)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
 				gotValue = true;
 				EXPECT_TRUE(value);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(oddValues).anyOf(&isEven).subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_FALSE(value);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, noneOf)
+TEST_F(ObservableNoneOf, checkCanReturnFalse)
 {
-	bool errored = false;
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.noneOf(&isEven)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
 				EXPECT_FALSE(value);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(defaultValues)
-		.noneOf(&isEven)
-		.subscribe(
-			[&gotValue](const auto value)
-			{
-				EXPECT_FALSE(gotValue);
-				gotValue = true;
-				EXPECT_FALSE(value);
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(oddValues).noneOf(&isEven).subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_TRUE(value);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, reduce)
+TEST_F(ObservableNoneOf, checkErrorsAreForwarded)
 {
-	bool errored = false;
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.noneOf(&isEven)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableReduce : public testing::Test
+{
+};
+
+TEST_F(ObservableReduce, checkDefaultBehavior)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(evenValues) //
 		.reduce()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 12);
+				EXPECT_EQ(value, evenValuesSum);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(evenValues)
+TEST_F(ObservableReduce, checkWithInitValue)
+{
+	bool gotValue = false;
+	Observable<int>::range(evenValues) //
 		.reduce(10)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 22);
+				EXPECT_EQ(value, 10 + evenValuesSum);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(evenValues)
+TEST_F(ObservableReduce, checkWithOperation)
+{
+	bool gotValue = false;
+	Observable<int>::range(evenValues) //
 		.reduce(std::minus<int>())
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, -12);
+				EXPECT_EQ(value, -evenValuesSum);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::range(evenValues)
+TEST_F(ObservableReduce, checkWithOperationAndInitValue)
+{
+	bool gotValue = false;
+	Observable<int>::range(evenValues) //
 		.reduce(std::minus<int>(), 10)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, -2);
+				EXPECT_EQ(value, 10 - evenValuesSum);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, max)
+TEST_F(ObservableReduce, checkErrorsAreForwarded)
 {
-	bool errored = false;
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.reduce()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableMax : public testing::Test
+{
+};
+
+TEST_F(ObservableMax, checkDefaultBehavior)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.max()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 6);
+				EXPECT_EQ(value, defaultValuesMax);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().max().subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, min)
+TEST_F(ObservableMax, checkWithComparator)
 {
-	bool errored = false;
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
+		.max(std::greater<int>())
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				gotValue = true;
+				EXPECT_EQ(value, defaultValuesMin);
+			},
+			[](const auto &) {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableMax, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.max()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableMin : public testing::Test
+{
+};
+
+TEST_F(ObservableMin, checkDefaultBehavior)
+{
+	bool gotValue = false;
+	Observable<int>::range(defaultValues) //
 		.min()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 2);
+				EXPECT_EQ(value, defaultValuesMin);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().min().subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, count)
+TEST_F(ObservableMin, checkWithComparator)
 {
-	bool errored = false;
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
+		.min(std::greater<int>())
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				gotValue = true;
+				EXPECT_EQ(value, defaultValuesMax);
+			},
+			[](const auto &) {});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(ObservableMin, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.min()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableCount : public testing::Test
+{
+};
+
+TEST_F(ObservableCount, checkFindsCorrectCount)
+{
+	bool gotValue = false;
+	Observable<int>::range(defaultValues) //
 		.count()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 3);
+				EXPECT_EQ(value, defaultValuesCount);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().count().subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, elementAt)
+TEST_F(ObservableCount, checkErrorsAreForwarded)
 {
-	bool errored = false;
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.count()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableElementAt : public testing::Test
+{
+};
+
+TEST_F(ObservableElementAt, checkFindsCorrectElementAt)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.elementAt(1)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 4);
+				EXPECT_EQ(value, defaultValues[1]);
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().elementAt(1).subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, first)
+TEST_F(ObservableElementAt, checkIsEmptyForOutOfRangeIndex)
 {
-	bool errored = false;
+	bool completed = false;
+	Observable<int>::range(defaultValues) //
+		.elementAt(defaultValuesCount)
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {},
+			[&completed]()
+			{
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableElementAt, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.elementAt(1)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableFirst : public testing::Test
+{
+};
+
+TEST_F(ObservableFirst, checkFindsCorrectFirstElement)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.first()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 2);
+				EXPECT_EQ(value, defaultValues.front());
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
-
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().elementAt(1).subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
 }
 
-TEST(Observable, last)
+TEST_F(ObservableFirst, checkIsEmptyForEmptyObservable)
 {
-	bool errored = false;
+	bool completed = false;
+	Observable<int>::empty() //
+		.first()
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {},
+			[&completed]()
+			{
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableFirst, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.first()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class ObservableLast : public testing::Test
+{
+};
+
+TEST_F(ObservableLast, checkFindsCorrectFirstElement)
+{
 	bool gotValue = false;
-	Observable<int>::range(evenValues)
+	Observable<int>::range(defaultValues) //
 		.last()
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				EXPECT_FALSE(gotValue);
 				gotValue = true;
-				EXPECT_EQ(value, 6);
+				EXPECT_EQ(value, defaultValues.back());
 			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			});
+			[](const auto &) {});
 	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+}
 
-	errored = false;
-	gotValue = false;
-	Observable<int>::empty().elementAt(1).subscribe(
-		[&gotValue](const auto value)
-		{
-			EXPECT_FALSE(gotValue);
-			gotValue = true;
-			EXPECT_EQ(value, 0);
-		},
-		[&errored](const auto &exception)
-		{
-			errored = true;
-		});
-	EXPECT_TRUE(gotValue);
-	EXPECT_FALSE(errored);
+TEST_F(ObservableLast, checkIsEmptyForEmptyObservable)
+{
+	bool completed = false;
+	Observable<int>::empty() //
+		.first()
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {},
+			[&completed]()
+			{
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableLast, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.first()
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
 }

@@ -39,7 +39,8 @@ template <typename T>
 void recpp::processors::First<T>::Impl::onComplete()
 {
 	const auto result = m_result.load();
-	m_subscriber.onNext(result ? *result : T{});
+	if (result)
+		m_subscriber.onNext(*result);
 	m_subscriber.onComplete();
 }
 
