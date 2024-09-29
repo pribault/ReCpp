@@ -1,7 +1,13 @@
+// fixtures
+#include <fixtures/EventLoopBasedTest.h>
+#include <fixtures/WorkerThreadBasedTest.h>
+
 // gtest
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 // recpp
+#include <recpp/async/EventLoop.h>
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Completable.h>
 #include <recpp/rx/Maybe.h>
@@ -24,755 +30,821 @@ namespace
 	constexpr auto			delayTolerance = chrono::milliseconds(10);
 	constexpr auto			delayDuration = chrono::milliseconds(100);
 	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr string_view	runtimeErrorMessage = "unexpected error!";
 } // namespace
 
-TEST(Completable, complete)
+class CompletableComplete : public testing::Test
+{
+};
+
+TEST_F(CompletableComplete, CheckOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::complete().subscribe(
-		[&completed]()
-		{
-			if (completed)
-				throw runtime_error("completion handler called twice");
-			completed = true;
-		},
-		[](const auto &exception)
-		{
-			throw runtime_error("error handler called");
-		}));
+	Completable::complete() //
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Completable, create)
+TEST_F(CompletableComplete, CheckOnErrorIsNotEmited)
+{
+	Completable::complete() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class CompletableCreate : public testing::Test
+{
+protected:
+	static Completable complete()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+			});
+	}
+	static Completable completeTwice()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+				subscriber.onComplete();
+			});
+	}
+	static Completable error()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Completable errorTwice()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Completable errorAfterComplete()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Completable completeAfterError()
+	{
+		return Completable::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+};
+
+TEST_F(CompletableCreate, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::create(
-						[](auto &subscriber)
-						{
-							subscriber.onComplete();
-							// Try to complete again, should not be forwarded
-							subscriber.onComplete();
-							// Try to send an error, should not be forwared
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	complete() //
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::create(
-						[](auto &subscriber)
-						{
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to emit another error, should not be forwarded
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to complete, should not be forwarded
-							subscriber.onComplete();
-						})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Completable::create([](auto &subscriber) {})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
 }
 
-TEST(Completable, defer)
+TEST_F(CompletableCreate, checkOnErrorIsNotEmitedOnComplete)
+{
+	complete() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(CompletableCreate, checkOnCompleteIsNotEmitedTwice)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::defer(
-						[]()
-						{
-							return Completable::complete();
-						})
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	completeTwice() //
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::defer(
-						[]()
-						{
-							return Completable::error(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Completable::defer(
-						[]()
-						{
-							return Completable::never();
-						})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
 }
 
-TEST(Completable, error)
+TEST_F(CompletableCreate, checkOnErrorIsNotEmitedOnCompleteTwice)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
+	completeTwice() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
 }
 
-TEST(Completable, never)
+TEST_F(CompletableCreate, checkOnErrorIsEmited)
 {
-	EXPECT_NO_THROW(Completable::never().subscribe(
+	bool gotError = false;
+	error() //
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(CompletableCreate, checkOnCompleteIsNotEmitedOnError)
+{
+	error() //
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(CompletableCreate, checkOnErrorIsNotEmitedTwice)
+{
+	bool gotError = false;
+	errorTwice() //
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(CompletableCreate, checkOnErrorIsNotEmitedAfterComplete)
+{
+	errorAfterComplete() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(CompletableCreate, checkOnCompleteIsNotEmitedAfterError)
+{
+	completeAfterError() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class CompletableDefer : public testing::Test
+{
+};
+
+TEST_F(CompletableDefer, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Completable::defer(
 		[]()
 		{
-			throw runtime_error("completion handler called");
+			return Completable::complete();
+		}) //
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(CompletableDefer, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	Completable::defer(
+		[]()
+		{
+			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class CompletableError : public testing::Test
+{
+};
+
+TEST_F(CompletableError, checkOnCompleteIsNotEmited)
+{
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(CompletableError, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class CompletableNever : public testing::Test
+{
+};
+
+TEST_F(CompletableNever, checkNothingIsEmited)
+{
+	Completable::never().subscribe(
+		[]()
+		{
+			ADD_FAILURE();
 		},
-		[](const auto &exception)
+		[](const auto &)
 		{
-			throw runtime_error("error handler called");
-		}));
+			ADD_FAILURE();
+		});
 }
 
-TEST(Completable, merge)
+class CompletableMerge : public testing::Test
 {
-	Observable<Completable> completableList = Observable<Completable>::create(
-		[](auto &subscriber)
-		{
-			subscriber.onNext(Completable::complete());
-			subscriber.onNext(Completable::complete());
-			subscriber.onNext(Completable::complete());
-			subscriber.onComplete();
-		});
-	bool completed = false;
-	EXPECT_NO_THROW(Completable::merge(completableList)
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(completed);
+protected:
+	static Completable complete()
+	{
+		Observable<Completable> completableList = Observable<Completable>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Completable::complete());
+				subscriber.onNext(Completable::complete());
+				subscriber.onNext(Completable::complete());
+				subscriber.onComplete();
+			});
+		return Completable::merge(completableList);
+	}
+	static Completable error()
+	{
+		Observable<Completable> completableList = Observable<Completable>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))));
+				subscriber.onComplete();
+			});
+		return Completable::merge(completableList);
+	}
+};
 
-	Observable<Completable> completableWithErrorList = Observable<Completable>::create(
-		[](auto &subscriber)
-		{
-			subscriber.onNext(Completable::complete());
-			subscriber.onNext(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))));
-			subscriber.onNext(Completable::complete());
-			subscriber.onComplete();
-		});
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::merge(completableWithErrorList)
-						.subscribe(
-							[&completed]()
-							{
-								throw runtime_error("completion handler called twice");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-}
-
-TEST(Completable, doOnComplete)
+TEST_F(CompletableMerge, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.doOnComplete(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
+	complete() //
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Completable::never()
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
 }
 
-TEST(Completable, doOnError)
+TEST_F(CompletableMerge, checkOnErrorIsNotEmitedOnComplete)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnError(
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Completable::complete()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Completable::never()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
+	complete() //
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
 }
 
-TEST(Completable, doOnTerminate)
+TEST_F(CompletableMerge, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	error() //
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(CompletableMerge, checkOnCompleteIsNotEmitedOnError)
+{
+	error() //
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+class CompletableDoOnComplete : public testing::Test
+{
+};
+
+TEST_F(CompletableDoOnComplete, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Completable::complete() //
+		.doOnComplete(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			})
+		.subscribe();
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(CompletableDoOnComplete, checkOnCompleteIsNotEmitedOnError)
+{
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnComplete(
+			[]()
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class CompletableDoOnError : public testing::Test
+{
+};
+
+TEST_F(CompletableDoOnError, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnError(
+			[&gotError](const auto &exception)
+			{
+				EXPECT_FALSE(gotError);
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(CompletableDoOnError, checkOnErrorIsNotEmitedOnComplete)
+{
+	Completable::complete() //
+		.doOnError(
+			[](const auto &)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class CompletableDoOnTerminate : public testing::Test
+{
+};
+
+TEST_F(CompletableDoOnTerminate, checkOnTerminateIsEmitedOnComplete)
 {
 	bool terminated = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+	Completable::complete() //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				EXPECT_FALSE(terminated);
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
+}
 
-	terminated = false;
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+TEST_F(CompletableDoOnTerminate, checkOnTerminateIsEmitedOnError)
+{
+	bool terminated = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				EXPECT_FALSE(terminated);
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
-
-	EXPECT_NO_THROW(Completable::never()
-						.doOnTerminate(
-							[]()
-							{
-								throw runtime_error("termination handler called");
-							})
-						.subscribe());
 }
 
-TEST(Completable, tap)
+class CompletableTap : public testing::Test
+{
+};
+
+TEST_F(CompletableTap, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.tap(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Completable::never()
-						.tap(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-}
-
-TEST(Completable, observeOn)
-{
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool completed = false;
-	bool testFailed = false;
-	Completable::complete()
-		.doOnComplete(
-			[&testFailed, mainThreadId]()
+	Completable::complete() //
+		.tap(
+			[&completed]()
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId]()
-			{
-				if (completed)
-					testFailed = true;
+				EXPECT_FALSE(completed);
 				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
 			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
+			[](const auto &) {})
+		.subscribe();
 	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&testFailed]()
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
 }
 
-TEST(Completable, subscribeOn)
+TEST_F(CompletableTap, checkOnCompleteIsNotEmitedOnError)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool completed = false;
-	bool testFailed = false;
-	Completable::complete()
-		.doOnComplete(
-			[&testFailed, workerThreadId]()
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap(
+			[]()
 			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId]()
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
+				ADD_FAILURE();
 			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, workerThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&testFailed]()
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+			[](const auto &) {})
+		.subscribe();
 }
 
-TEST(Completable, andThen)
+TEST_F(CompletableTap, checkOnErrorIsEmited)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.andThen(Completable::complete())
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
+	bool gotError = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([]() {},
+			 [&gotError](const auto &exception)
+			 {
+				 EXPECT_FALSE(gotError);
+				 gotError = true;
+				 try
+				 {
+					 rethrow_exception(exception);
+				 }
+				 catch (runtime_error &runtimeError)
+				 {
+					 EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				 }
+			 })
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
 
-	errored = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))))
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
+TEST_F(CompletableTap, checkOnErrorIsNotEmitedOnComplete)
+{
+	Completable::complete() //
+		.tap([]() {},
+			 [](const auto &)
+			 {
+				 ADD_FAILURE();
+			 })
+		.subscribe();
+}
 
-	EXPECT_NO_THROW(Completable::never()
-						.andThen(Completable::complete())
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+class CompletableObserveOn : public WorkerThreadBasedTest
+{
+};
 
-	EXPECT_NO_THROW(Completable::never()
-						.andThen(Completable::error(make_exception_ptr(runtime_error("unexpected error!"))))
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-
+TEST_F(CompletableObserveOn, checkSubscribeOnMainThread)
+{
 	bool deferCalled = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Completable::defer(
-							[&deferCalled]()
-							{
-								if (deferCalled)
-									throw runtime_error("defer handler called twice");
-								deferCalled = true;
-								return Completable::complete();
-							}))
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	Completable::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_mainThreadId);
+			deferCalled = true;
+			return Completable::complete();
+		}) //
+		.observeOn(*m_worker)
+		.subscribe();
 	EXPECT_TRUE(deferCalled);
-	EXPECT_TRUE(completed);
-
-	deferCalled = false;
-	errored = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Completable::defer(
-							[&deferCalled]()
-							{
-								if (deferCalled)
-									throw runtime_error("defer handler called twice");
-								deferCalled = true;
-								return Completable::error(make_exception_ptr(runtime_error("unexpected error!")));
-							}))
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(deferCalled);
-	EXPECT_TRUE(errored);
-
-	deferCalled = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Completable::defer(
-							[&deferCalled]()
-							{
-								if (deferCalled)
-									throw runtime_error("defer handler called twice");
-								deferCalled = true;
-								return Completable::never();
-							}))
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(deferCalled);
-
-	bool succeeded = false;
-	completed = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Maybe<float>::just(defaultValue))
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(succeeded);
-	EXPECT_TRUE(completed);
-
-	succeeded = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Single<float>::just(defaultValue))
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(succeeded);
-
-	size_t valuesCount = 0;
-	completed = false;
-	EXPECT_NO_THROW(Completable::complete()
-						.andThen(Observable<int>::range(defaultValues))
-						.subscribe(
-							[&valuesCount](const auto value)
-							{
-								if (valuesCount >= defaultValues.size())
-									throw runtime_error("too much values forwarded");
-								const auto expectedValue = defaultValues[valuesCount++];
-								if (value != expectedValue)
-									throw runtime_error("unexpected value");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_EQ(valuesCount, defaultValues.size());
 }
 
-TEST(Completable, delay)
+TEST_F(CompletableObserveOn, checkDoOnCompleteCalledOnWorkerThread)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool				completed = false;
-	bool				testFailed = false;
-	auto				startTime = SchedulableQueue::Clock::now();
-	decltype(startTime) afterDelayTime;
-	Completable::complete()
+	bool completed = false;
+	Completable::complete() //
+		.observeOn(*m_worker)
 		.doOnComplete(
-			[&testFailed, mainThreadId]()
+			[this, &completed]()
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.delay(worker, delayDuration, true)
-		.subscribe(
-			[&completed, &testFailed, &afterDelayTime, workerThreadId]()
-			{
-				if (completed)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
 				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
 	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-	auto timeDiff = afterDelayTime - startTime;
+}
+
+TEST_F(CompletableObserveOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool gotError = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.observeOn(*m_worker)
+		.doOnError(
+			[this, &gotError](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(gotError);
+}
+
+class CompletableSubscribeOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(CompletableSubscribeOn, checkSubscribeOnWorkerThread)
+{
+	bool deferCalled = false;
+	Completable::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+			deferCalled = true;
+			return Completable::complete();
+		}) //
+		.subscribeOn(*m_worker)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(CompletableSubscribeOn, checkDoOnCompleteCalledOnWorkerThread)
+{
+	bool completed = false;
+	Completable::complete() //
+		.subscribeOn(*m_worker)
+		.doOnComplete(
+			[this, &completed]()
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				completed = true;
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(CompletableSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool gotError = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribeOn(*m_worker)
+		.doOnError(
+			[this, &gotError](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(gotError);
+}
+
+class CompletableAndThen : public testing::Test
+{
+};
+
+TEST_F(CompletableAndThen, checkNextCompletableIsCalledOnComplete)
+{
+	bool deferCalled = false;
+	Completable::complete() //
+		.andThen(Completable::defer(
+			[&deferCalled]()
+			{
+				EXPECT_FALSE(deferCalled);
+				deferCalled = true;
+				return Completable::complete();
+			}))
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(CompletableAndThen, checkNextSingleIsCalledOnComplete)
+{
+	bool deferCalled = false;
+	Completable::complete() //
+		.andThen(Single<int>::defer(
+			[&deferCalled]()
+			{
+				EXPECT_FALSE(deferCalled);
+				deferCalled = true;
+				return Single<int>::just(defaultValue);
+			}))
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(CompletableAndThen, checkNextMaybeIsCalledOnComplete)
+{
+	bool deferCalled = false;
+	Completable::complete() //
+		.andThen(Maybe<int>::defer(
+			[&deferCalled]()
+			{
+				EXPECT_FALSE(deferCalled);
+				deferCalled = true;
+				return Maybe<int>::empty();
+			}))
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(CompletableAndThen, checkNextObservableIsCalledOnComplete)
+{
+	bool deferCalled = false;
+	Completable::complete() //
+		.andThen(Observable<int>::defer(
+			[&deferCalled]()
+			{
+				EXPECT_FALSE(deferCalled);
+				deferCalled = true;
+				return Observable<int>::empty();
+			}))
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(CompletableAndThen, checkAndThenIsNotCalledOnError)
+{
+	bool deferCalled = false;
+	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.andThen(Completable::defer(
+			[&deferCalled]()
+			{
+				deferCalled = true;
+				return Completable::complete();
+			}))
+		.subscribe();
+	EXPECT_FALSE(deferCalled);
+}
+
+class CompletableDelay : public EventLoopBasedTest
+{
+};
+
+TEST_F(CompletableDelay, checkOnCompleteDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Completable::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Completable::complete();
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe(
+			[this, &end]()
+			{
+				end = recpp::async::Scheduler::Clock::now();
+				m_eventLoop->stop();
+			},
+			[](const auto &) {});
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
 	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
 
-	bool errored = false;
-	testFailed = false;
-	startTime = SchedulableQueue::Clock::now();
-	Completable::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.delay(worker, delayDuration, true)
-		.subscribe(
-			[&testFailed]()
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
-	timeDiff = afterDelayTime - startTime;
-	gap = timeDiff - delayDuration;
+TEST_F(CompletableDelay, checkOnErrorDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Completable::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([]() {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
+
+TEST_F(CompletableDelay, checkNoErrorDelayMode)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Completable::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
+		.subscribe([]() {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	EXPECT_LT(chrono::abs(timeDiff), delayTolerance);
 }

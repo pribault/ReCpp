@@ -1,3 +1,7 @@
+// fixtures
+#include <fixtures/EventLoopBasedTest.h>
+#include <fixtures/WorkerThreadBasedTest.h>
+
 // gtest
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -48,44 +52,6 @@ namespace
 	{
 		return value / 10.f;
 	}
-
-	class WorkerThreadBasedTest : public testing::Test
-	{
-	protected:
-		void SetUp() final
-		{
-			m_worker = make_unique<WorkerThread>();
-			m_mainThreadId = this_thread::get_id();
-			m_workerThreadId = m_worker->threadId();
-		}
-
-		void TearDown() final
-		{
-			m_worker.reset();
-			m_mainThreadId = {};
-			m_workerThreadId = {};
-		}
-
-		unique_ptr<WorkerThread> m_worker;
-		thread::id				 m_mainThreadId;
-		thread::id				 m_workerThreadId;
-	};
-
-	class EventLoopBasedTest : public testing::Test
-	{
-	protected:
-		void SetUp() final
-		{
-			m_eventLoop = make_unique<recpp::async::EventLoop>();
-		}
-
-		void TearDown() final
-		{
-			m_eventLoop.reset();
-		}
-
-		unique_ptr<recpp::async::EventLoop> m_eventLoop;
-	};
 } // namespace
 
 class ObservableCreate : public testing::Test
@@ -184,12 +150,13 @@ TEST_F(ObservableCreate, checkOnCompleteIsEmited)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   [&completed]()
 				   {
+					   EXPECT_FALSE(completed);
 					   completed = true;
 				   });
 	EXPECT_TRUE(completed);
 }
 
-TEST_F(ObservableCreate, checkOnCompleteIsNotCalledTwice)
+TEST_F(ObservableCreate, checkOnCompleteIsNotEmitedTwice)
 {
 	bool completed = false;
 	completesTwice() //
@@ -199,6 +166,7 @@ TEST_F(ObservableCreate, checkOnCompleteIsNotCalledTwice)
 					   EXPECT_FALSE(completed);
 					   completed = true;
 				   });
+	EXPECT_TRUE(completed);
 }
 
 TEST_F(ObservableCreate, checkValuesAfterCompleteArentEmited)
@@ -208,8 +176,7 @@ TEST_F(ObservableCreate, checkValuesAfterCompleteArentEmited)
 			[](const auto)
 			{
 				ADD_FAILURE();
-			},
-			[](const auto &) {}, []() {});
+			});
 }
 
 TEST_F(ObservableCreate, checkEmitedError)
@@ -219,6 +186,7 @@ TEST_F(ObservableCreate, checkEmitedError)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
 				   {
+					   EXPECT_FALSE(gotError);
 					   gotError = true;
 					   try
 					   {
@@ -228,22 +196,7 @@ TEST_F(ObservableCreate, checkEmitedError)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
-	EXPECT_TRUE(gotError);
-}
-
-TEST_F(ObservableCreate, checkErrorIsNotCalledTwice)
-{
-	bool gotError = false;
-	doubleError() //
-		.subscribe([](const auto) {},
-				   [&gotError](const auto &exception)
-				   {
-					   EXPECT_FALSE(gotError);
-					   gotError = true;
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -254,8 +207,7 @@ TEST_F(ObservableCreate, checkValuesAfterErrorArentEmited)
 			[](const auto)
 			{
 				ADD_FAILURE();
-			},
-			[](const auto &) {}, []() {});
+			});
 }
 
 TEST_F(ObservableCreate, checkCompleteAfterErrorIsntEmited)
@@ -344,8 +296,7 @@ TEST_F(ObservableDefer, checkEmitedError)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -384,8 +335,7 @@ TEST_F(ObservableEmpty, checkNoValueIsEmited)
 			[](const auto)
 			{
 				ADD_FAILURE();
-			},
-			[](const auto &) {}, []() {});
+			});
 }
 
 TEST_F(ObservableEmpty, checkNoErrorIsEmited)
@@ -395,8 +345,7 @@ TEST_F(ObservableEmpty, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 class ObservableError : public testing::Test
@@ -424,8 +373,7 @@ TEST_F(ObservableError, checkOnErrorIsEmited)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -438,8 +386,7 @@ TEST_F(ObservableError, checkOnlyOneErrorIsEmited)
 				   {
 					   EXPECT_FALSE(gotError);
 					   gotError = true;
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -450,8 +397,7 @@ TEST_F(ObservableError, checkNoValueIsEmited)
 			[](const auto)
 			{
 				ADD_FAILURE();
-			},
-			[](const auto &) {}, []() {});
+			});
 }
 
 TEST_F(ObservableError, checkOnCompleteIsntEmited)
@@ -477,8 +423,7 @@ TEST_F(ObservableJust, checkValueIsEmitted)
 			{
 				EXPECT_EQ(value, defaultValue);
 				gotValue = true;
-			},
-			[](const auto &) {}, []() {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -491,8 +436,7 @@ TEST_F(ObservableJust, checkOnlyOneValueIsEmitted)
 			{
 				EXPECT_FALSE(gotValue);
 				gotValue = true;
-			},
-			[](const auto &) {}, []() {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -516,8 +460,7 @@ TEST_F(ObservableJust, checkNoError)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 class ObservableNever : public testing::Test
@@ -583,8 +526,7 @@ TEST_F(ObservableRange, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 class ObservableMerge : public testing::Test
@@ -655,8 +597,7 @@ TEST_F(ObservableMerge, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 TEST_F(ObservableMerge, checkErrorCanBeEmited)
@@ -699,8 +640,7 @@ TEST_F(ObservableInterval, checkEmitedValues)
 				values.push_back(value);
 				if (value == 4)
 					m_eventLoop->stop();
-			},
-			[](const auto &) {}, []() {});
+			});
 	m_eventLoop->run();
 	EXPECT_EQ(values, expected);
 }
@@ -717,8 +657,7 @@ TEST_F(ObservableInterval, checkNoErrorIsEmited)
 			[](const auto &)
 			{
 				ADD_FAILURE();
-			},
-			[]() {});
+			});
 	m_eventLoop->run();
 }
 
@@ -755,8 +694,7 @@ TEST_F(ObservableFilter, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 TEST_F(ObservableFilter, checkErrorsAreForwarded)
@@ -776,8 +714,7 @@ TEST_F(ObservableFilter, checkErrorsAreForwarded)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -805,8 +742,7 @@ TEST_F(ObservableIgnoreElements, checkCompletes)
 			[&completed]()
 			{
 				completed = true;
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(completed);
 }
 
@@ -850,8 +786,7 @@ TEST_F(ObservableIgnoreElements, checkDoNotCompleteOnError)
 			[]()
 			{
 				ADD_FAILURE();
-			},
-			[](const auto &) {});
+			});
 }
 
 class ObservableMap : public testing::Test
@@ -887,8 +822,7 @@ TEST_F(ObservableMap, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 TEST_F(ObservableMap, checkErrorsAreForwarded)
@@ -972,8 +906,7 @@ TEST_F(ObservableFlatMap, checkNoErrorIsEmited)
 				   [](const auto &)
 				   {
 					   ADD_FAILURE();
-				   },
-				   []() {});
+				   });
 }
 
 TEST_F(ObservableFlatMap, checkErrorsAreForwarded)
@@ -997,8 +930,7 @@ TEST_F(ObservableFlatMap, checkErrorsAreForwarded)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -1038,8 +970,7 @@ TEST_F(ObservableFlatMap, checkCanEmitErrors)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -1440,8 +1371,7 @@ TEST_F(ObservableDelay, checkOnNextDelay)
 			{
 				end = recpp::async::Scheduler::Clock::now();
 				m_eventLoop->stop();
-			},
-			[](const auto &) {}, []() {});
+			});
 
 	m_eventLoop->run();
 	auto timeDiff = end - start;
@@ -1465,8 +1395,7 @@ TEST_F(ObservableDelay, checkOnErrorDelay)
 				   {
 					   end = recpp::async::Scheduler::Clock::now();
 					   m_eventLoop->stop();
-				   },
-				   []() {});
+				   });
 
 	m_eventLoop->run();
 	auto timeDiff = end - start;
@@ -1490,8 +1419,7 @@ TEST_F(ObservableDelay, checkNoErrorDelayMode)
 				   {
 					   end = recpp::async::Scheduler::Clock::now();
 					   m_eventLoop->stop();
-				   },
-				   []() {});
+				   });
 
 	m_eventLoop->run();
 	auto timeDiff = end - start;
@@ -1536,8 +1464,7 @@ TEST_F(ObservableDefaultIfEmpty, checkValuesAreForwarded)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValue);
-			},
-			[](const auto &) {}, []() {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1551,8 +1478,7 @@ TEST_F(ObservableDefaultIfEmpty, checkDefaultValueIsEmitedIfEmpty)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, otherValue);
-			},
-			[](const auto &) {}, []() {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1573,8 +1499,7 @@ TEST_F(ObservableDefaultIfEmpty, checkErrorsAreForwarded)
 					   {
 						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
 					   }
-				   },
-				   []() {});
+				   });
 	EXPECT_TRUE(gotError);
 }
 
@@ -1592,8 +1517,7 @@ TEST_F(ObservableAllOf, checkCanReturnTrue)
 			{
 				gotValue = true;
 				EXPECT_TRUE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1607,8 +1531,7 @@ TEST_F(ObservableAllOf, checkCanReturnFalse)
 			{
 				gotValue = true;
 				EXPECT_FALSE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1647,8 +1570,7 @@ TEST_F(ObservableAnyOf, checkCanReturnTrue)
 			{
 				gotValue = true;
 				EXPECT_TRUE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1662,8 +1584,7 @@ TEST_F(ObservableAnyOf, checkCanReturnFalse)
 			{
 				gotValue = true;
 				EXPECT_FALSE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1702,8 +1623,7 @@ TEST_F(ObservableNoneOf, checkCanReturnTrue)
 			{
 				gotValue = true;
 				EXPECT_TRUE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1717,8 +1637,7 @@ TEST_F(ObservableNoneOf, checkCanReturnFalse)
 			{
 				gotValue = true;
 				EXPECT_FALSE(value);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1757,8 +1676,7 @@ TEST_F(ObservableReduce, checkDefaultBehavior)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, evenValuesSum);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1772,8 +1690,7 @@ TEST_F(ObservableReduce, checkWithInitValue)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, 10 + evenValuesSum);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1787,8 +1704,7 @@ TEST_F(ObservableReduce, checkWithOperation)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, -evenValuesSum);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1802,8 +1718,7 @@ TEST_F(ObservableReduce, checkWithOperationAndInitValue)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, 10 - evenValuesSum);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1842,8 +1757,7 @@ TEST_F(ObservableMax, checkDefaultBehavior)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValuesMax);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1857,8 +1771,7 @@ TEST_F(ObservableMax, checkWithComparator)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValuesMin);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1897,8 +1810,7 @@ TEST_F(ObservableMin, checkDefaultBehavior)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValuesMin);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1912,8 +1824,7 @@ TEST_F(ObservableMin, checkWithComparator)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValuesMax);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1952,8 +1863,7 @@ TEST_F(ObservableCount, checkFindsCorrectCount)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValuesCount);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -1992,8 +1902,7 @@ TEST_F(ObservableElementAt, checkFindsCorrectElementAt)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValues[1]);
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -2050,8 +1959,7 @@ TEST_F(ObservableFirst, checkFindsCorrectFirstElement)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValues.front());
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
@@ -2108,8 +2016,7 @@ TEST_F(ObservableLast, checkFindsCorrectFirstElement)
 			{
 				gotValue = true;
 				EXPECT_EQ(value, defaultValues.back());
-			},
-			[](const auto &) {});
+			});
 	EXPECT_TRUE(gotValue);
 }
 
