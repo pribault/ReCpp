@@ -1,7 +1,13 @@
+// fixtures
+#include <fixtures/EventLoopBasedTest.h>
+#include <fixtures/WorkerThreadBasedTest.h>
+
 // gtest
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 // recpp
+#include <recpp/async/EventLoop.h>
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Single.h>
 
@@ -14,993 +20,1213 @@ using namespace std;
 
 namespace
 {
-	constexpr int  defaultValue = 42;
-	constexpr auto sleepDuration = chrono::milliseconds(10);
-	constexpr auto delayTolerance = chrono::milliseconds(10);
-	constexpr auto delayDuration = chrono::milliseconds(100);
-	constexpr auto sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr int		  defaultValue = 42;
+	const vector<int>	  defaultValues = {1, 2, 3};
+	constexpr auto		  sleepDuration = chrono::milliseconds(10);
+	constexpr auto		  delayTolerance = chrono::milliseconds(1);
+	constexpr auto		  delayDuration = chrono::milliseconds(10);
+	constexpr string_view runtimeErrorMessage = "unexpected error!";
+
+	float divideByTen(int value)
+	{
+		return value / 10.f;
+	}
 } // namespace
 
-TEST(Single, create)
+class SingleCreate : public testing::Test
+{
+public:
+	static Single<int> singleValue()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(defaultValue);
+			});
+	}
+	static Single<int> twoValues()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(defaultValue);
+				subscriber.onNext(defaultValue);
+			});
+	}
+	static Single<int> error()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Single<int> twoErrors()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Single<int> errorAfterValue()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(defaultValue);
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Single<int> valueAfterError()
+	{
+		return Single<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onNext(defaultValue);
+			});
+	}
+};
+
+TEST_F(SingleCreate, checkEmitedValue)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onNext(defaultValue);
-							// Try to complete again, should not be forwarded
-							subscriber.onNext(defaultValue);
-							// Try to send an error, should not be forwared
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[&completed](const auto value)
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to emit another error, should not be forwarded
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to complete, should not be forwarded
-							subscriber.onNext(defaultValue);
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::create([](auto &subscriber) {})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-}
-
-TEST(Single, defer)
-{
-	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::defer(
-						[]()
-						{
-							return Single<int>::just(defaultValue);
-						})
-						.subscribe(
-							[&completed](const auto value)
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::defer(
-						[]()
-						{
-							return Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::defer(
-						[]()
-						{
-							return Single<int>::never();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-}
-
-TEST(Single, error)
-{
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-}
-
-TEST(Single, just)
-{
-	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.subscribe(
-							[&completed](const auto value)
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	singleValue() //
+		.subscribe(
+			[&completed](const auto value)
+			{
+				completed = true;
+				EXPECT_EQ(value, defaultValue);
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Single, never)
+TEST_F(SingleCreate, checkOnErrorIsNotEmitedOnNext)
 {
-	EXPECT_NO_THROW(Single<int>::never().subscribe(
-		[](const auto value)
+	singleValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleCreate, checkCannotEmitMultipleValues)
+{
+	bool completed = false;
+	twoValues() //
+		.subscribe(
+			[&completed](const auto)
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+}
+
+TEST_F(SingleCreate, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	error() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleCreate, checkOnNextIsNotEmitedOnError)
+{
+	error() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(SingleCreate, checkOnErrorIsEmitedOnlyOnce)
+{
+	bool gotError = false;
+	twoErrors() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleCreate, checkOnErrorIsNotEmitedAfterValue)
+{
+	errorAfterValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleCreate, checkOnNextIsNotEmitedAfterError)
+{
+	valueAfterError() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+class SingleDefer : public testing::Test
+{
+protected:
+	static Single<int> deferredValue()
+	{
+		return Single<int>::defer(
+			[]()
+			{
+				return Single<int>::just(defaultValue);
+			});
+	}
+	static Single<int> deferredError()
+	{
+		return Single<int>::defer(
+			[]()
+			{
+				return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+};
+
+TEST_F(SingleDefer, checkEmitedValue)
+{
+	bool completed = false;
+	deferredValue() //
+		.subscribe(
+			[&completed](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleDefer, checkEmitedError)
+{
+	bool gotError = false;
+	deferredError() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class SingleError : public testing::Test
+{
+protected:
+	static Single<int> errored()
+	{
+		return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+	}
+};
+
+TEST_F(SingleError, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleError, checkOnlyOneErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleError, checkNoValueIsEmited)
+{
+	errored() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+class SingleJust : public testing::Test
+{
+};
+
+TEST_F(SingleJust, checkValueIsEmitted)
+{
+	bool gotValue = false;
+	Single<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				gotValue = true;
+			});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(SingleJust, checkOnlyOneValueIsEmitted)
+{
+	bool gotValue = false;
+	Single<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+			});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(SingleJust, checkNoError)
+{
+	Single<int>::just(defaultValue)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class SingleNever : public testing::Test
+{
+};
+
+TEST_F(SingleNever, checkNothingIsEmited)
+{
+	Single<int>::never().subscribe(
+		[](const auto)
 		{
-			throw runtime_error("success handler called");
+			ADD_FAILURE();
 		},
-		[](const auto &exception)
+		[](const auto &)
 		{
-			throw runtime_error("error handler called");
-		}));
+			ADD_FAILURE();
+		});
 }
 
-TEST(Single, map)
+class SingleMap : public testing::Test
+{
+};
+
+TEST_F(SingleMap, checkEmitedValue)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[&completed](const auto value)
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	Single<int>::just(defaultValue) //
+		.map<float>(&divideByTen)
+		.subscribe(
+			[&completed](const auto value)
+			{
+				EXPECT_EQ(value, divideByTen(defaultValue));
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
 }
 
-TEST(Single, flatMap)
+TEST_F(SingleMap, checkNoErrorIsEmited)
+{
+	Single<int>::just(defaultValue) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleMap, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleMap, checkDoNotEmitValueOnError)
+{
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+class SingleFlatMap : public testing::Test
+{
+protected:
+	static Single<float> transformedValue()
+	{
+		return Single<int>::just(defaultValue) //
+			.flatMap<float>(
+				[](const auto value)
+				{
+					return Single<float>::just(divideByTen(value));
+				});
+	}
+};
+
+TEST_F(SingleFlatMap, checkEmitedValue)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Single<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[&completed](const auto value)
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	transformedValue() //
+		.subscribe(
+			[&completed](const auto value)
+			{
+				EXPECT_EQ(value, divideByTen(defaultValue));
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Single<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Single<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Single<float>::never();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
 }
 
-TEST(Single, flatMapCompletable)
+TEST_F(SingleFlatMap, checkNoErrorIsEmited)
+{
+	transformedValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleFlatMap, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Single<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleFlatMap, checkDoNotEmitValueOnError)
+{
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Single<float>::just(defaultValue);
+			})
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(SingleFlatMap, checkCanEmitErrors)
+{
+	bool gotError = false;
+	Single<int>::just(defaultValue) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Single<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class SingleFlatMapCompletable : public testing::Test
+{
+};
+
+TEST_F(SingleFlatMapCompletable, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapCompletable(
-							[](const auto value)
-							{
-								return Completable::complete();
-							})
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
+	Single<int>::just(42)
+		.flatMapCompletable(
+			[](int)
+			{
+				return Completable::complete();
+			})
+		.subscribe(
+			[&completed]()
+			{
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMapCompletable(
-							[](const auto value)
-							{
-								return Completable::complete();
-							})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapCompletable(
-							[](const auto value)
-							{
-								return Completable::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[]()
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							}));
-	EXPECT_TRUE(errored);
 }
 
-TEST(Single, flatMapMaybe)
+TEST_F(SingleFlatMapCompletable, checkNoErrorIsEmited)
 {
-	bool gotValue = false;
+	Single<int>::just(42)
+		.flatMapCompletable(
+			[](int)
+			{
+				return Completable::complete();
+			})
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleFlatMapCompletable, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMapCompletable(
+			[](int)
+			{
+				return Completable::complete();
+			})
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleFlatMapCompletable, checkDoNotCompleteOnError)
+{
+	Single<int>::just(42)
+		.flatMapCompletable(
+			[](int)
+			{
+				return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+class SingleFlatMapMaybe : public testing::Test
+{
+protected:
+	static Maybe<float> maybeWithValue()
+	{
+		return Single<int>::just(defaultValue) //
+			.flatMapMaybe<float>(
+				[](const auto value)
+				{
+					return Maybe<float>::just(divideByTen(value));
+				});
+	}
+
+	static Maybe<float> maybeWithoutValue()
+	{
+		return Single<int>::just(defaultValue) //
+			.flatMapMaybe<float>(
+				[](const auto value)
+				{
+					return Maybe<float>::empty();
+				});
+	}
+};
+
+TEST_F(SingleFlatMapMaybe, checkEmitedValue)
+{
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapMaybe<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[&gotValue](const auto value)
-							{
-								if (gotValue)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								gotValue = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMapMaybe<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("success handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapMaybe<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapMaybe<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::never();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapMaybe<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::empty();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
+	maybeWithValue() //
+		.subscribe(
+			[&completed](const auto value)
+			{
+				EXPECT_EQ(value, divideByTen(defaultValue));
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Single, flatMapObservable)
+TEST_F(SingleFlatMapMaybe, checkNoErrorIsEmitedWithValue)
 {
-	bool gotValue = false;
+	maybeWithValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleFlatMapMaybe, checkNoErrorIsEmitedWithoutValue)
+{
+	maybeWithoutValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleFlatMapMaybe, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMapMaybe<float>(
+			[](const auto)
+			{
+				return Maybe<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleFlatMapMaybe, checkDoNotEmitValueOnError)
+{
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMapMaybe<float>(
+			[](const auto)
+			{
+				return Maybe<float>::just(defaultValue);
+			})
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(SingleFlatMapMaybe, checkCanEmitErrors)
+{
+	bool gotError = false;
+	Single<int>::just(defaultValue) //
+		.flatMapMaybe<float>(
+			[](const auto)
+			{
+				return Maybe<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class SingleFlatMapObservable : public testing::Test
+{
+protected:
+	static Observable<int> transformedValues()
+	{
+		return Single<int>::just(defaultValue) //
+			.flatMapObservable<int>(
+				[](const auto value)
+				{
+					return Observable<int>::range(defaultValues);
+				});
+	}
+};
+
+TEST_F(SingleFlatMapObservable, checkEmitedValues)
+{
+	bool		completed = false;
+	vector<int> result;
+	transformedValues() //
+		.subscribe(
+			[&completed, &result](const auto value)
+			{
+				result.push_back(value);
+				completed = true;
+			});
+	EXPECT_EQ(result, defaultValues);
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleFlatMapObservable, checkNoErrorIsEmited)
+{
+	transformedValues() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleFlatMapObservable, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMapObservable<int>(
+			[](const auto)
+			{
+				return Observable<int>::range(defaultValues);
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleFlatMapObservable, checkDoNotEmitValueOnError)
+{
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMapObservable<int>(
+			[](const auto)
+			{
+				return Observable<int>::range(defaultValues);
+			})
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(SingleFlatMapObservable, checkCanEmitErrors)
+{
+	bool gotError = false;
+	Single<int>::just(defaultValue) //
+		.flatMapObservable<int>(
+			[](const auto)
+			{
+				return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class SingleIgnoreElement : public testing::Test
+{
+};
+
+TEST_F(SingleIgnoreElement, checkCompletes)
+{
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapObservable<float>(
-							[](const auto value)
-							{
-								return Observable<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[&gotValue](const auto value)
-							{
-								if (gotValue)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								gotValue = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMapObservable<float>(
-							[](const auto value)
-							{
-								return Observable<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("success handler called twice");
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapObservable<float>(
-							[](const auto value)
-							{
-								return Observable<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapObservable<float>(
-							[](const auto value)
-							{
-								return Observable<float>::never();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.flatMapObservable<float>(
-							[](const auto value)
-							{
-								return Observable<float>::empty();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("success handler called twice");
-								completed = true;
-							}));
+	Single<int>::just(defaultValue) //
+		.ignoreElement()
+		.subscribe(
+			[&completed]()
+			{
+				completed = true;
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Single, ignoreElement)
+TEST_F(SingleIgnoreElement, checkNoErrorIsEmited)
 {
-	bool succeeded = false;
+	Single<int>::just(defaultValue) //
+		.ignoreElement()
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleIgnoreElement, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElement()
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(SingleIgnoreElement, checkDoNotCompleteOnError)
+{
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElement()
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+class SingleDoOnError : public testing::Test
+{
+};
+
+TEST_F(SingleDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Single<int>::just(defaultValue) //
+		.doOnError(
+			[](const auto &)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+TEST_F(SingleDoOnError, checkDoOnErrorIsCalledOnError)
+{
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnError(
+			[&gotError](const auto &exception)
+			{
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+class SingleDoOnSuccess : public testing::Test
+{
+};
+
+TEST_F(SingleDoOnSuccess, checkDoOnSuccessIsCalled)
+{
 	bool completed = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.doOnSuccess(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								succeeded = true;
-							})
-						.ignoreElement()
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(succeeded);
+	Single<int>::just(defaultValue) //
+		.doOnSuccess(
+			[&completed](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				completed = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(completed);
 }
 
-TEST(Single, doOnError)
+TEST_F(SingleDoOnSuccess, checkDoOnSuccessIsNotCalledInCaseOfAnError)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnError(
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Single<int>::never()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnSuccess(
+			[](const auto value)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
 }
 
-TEST(Single, doOnSuccess)
+class SingleDoOnTerminate : public testing::Test
 {
-	bool succeeded = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.doOnSuccess(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								succeeded = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(succeeded);
+};
 
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnSuccess(
-							[&succeeded](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Single<int>::never()
-						.doOnSuccess(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-}
-
-TEST(Single, doOnTerminate)
+TEST_F(SingleDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 {
 	bool terminated = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+	Single<int>::just(defaultValue) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
+}
 
-	terminated = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+TEST_F(SingleDoOnTerminate, checkDoOnTerminateIsCalledOnError)
+{
+	bool terminated = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
-
-	EXPECT_NO_THROW(Single<int>::never()
-						.doOnTerminate(
-							[]()
-							{
-								throw runtime_error("termination handler called");
-							})
-						.subscribe());
 }
 
-TEST(Single, tap)
+class SingleTap : public testing::Test
 {
-	bool succeeded = false;
-	EXPECT_NO_THROW(Single<int>::just(defaultValue)
-						.tap(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-	EXPECT_TRUE(succeeded);
+};
 
-	bool errored = false;
-	EXPECT_NO_THROW(Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Single<int>::never()
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
+TEST_F(SingleTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Single<int>::just(defaultValue) //
+		.tap([](const auto) {},
+			 [](const auto &)
+			 {
+				 ADD_FAILURE();
+			 })
+		.subscribe();
 }
 
-TEST(Single, observeOn)
+TEST_F(SingleTap, checkTapDoOnErrorIsCalledOnError)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
+	bool gotError = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([](const auto) {},
+			 [&gotError](const auto &exception)
+			 {
+				 gotError = true;
+				 try
+				 {
+					 rethrow_exception(exception);
+				 }
+				 catch (runtime_error &runtimeError)
+				 {
+					 EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				 }
+			 })
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
 
+TEST_F(SingleTap, checkTapDoOnNextIsCalled)
+{
 	bool completed = false;
-	bool testFailed = false;
-	Single<int>::just(defaultValue)
-		.doOnSuccess(
-			[&testFailed, mainThreadId](const auto value)
+	Single<int>::just(defaultValue) //
+		.tap(
+			[&completed](const auto value)
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
+				EXPECT_EQ(value, defaultValue);
 				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
 			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
+			[](const auto &) {})
+		.subscribe();
 	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
 }
 
-TEST(Single, subscribeOn)
+TEST_F(SingleTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool completed = false;
-	bool testFailed = false;
-	Single<int>::just(defaultValue)
-		.doOnSuccess(
-			[&testFailed, workerThreadId](const auto value)
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap(
+			[](const auto)
 			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
+				ADD_FAILURE();
 			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, workerThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+			[](const auto &) {})
+		.subscribe();
 }
 
-TEST(Single, delay)
+class SingleObserveOn : public WorkerThreadBasedTest
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
+};
 
-	bool				completed = false;
-	bool				testFailed = false;
-	auto				startTime = SchedulableQueue::Clock::now();
-	decltype(startTime) afterDelayTime;
-	Single<int>::just(defaultValue)
+TEST_F(SingleObserveOn, checkSubscribeOnMainThread)
+{
+	bool deferCalled = false;
+	Single<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_mainThreadId);
+			deferCalled = true;
+			return Single<int>::just(defaultValue);
+		}) //
+		.observeOn(*m_worker)
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(SingleObserveOn, checkDoOnSuccessCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Single<int>::just(defaultValue) //
+		.observeOn(*m_worker)
 		.doOnSuccess(
-			[&testFailed, mainThreadId](const auto value)
+			[this, &doOnNextCalled](const auto value)
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
 			})
-		.delay(worker, delayDuration, true)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnNextCalled);
+}
+
+TEST_F(SingleObserveOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool doOnErrorCalled = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.observeOn(*m_worker)
+		.doOnError(
+			[this, &doOnErrorCalled](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnErrorCalled);
+}
+
+class SingleSubscribeOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(SingleSubscribeOn, checkSubscribeOnWorkerThread)
+{
+	bool deferCalled = false;
+	Single<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+			deferCalled = true;
+			return Single<int>::just(defaultValue);
+		}) //
+		.subscribeOn(*m_worker)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(SingleSubscribeOn, checkDoOnSuccessCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Single<int>::just(defaultValue) //
+		.subscribeOn(*m_worker)
+		.doOnSuccess(
+			[this, &doOnNextCalled](const auto value)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnNextCalled);
+}
+
+TEST_F(SingleSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool doOnErrorCalled = false;
+	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribeOn(*m_worker)
+		.doOnError(
+			[this, &doOnErrorCalled](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnErrorCalled);
+}
+
+class SingleDelay : public EventLoopBasedTest
+{
+};
+
+TEST_F(SingleDelay, checkOnNextDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Single<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Single<int>::just(defaultValue);
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe(
-			[&completed, &testFailed, &afterDelayTime, workerThreadId](const auto value)
+			[this, &end](const auto)
 			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
+				end = recpp::async::Scheduler::Clock::now();
+				m_eventLoop->stop();
 			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-	auto timeDiff = afterDelayTime - startTime;
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
 	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
 
-	bool errored = false;
-	testFailed = false;
-	startTime = SchedulableQueue::Clock::now();
-	Single<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.delay(worker, delayDuration, true)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
-	timeDiff = afterDelayTime - startTime;
-	gap = timeDiff - delayDuration;
+TEST_F(SingleDelay, checkOnErrorDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Single<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
+
+TEST_F(SingleDelay, checkNoErrorDelayMode)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Single<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	EXPECT_LT(chrono::abs(timeDiff), delayTolerance);
 }

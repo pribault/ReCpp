@@ -26,10 +26,8 @@ namespace
 {
 	constexpr auto			sleepDuration = chrono::milliseconds(10);
 	constexpr int			defaultValue = 42;
-	constexpr array<int, 3> defaultValues({1, 2, 3});
-	constexpr auto			delayTolerance = chrono::milliseconds(10);
-	constexpr auto			delayDuration = chrono::milliseconds(100);
-	constexpr auto			sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr auto			delayTolerance = chrono::milliseconds(1);
+	constexpr auto			delayDuration = chrono::milliseconds(10);
 	constexpr string_view	runtimeErrorMessage = "unexpected error!";
 } // namespace
 
