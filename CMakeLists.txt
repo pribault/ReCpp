@@ -131,6 +131,14 @@ target_include_directories(ReCpp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(ReCpp PUBLIC RsCpp)
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	target_link_options(ReCpp PUBLIC "-latomic")
+elseif(WIN32)
+	target_compile_options(ReCpp PRIVATE
+		/Wall
+		/WX
+		/wd4503
+		/wd4702
+		/bigobj
+	)
 endif()
 
 if(WIN32)
