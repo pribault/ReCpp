@@ -11,7 +11,7 @@
 #include <fstream>
 #include <iostream>
 
-using namespace recpp;
+using namespace recpp::rx;
 using namespace recpp::async;
 using namespace recpp::rx;
 using namespace std;

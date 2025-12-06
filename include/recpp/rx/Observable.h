@@ -378,26 +378,26 @@ namespace recpp::rx
 		Single<std::size_t> count();
 
 		/**
-		 * @brief Retrieve the element at the specified index as a {@link Single}.
+		 * @brief Retrieve the element at the specified index as a {@link Maybe}.
 		 *
 		 * @param index The element index.
-		 * @return The new {@link Single} instance.
+		 * @return The new {@link Maybe} instance.
 		 */
-		Single<T> elementAt(std::size_t index);
+		Maybe<T> elementAt(std::size_t index);
 
 		/**
-		 * @brief Retrieve the first element as a {@link Single}.
+		 * @brief Retrieve the first element as a {@link Maybe}.
 		 *
-		 * @return The new {@link Single} instance.
+		 * @return The new {@link Maybe} instance.
 		 */
-		Single<T> first();
+		Maybe<T> first();
 
 		/**
-		 * @brief Retrieve the last element as a {@link Single}.
+		 * @brief Retrieve the last element as a {@link Maybe}.
 		 *
-		 * @return The new {@link Single} instance.
+		 * @return The new {@link Maybe} instance.
 		 */
-		Single<T> last();
+		Maybe<T> last();
 
 	protected:
 		/**

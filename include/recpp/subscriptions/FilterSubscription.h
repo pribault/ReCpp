@@ -15,7 +15,7 @@ namespace recpp::subscriptions
 		public:
 			Impl(const rscpp::Subscription &subscription);
 
-			void request(size_t count) override;
+			void request(std::size_t count) override;
 
 			void cancel() override;
 
@@ -23,8 +23,8 @@ namespace recpp::subscriptions
 
 		private:
 			rscpp::Subscription m_subscription;
-			size_t				m_requested = 0;
-			size_t				m_waiting = 0;
+			std::size_t			m_requested = 0;
+			std::size_t			m_waiting = 0;
 		};
 
 	public:

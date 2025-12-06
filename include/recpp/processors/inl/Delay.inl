@@ -33,21 +33,40 @@ template <typename T, typename Rep, typename Period>
 void recpp::processors::Delay<T, Rep, Period>::Impl::onNext(const T &value)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable([subscriber, value]() mutable { subscriber.onNext(value); }));
+	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable(
+											  [subscriber, value]() mutable
+											  {
+												  subscriber.onNext(value);
+											  }));
 }
 
 template <typename T, typename Rep, typename Period>
 void recpp::processors::Delay<T, Rep, Period>::Impl::onError(const std::exception_ptr &error)
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable([subscriber, error]() mutable { subscriber.onError(error); }));
+	if (m_delayError)
+		m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable(
+												  [subscriber, error]() mutable
+												  {
+													  subscriber.onError(error);
+												  }));
+	else
+		m_scheduler.schedule(recpp::async::Schedulable(
+			[subscriber, error]() mutable
+			{
+				subscriber.onError(error);
+			}));
 }
 
 template <typename T, typename Rep, typename Period>
 void recpp::processors::Delay<T, Rep, Period>::Impl::onComplete()
 {
 	auto subscriber = m_subscriber;
-	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable([subscriber]() mutable { subscriber.onComplete(); }));
+	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable(
+											  [subscriber]() mutable
+											  {
+												  subscriber.onComplete();
+											  }));
 }
 
 template <typename T, typename Rep, typename Period>

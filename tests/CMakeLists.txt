@@ -20,6 +20,10 @@ include(CTest)
 set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/async/ThreadPool.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/fixtures/EventLoopBasedTest.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/fixtures/EventLoopBasedTest.h
+	${CMAKE_CURRENT_SOURCE_DIR}/fixtures/WorkerThreadBasedTest.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/fixtures/WorkerThreadBasedTest.h
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Completable.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Maybe.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/rx/Observable.cpp
@@ -32,4 +36,11 @@ add_test(NAME ReCpp-test COMMAND ReCpp-test)
 
 set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 20)
 
-target_link_libraries(ReCpp-test ReCpp gtest)
+target_include_directories(ReCpp-test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(ReCpp-test ReCpp gtest gmock)
+
+add_custom_command(TARGET ReCpp-test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:ReCpp-test>
+)

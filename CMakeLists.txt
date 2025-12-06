@@ -133,6 +133,12 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	target_link_options(ReCpp PUBLIC "-latomic")
 endif()
 
+if(WIN32)
+	target_compile_options(ReCpp PUBLIC /WX)
+elseif(UNIX)
+	target_compile_options(ReCpp PUBLIC -Werror)
+endif()
+
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
 
 if(RECPP_BUILD_EXAMPLES)

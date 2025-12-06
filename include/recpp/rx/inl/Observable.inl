@@ -266,21 +266,21 @@ recpp::rx::Single<std::size_t> recpp::rx::Observable<T>::count()
 }
 
 template <typename T>
-recpp::rx::Single<T> recpp::rx::Observable<T>::elementAt(std::size_t index)
+recpp::rx::Maybe<T> recpp::rx::Observable<T>::elementAt(std::size_t index)
 {
-	return Single<T>(std::make_shared<processors::ElementAt<T>>(*this, index));
+	return Maybe<T>(std::make_shared<processors::ElementAt<T>>(*this, index));
 }
 
 template <typename T>
-recpp::rx::Single<T> recpp::rx::Observable<T>::first()
+recpp::rx::Maybe<T> recpp::rx::Observable<T>::first()
 {
-	return Single<T>(std::make_shared<processors::First<T>>(*this));
+	return Maybe<T>(std::make_shared<processors::First<T>>(*this));
 }
 
 template <typename T>
-recpp::rx::Single<T> recpp::rx::Observable<T>::last()
+recpp::rx::Maybe<T> recpp::rx::Observable<T>::last()
 {
-	return Single<T>(std::make_shared<processors::Last<T>>(*this));
+	return Maybe<T>(std::make_shared<processors::Last<T>>(*this));
 }
 
 template <typename T>

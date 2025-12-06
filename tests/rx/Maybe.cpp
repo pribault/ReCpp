@@ -1,7 +1,13 @@
+// fixtures
+#include <fixtures/EventLoopBasedTest.h>
+#include <fixtures/WorkerThreadBasedTest.h>
+
 // gtest
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 // recpp
+#include <recpp/async/EventLoop.h>
 #include <recpp/async/WorkerThread.h>
 #include <recpp/rx/Maybe.h>
 
@@ -14,1061 +20,1192 @@ using namespace std;
 
 namespace
 {
-	constexpr int  defaultValue = 42;
-	constexpr auto sleepDuration = chrono::milliseconds(10);
-	constexpr auto delayTolerance = chrono::milliseconds(10);
-	constexpr auto delayDuration = chrono::milliseconds(100);
-	constexpr auto sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr int		  defaultValue = 42;
+	constexpr int		  otherValue = 55;
+	const vector<int>	  defaultValues = {1, 2, 3};
+	constexpr auto		  sleepDuration = chrono::milliseconds(10);
+	constexpr auto		  delayTolerance = chrono::milliseconds(10);
+	constexpr auto		  delayDuration = chrono::milliseconds(100);
+	constexpr auto		  sleepDurationForDelay = chrono::milliseconds(150);
+	constexpr string_view runtimeErrorMessage = "unexpected error!";
+
+	float divideByTen(int value)
+	{
+		return value / 10.f;
+	}
 } // namespace
 
-TEST(Maybe, create)
+class MaybeCreate : public testing::Test
 {
-	bool succeeded = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onNext(defaultValue);
-							// Try to complete, should not be forwarded
-							subscriber.onComplete();
-							// Try to complete again, should not be forwarded
-							subscriber.onNext(defaultValue);
-							// Try to send an error, should not be forwared
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(succeeded);
-	EXPECT_TRUE(completed);
+protected:
+	static Maybe<int> listOfValues()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				for (const auto value : defaultValues)
+					subscriber.onNext(value);
+				subscriber.onComplete();
+			});
+	}
+	static Maybe<int> completesTwice()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				for (const auto value : defaultValues)
+					subscriber.onNext(value);
+				subscriber.onComplete();
+				subscriber.onComplete();
+			});
+	}
+	static Maybe<int> valueAfterCompletion()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onComplete();
+				subscriber.onNext(42);
+			});
+	}
+	static Maybe<int> errored()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Maybe<int> valueAfterError()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onNext(42);
+			});
+	}
+	static Maybe<int> doubleError()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+	static Maybe<int> completeAfterError()
+	{
+		return Maybe<int>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onComplete();
+			});
+	}
+};
 
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to emit another error, should not be forwarded
-							subscriber.onError(make_exception_ptr(runtime_error("unexpected error!")));
-							// Try to complete, should not be forwarded
-							subscriber.onNext(defaultValue);
-							// Try to complete, should not be forwarded
-							subscriber.onComplete();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::create(
-						[](auto &subscriber)
-						{
-							subscriber.onComplete();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Maybe<int>::create([](auto &subscriber) {})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-}
-
-TEST(Maybe, defer)
+TEST_F(MaybeCreate, checkEmitedValues)
 {
-	bool completed = false;
-	bool succeeded = false;
-	EXPECT_NO_THROW(Maybe<int>::defer(
-						[]()
-						{
-							return Maybe<int>::just(defaultValue);
-						})
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_TRUE(succeeded);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::defer(
-						[]()
-						{
-							return Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")));
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Maybe<int>::defer(
-						[]()
-						{
-							return Maybe<int>::never();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::defer(
-						[]()
-						{
-							return Maybe<int>::empty();
-						})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
+	vector<int> result;
+	bool		completed = false;
+	listOfValues() //
+		.subscribe(
+			[&result](const auto value)
+			{
+				EXPECT_EQ(value, defaultValues[0]);
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result.size(), 1);
+			});
 	EXPECT_TRUE(completed);
 }
 
-TEST(Maybe, empty)
+TEST_F(MaybeCreate, checkOnCompleteIsEmited)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::empty().subscribe(
-		[](const auto value)
+	listOfValues() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeCreate, checkOnCompleteIsNotEmitedTwice)
+{
+	bool completed = false;
+	completesTwice() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeCreate, checkValuesAfterCompleteArentEmited)
+{
+	valueAfterCompletion() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(MaybeCreate, checkEmitedError)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeCreate, checkValuesAfterErrorArentEmited)
+{
+	valueAfterError() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(MaybeCreate, checkCompleteAfterErrorIsntEmited)
+{
+	completeAfterError() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class MaybeDefer : public testing::Test
+{
+protected:
+	static Maybe<int> deferredValue()
+	{
+		return Maybe<int>::defer(
+			[]()
+			{
+				return Maybe<int>::just(defaultValue);
+			});
+	}
+	static Maybe<int> deferredEmpty()
+	{
+		return Maybe<int>::defer(
+			[]()
+			{
+				return Maybe<int>::empty();
+			});
+	}
+	static Maybe<int> deferredError()
+	{
+		return Maybe<int>::defer(
+			[]()
+			{
+				return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			});
+	}
+};
+
+TEST_F(MaybeDefer, checkEmitedValue)
+{
+	vector<int> result;
+	bool		completed = false;
+	deferredValue() //
+		.subscribe(
+			[&result](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result.size(), 1);
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeDefer, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	deferredEmpty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeDefer, checkEmitedError)
+{
+	bool gotError = false;
+	deferredError() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class MaybeEmpty : public testing::Test
+{
+};
+
+TEST_F(MaybeEmpty, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Maybe<int>::empty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeEmpty, checkOnCompleteIsNotCalledTwice)
+{
+	bool completed = false;
+	Maybe<int>::empty() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+}
+
+TEST_F(MaybeEmpty, checkNoValueIsEmited)
+{
+	Maybe<int>::empty() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(MaybeEmpty, checkNoErrorIsEmited)
+{
+	Maybe<int>::empty() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class MaybeError : public testing::Test
+{
+protected:
+	static Maybe<int> errored()
+	{
+		return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+	}
+};
+
+TEST_F(MaybeError, checkOnErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeError, checkOnlyOneErrorIsEmited)
+{
+	bool gotError = false;
+	errored() //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeError, checkNoValueIsEmited)
+{
+	errored() //
+		.subscribe(
+			[](const auto)
+			{
+				ADD_FAILURE();
+			});
+}
+
+TEST_F(MaybeError, checkOnCompleteIsntEmited)
+{
+	errored() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class MaybeJust : public testing::Test
+{
+};
+
+TEST_F(MaybeJust, checkValueIsEmitted)
+{
+	bool gotValue = false;
+	Maybe<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+				gotValue = true;
+			});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(MaybeJust, checkOnlyOneValueIsEmitted)
+{
+	bool gotValue = false;
+	Maybe<int>::just(defaultValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				EXPECT_FALSE(gotValue);
+				gotValue = true;
+			});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(MaybeJust, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	Maybe<int>::just(defaultValue)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeJust, checkNoError)
+{
+	Maybe<int>::just(defaultValue)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class MaybeNever : public testing::Test
+{
+};
+
+TEST_F(MaybeNever, checkNothingIsEmited)
+{
+	Maybe<int>::never().subscribe(
+		[](const auto)
 		{
-			throw runtime_error("success handler called");
+			ADD_FAILURE();
 		},
-		[](const auto &exception)
+		[](const auto &)
 		{
-			throw runtime_error("error handler called");
-		},
-		[&completed]()
-		{
-			if (completed)
-				throw runtime_error("completion handler called twice");
-			completed = true;
-		}));
-	EXPECT_TRUE(completed);
-}
-
-TEST(Maybe, error)
-{
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-}
-
-TEST(Maybe, just)
-{
-	bool succeeded = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(succeeded);
-	EXPECT_TRUE(completed);
-}
-
-TEST(Maybe, never)
-{
-	EXPECT_NO_THROW(Maybe<int>::never().subscribe(
-		[](const auto value)
-		{
-			throw runtime_error("success handler called");
-		},
-		[](const auto &exception)
-		{
-			throw runtime_error("error handler called");
+			ADD_FAILURE();
 		},
 		[]()
 		{
-			throw runtime_error("completion handler called");
-		}));
+			ADD_FAILURE();
+		});
 }
 
-TEST(Maybe, map)
+class MaybeMap : public testing::Test
 {
-	bool succeeded = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(succeeded);
-	EXPECT_TRUE(completed);
+};
 
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.map<float>(
-							[](const auto value)
-							{
-								return static_cast<float>(value) / 1000;
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-}
-
-TEST(Maybe, flatMap)
+TEST_F(MaybeMap, checkEmitedValues)
 {
-	bool succeeded = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != static_cast<float>(defaultValue) / 1000)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							}));
-	EXPECT_TRUE(completed);
-	EXPECT_TRUE(succeeded);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::just(static_cast<float>(value) / 1000);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	errored = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::error(make_exception_ptr(runtime_error("unexpected error!")));
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::never();
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.flatMap<float>(
-							[](const auto value)
-							{
-								return Maybe<float>::just(defaultValue);
-							})
-						.subscribe(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							}));
+	Maybe<int>::just(defaultValue) //
+		.map<float>(&divideByTen)
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, divideByTen(defaultValue));
+			});
 }
 
-TEST(Maybe, ignoreElement)
+TEST_F(MaybeMap, checkNoErrorIsEmited)
 {
-	bool succeeded = false;
-	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.doOnNext(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								succeeded = true;
-							})
-						.ignoreElement()
-						.subscribe(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							}));
-	EXPECT_TRUE(succeeded);
-	EXPECT_TRUE(completed);
+	Maybe<int>::just(defaultValue) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
 }
 
-TEST(Maybe, doOnComplete)
+TEST_F(MaybeMap, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []() {});
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeMap, checkDoNotCompleteOnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.map<float>(&divideByTen)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class MaybeFlatMap : public testing::Test
+{
+protected:
+	static Maybe<float> transformedValue()
+	{
+		return Maybe<int>::just(defaultValue) //
+			.flatMap<float>(
+				[](const auto value)
+				{
+					return Maybe<float>::just(divideByTen(value));
+				});
+	}
+};
+
+TEST_F(MaybeFlatMap, checkEmitedValue)
+{
+	transformedValue() //
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, divideByTen(defaultValue));
+			});
+}
+
+TEST_F(MaybeFlatMap, checkEmitedCompletes)
 {
 	bool completed = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.doOnComplete(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(completed);
-
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.doOnComplete(
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.doOnComplete(
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
+	transformedValue() //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
 	EXPECT_TRUE(completed);
 }
 
-TEST(Maybe, doOnError)
+TEST_F(MaybeFlatMap, checkNoErrorIsEmited)
 {
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnError(
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.doOnError(
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							})
-						.subscribe());
+	transformedValue() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
 }
 
-TEST(Maybe, doOnNext)
+TEST_F(MaybeFlatMap, checkErrorsAreForwarded)
 {
-	bool succeeded = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.doOnNext(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								succeeded = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(succeeded);
-
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
-
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.doOnNext(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							})
-						.subscribe());
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Maybe<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
 }
 
-TEST(Maybe, doOnTerminate)
+TEST_F(MaybeFlatMap, checkDoNotCompleteOnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Maybe<float>::just(defaultValue);
+			})
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(MaybeFlatMap, checkCanEmitErrors)
+{
+	bool gotError = false;
+	Maybe<int>::just(defaultValue) //
+		.flatMap<float>(
+			[](const auto)
+			{
+				return Maybe<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+class MaybeIgnoreElement : public testing::Test
+{
+};
+
+TEST_F(MaybeIgnoreElement, checkCompletes)
+{
+	bool completed = false;
+	Maybe<int>::just(defaultValue) //
+		.ignoreElement()
+		.subscribe(
+			[&completed]()
+			{
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeIgnoreElement, checkNoErrorIsEmited)
+{
+	Maybe<int>::just(defaultValue) //
+		.ignoreElement()
+		.subscribe([]() {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(MaybeIgnoreElement, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElement()
+		.subscribe([]() {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeIgnoreElement, checkDoNotCompleteOnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.ignoreElement()
+		.subscribe(
+			[]()
+			{
+				ADD_FAILURE();
+			});
+}
+
+class MaybeDoOnComplete : public testing::Test
+{
+};
+
+TEST_F(MaybeDoOnComplete, checkDoOnCompleteIsCalledOnce)
+{
+	bool completed = false;
+	Maybe<int>::just(defaultValue) //
+		.doOnComplete(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			})
+		.subscribe();
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeDoOnComplete, checkDoOnCompleteIsNotCalledOnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnComplete(
+			[]()
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class MaybeDoOnError : public testing::Test
+{
+};
+
+TEST_F(MaybeDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Maybe<int>::just(defaultValue) //
+		.doOnError(
+			[](const auto &)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+TEST_F(MaybeDoOnError, checkDoOnErrorIsCalledOnError)
+{
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnError(
+			[&gotError](const auto &exception)
+			{
+				gotError = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+class MaybeDoOnNext : public testing::Test
+{
+};
+
+TEST_F(MaybeDoOnNext, checkDoOnNextIsCalledForEachValue)
+{
+	Maybe<int>::just(defaultValue) //
+		.doOnNext(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			})
+		.subscribe();
+}
+
+TEST_F(MaybeDoOnNext, checkDoOnNextIsNotCalledInCaseOfAnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnNext(
+			[](const auto value)
+			{
+				ADD_FAILURE();
+			})
+		.subscribe();
+}
+
+class MaybeDoOnTerminate : public testing::Test
+{
+};
+
+TEST_F(MaybeDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 {
 	bool terminated = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(terminated);
-
-	terminated = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(terminated);
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.doOnTerminate(
-							[]()
-							{
-								throw runtime_error("termination handler called");
-							})
-						.subscribe());
-
-	terminated = false;
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.doOnTerminate(
-							[&terminated]()
-							{
-								if (terminated)
-									throw runtime_error("termination handler called twice");
-								terminated = true;
-							})
-						.subscribe());
+	Maybe<int>::just(defaultValue) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
 	EXPECT_TRUE(terminated);
 }
 
-TEST(Maybe, tap)
+TEST_F(MaybeDoOnTerminate, checkDoOnTerminateIsCalledOnError)
+{
+	bool terminated = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.doOnTerminate(
+			[&terminated]()
+			{
+				terminated = true;
+			})
+		.subscribe();
+	EXPECT_TRUE(terminated);
+}
+
+class MaybeTap : public testing::Test
+{
+};
+
+TEST_F(MaybeTap, checkTapDoOnCompleteIsCalledOnce)
 {
 	bool completed = false;
-	bool succeeded = false;
-	EXPECT_NO_THROW(Maybe<int>::just(defaultValue)
-						.tap(
-							[&succeeded](const auto value)
-							{
-								if (succeeded)
-									throw runtime_error("success handler called twice");
-								if (value != defaultValue)
-									throw runtime_error("invalid value");
-								succeeded = true;
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
-	EXPECT_TRUE(completed);
-	EXPECT_TRUE(succeeded);
-
-	bool errored = false;
-	EXPECT_NO_THROW(Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[&errored](const auto &exception)
-							{
-								if (errored)
-									throw runtime_error("error handler called twice");
-								errored = true;
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-	EXPECT_TRUE(errored);
-
-	EXPECT_NO_THROW(Maybe<int>::never()
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[]()
-							{
-								throw runtime_error("completion handler called");
-							})
-						.subscribe());
-
-	completed = false;
-	EXPECT_NO_THROW(Maybe<int>::empty()
-						.tap(
-							[](const auto value)
-							{
-								throw runtime_error("success handler called");
-							},
-							[](const auto &exception)
-							{
-								throw runtime_error("error handler called");
-							},
-							[&completed]()
-							{
-								if (completed)
-									throw runtime_error("completion handler called twice");
-								completed = true;
-							})
-						.subscribe());
+	Maybe<int>::just(defaultValue) //
+		.tap([](const auto) {}, [](const auto &) {},
+			 [&completed]()
+			 {
+				 EXPECT_FALSE(completed);
+				 completed = true;
+			 })
+		.subscribe();
 	EXPECT_TRUE(completed);
 }
 
-TEST(Maybe, observeOn)
+TEST_F(MaybeTap, checkTapDoOnCompleteIsNotCalledOnError)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([](const auto) {}, [](const auto &) {},
+			 []()
+			 {
+				 ADD_FAILURE();
+			 })
+		.subscribe();
+}
 
-	bool completed = false;
-	bool testFailed = false;
-	Maybe<int>::just(defaultValue)
+TEST_F(MaybeTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
+{
+	Maybe<int>::just(defaultValue) //
+		.tap([](const auto) {},
+			 [](const auto &)
+			 {
+				 ADD_FAILURE();
+			 },
+			 []() {})
+		.subscribe();
+}
+
+TEST_F(MaybeTap, checkTapDoOnErrorIsCalledOnError)
+{
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap([](const auto) {},
+			 [&gotError](const auto &exception)
+			 {
+				 gotError = true;
+				 try
+				 {
+					 rethrow_exception(exception);
+				 }
+				 catch (runtime_error &runtimeError)
+				 {
+					 EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				 }
+			 },
+			 []() {})
+		.subscribe();
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(MaybeTap, checkTapDoOnNextIsCalled)
+{
+	Maybe<int>::just(defaultValue) //
+		.tap(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			},
+			[](const auto &) {}, []() {})
+		.subscribe();
+}
+
+TEST_F(MaybeTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
+{
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.tap(
+			[](const auto value)
+			{
+				ADD_FAILURE();
+			},
+			[](const auto &) {}, []() {})
+		.subscribe();
+}
+
+class MaybeObserveOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(MaybeObserveOn, checkSubscribeOnMainThread)
+{
+	bool deferCalled = false;
+	Maybe<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_mainThreadId);
+			deferCalled = true;
+			return Maybe<int>::empty();
+		}) //
+		.observeOn(*m_worker)
+		.subscribe();
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(MaybeObserveOn, checkDoOnNextCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Maybe<int>::just(defaultValue) //
+		.observeOn(*m_worker)
 		.doOnNext(
-			[&testFailed, mainThreadId](const auto value)
+			[this, &doOnNextCalled](const auto value)
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
 			})
-		.observeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
+		.subscribe();
 	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.observeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+	EXPECT_TRUE(doOnNextCalled);
 }
 
-TEST(Maybe, subscribeOn)
+TEST_F(MaybeObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool completed = false;
-	bool testFailed = false;
-	Maybe<int>::just(defaultValue)
-		.doOnNext(
-			[&testFailed, workerThreadId](const auto value)
-			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&completed, &testFailed, workerThreadId](const auto value)
-			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
-			});
-	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-
-	bool errored = false;
-	testFailed = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
+	bool doOnErrorCalled = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.observeOn(*m_worker)
 		.doOnError(
-			[&testFailed, workerThreadId](const auto &exception)
+			[this, &doOnErrorCalled](const auto &exception)
 			{
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
 			})
-		.subscribeOn(worker)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-			});
+		.subscribe();
 	this_thread::sleep_for(sleepDuration);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
+	EXPECT_TRUE(doOnErrorCalled);
 }
 
-TEST(Maybe, delay)
+TEST_F(MaybeObserveOn, checkDoOnCompleteCalledOnWorkerThread)
 {
-	WorkerThread worker;
-	const auto	 workerThreadId = worker.threadId();
-	const auto	 mainThreadId = this_thread::get_id();
-
-	bool				completed = false;
-	bool				testFailed = false;
-	auto				startTime = SchedulableQueue::Clock::now();
-	decltype(startTime) afterDelayTime;
-	Maybe<int>::just(defaultValue)
+	bool doOnCompleteCalled = false;
+	Maybe<int>::empty() //
+		.observeOn(*m_worker)
 		.doOnComplete(
-			[&testFailed, mainThreadId]()
+			[this, &doOnCompleteCalled]()
 			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnCompleteCalled = true;
 			})
-		.delay(worker, delayDuration, true)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnCompleteCalled);
+}
+
+class MaybeSubscribeOn : public WorkerThreadBasedTest
+{
+};
+
+TEST_F(MaybeSubscribeOn, checkSubscribeOnWorkerThread)
+{
+	bool deferCalled = false;
+	Maybe<int>::defer(
+		[this, &deferCalled]()
+		{
+			EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+			deferCalled = true;
+			return Maybe<int>::empty();
+		}) //
+		.subscribeOn(*m_worker)
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(deferCalled);
+}
+
+TEST_F(MaybeSubscribeOn, checkDoOnNextCalledOnWorkerThread)
+{
+	bool doOnNextCalled = false;
+	Maybe<int>::just(defaultValue) //
+		.subscribeOn(*m_worker)
+		.doOnNext(
+			[this, &doOnNextCalled](const auto value)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnNextCalled = true;
+				EXPECT_EQ(value, defaultValue);
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnNextCalled);
+}
+
+TEST_F(MaybeSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
+{
+	bool doOnErrorCalled = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.subscribeOn(*m_worker)
+		.doOnError(
+			[this, &doOnErrorCalled](const auto &exception)
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnErrorCalled = true;
+				try
+				{
+					rethrow_exception(exception);
+				}
+				catch (runtime_error &runtimeError)
+				{
+					EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+				}
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnErrorCalled);
+}
+
+TEST_F(MaybeSubscribeOn, checkDoOnCompleteCalledOnWorkerThread)
+{
+	bool doOnCompleteCalled = false;
+	Maybe<int>::empty() //
+		.subscribeOn(*m_worker)
+		.doOnComplete(
+			[this, &doOnCompleteCalled]()
+			{
+				EXPECT_EQ(this_thread::get_id(), m_workerThreadId);
+				doOnCompleteCalled = true;
+			})
+		.subscribe();
+	this_thread::sleep_for(sleepDuration);
+	EXPECT_TRUE(doOnCompleteCalled);
+}
+
+class MaybeDelay : public EventLoopBasedTest
+{
+};
+
+TEST_F(MaybeDelay, checkOnNextDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Maybe<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Maybe<int>::just(defaultValue);
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe(
-			[&completed, &testFailed, &afterDelayTime, workerThreadId](const auto value)
+			[this, &end](const auto)
 			{
-				if (completed)
-					testFailed = true;
-				completed = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				if (value != defaultValue)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			},
-			[&testFailed](const auto &exception)
-			{
-				testFailed = true;
+				end = recpp::async::Scheduler::Clock::now();
+				m_eventLoop->stop();
 			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(testFailed);
-	auto timeDiff = afterDelayTime - startTime;
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
 	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
 
-	bool errored = false;
-	testFailed = false;
-	startTime = SchedulableQueue::Clock::now();
-	Maybe<int>::error(make_exception_ptr(runtime_error("unexpected error!")))
-		.doOnError(
-			[&testFailed, mainThreadId](const auto &exception)
-			{
-				if (this_thread::get_id() != mainThreadId)
-					testFailed = true;
-			})
-		.delay(worker, delayDuration, true)
-		.subscribe(
-			[&testFailed](const auto value)
-			{
-				testFailed = true;
-			},
-			[&errored, &testFailed, &afterDelayTime, workerThreadId](const auto &exception)
-			{
-				if (errored)
-					testFailed = true;
-				errored = true;
-				if (this_thread::get_id() != workerThreadId)
-					testFailed = true;
-				afterDelayTime = SchedulableQueue::Clock::now();
-			});
-	this_thread::sleep_for(sleepDurationForDelay);
-	EXPECT_TRUE(errored);
-	EXPECT_FALSE(testFailed);
-	timeDiff = afterDelayTime - startTime;
-	gap = timeDiff - delayDuration;
+TEST_F(MaybeDelay, checkOnErrorDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Maybe<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
 	EXPECT_LT(chrono::abs(gap), delayTolerance);
 }
 
-TEST(Maybe, switchIfEmpty)
+TEST_F(MaybeDelay, checkNoErrorDelayMode)
 {
-	bool completed = false;
-	bool errored = false;
-	bool gotValue = false;
-	Maybe<int>::empty()
-		.switchIfEmpty(defaultValue)
-		.subscribe(
-			[&gotValue](const auto value)
-			{
-				if (gotValue)
-					throw runtime_error("success handler called twice");
-				gotValue = true;
-				if (value != defaultValue)
-					throw runtime_error("invalid value");
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			},
-			[&completed]()
-			{
-				if (completed)
-					throw runtime_error("completion handler called twice");
-				completed = true;
-			});
-	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(errored);
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Maybe<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		}) //
+		.delay(*m_eventLoop, delayDuration, false)
+		.subscribe([](const auto) {},
+				   [this, &end](const auto &)
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
 
-	completed = false;
-	errored = false;
-	gotValue = false;
-	Maybe<int>::just(defaultValue)
-		.switchIfEmpty(66)
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	EXPECT_LT(chrono::abs(timeDiff), delayTolerance);
+}
+
+TEST_F(MaybeDelay, checkOnCompleteDelay)
+{
+	recpp::async::Scheduler::TimePoint start;
+	recpp::async::Scheduler::TimePoint end;
+	Maybe<int>::defer(
+		[&start]()
+		{
+			start = recpp::async::Scheduler::Clock::now();
+			return Maybe<int>::just(defaultValue);
+		}) //
+		.delay(*m_eventLoop, delayDuration, true)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [this, &end]()
+				   {
+					   end = recpp::async::Scheduler::Clock::now();
+					   m_eventLoop->stop();
+				   });
+
+	m_eventLoop->run();
+	auto timeDiff = end - start;
+	auto gap = timeDiff - delayDuration;
+	EXPECT_LT(chrono::abs(gap), delayTolerance);
+}
+
+class MaybeSwitchIfEmpty : public testing::Test
+{
+};
+
+TEST_F(MaybeSwitchIfEmpty, checkValueIsForwarded)
+{
+	bool gotValue = false;
+	Maybe<int>::just(defaultValue) //
+		.switchIfEmpty(otherValue)
 		.subscribe(
 			[&gotValue](const auto value)
 			{
-				if (gotValue)
-					throw runtime_error("success handler called twice");
 				gotValue = true;
-				if (value != defaultValue)
-					throw runtime_error("invalid value");
-			},
-			[&errored](const auto &exception)
-			{
-				errored = true;
-			},
-			[&completed]()
-			{
-				if (completed)
-					throw runtime_error("completion handler called twice");
-				completed = true;
+				EXPECT_EQ(value, defaultValue);
 			});
 	EXPECT_TRUE(gotValue);
-	EXPECT_TRUE(completed);
-	EXPECT_FALSE(errored);
+}
+
+TEST_F(MaybeSwitchIfEmpty, checkDefaultValueIsEmitedIfEmpty)
+{
+	bool gotValue = false;
+	Maybe<int>::empty() //
+		.switchIfEmpty(otherValue)
+		.subscribe(
+			[&gotValue](const auto value)
+			{
+				gotValue = true;
+				EXPECT_EQ(value, otherValue);
+			});
+	EXPECT_TRUE(gotValue);
+}
+
+TEST_F(MaybeSwitchIfEmpty, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+		.switchIfEmpty(otherValue)
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
 }

@@ -93,7 +93,7 @@ recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscribe
 }
 
 template <typename T, typename P>
-void recpp::subscriptions::MergeSubscription<T, P>::Impl::request(size_t count)
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::request(std::size_t count)
 {
 	m_requested += count;
 	tryRequest();
@@ -115,7 +115,7 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherNextValue(c
 }
 
 template <typename T, typename P>
-void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr)
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(std::size_t publisherId, const std::exception_ptr &exceptionPtr)
 {
 	removePublisher(publisherId);
 	cancel();
@@ -123,7 +123,7 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherError(size_
 }
 
 template <typename T, typename P>
-void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(size_t publisherId)
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(std::size_t publisherId)
 {
 	removePublisher(publisherId);
 	if (!m_completed && !m_remaining && sourceCompleted)
@@ -135,7 +135,7 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(si
 }
 
 template <typename T, typename P>
-void recpp::subscriptions::MergeSubscription<T, P>::Impl::removePublisher(size_t publisherId)
+void recpp::subscriptions::MergeSubscription<T, P>::Impl::removePublisher(std::size_t publisherId)
 {
 	const auto it = std::find_if(std::begin(m_subscriptions), std::end(m_subscriptions),
 								 [publisherId](const auto &pair)

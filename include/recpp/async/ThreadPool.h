@@ -28,7 +28,7 @@ namespace recpp::async
 		 *
 		 * @param threadCount The number worker threads to create.
 		 */
-		explicit ThreadPool(size_t threadCount = std::thread::hardware_concurrency());
+		explicit ThreadPool(std::size_t threadCount = std::thread::hardware_concurrency());
 
 		/**
 		 * @brief Destroy this {@link ThreadPool} instance
@@ -40,7 +40,7 @@ namespace recpp::async
 		 *
 		 * @return size_t The worker threads count
 		 */
-		size_t size() const;
+		std::size_t size() const;
 
 	private:
 		/**

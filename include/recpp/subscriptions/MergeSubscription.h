@@ -38,25 +38,25 @@ namespace recpp::subscriptions
 			Impl(const rscpp::Subscriber<T> &subscriber, rscpp::Publisher<P> &publisherSource,
 				 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler);
 
-			void request(size_t count) override;
+			void request(std::size_t count) override;
 			void cancel() override;
 
 		private:
 			void onPublisherNextValue(const T &value);
-			void onPublisherError(size_t publisherId, const std::exception_ptr &exceptionPtr);
-			void onPublisherComplete(size_t publisherId);
-			void removePublisher(size_t publisherId);
+			void onPublisherError(std::size_t publisherId, const std::exception_ptr &exceptionPtr);
+			void onPublisherComplete(std::size_t publisherId);
+			void removePublisher(std::size_t publisherId);
 			void tryRequest();
 
-			rscpp::Subscriber<T>							   m_subscriber;
-			std::deque<std::pair<size_t, rscpp::Subscription>> m_subscriptions;
-			size_t											   m_currentId = 0;
-			int												   m_currentIndex = 0;
-			bool											   sourceCompleted = false;
-			bool											   m_completed = false;
-			bool											   m_canceled = false;
-			size_t											   m_remaining = 0;
-			size_t											   m_requested = 0;
+			rscpp::Subscriber<T>									m_subscriber;
+			std::deque<std::pair<std::size_t, rscpp::Subscription>> m_subscriptions;
+			std::size_t												m_currentId = 0;
+			int														m_currentIndex = 0;
+			bool													sourceCompleted = false;
+			bool													m_completed = false;
+			bool													m_canceled = false;
+			std::size_t												m_remaining = 0;
+			std::size_t												m_requested = 0;
 		};
 
 	public:

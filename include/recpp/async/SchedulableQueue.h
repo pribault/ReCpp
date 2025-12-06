@@ -88,7 +88,7 @@ namespace recpp::async
 		 *
 		 * @return size_t The queue size
 		 */
-		size_t size();
+		std::size_t size();
 
 		/**
 		 * @brief Stop this queue and wake up all threads trying to pop an element.

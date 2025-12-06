@@ -41,7 +41,7 @@ namespace recpp::subscribers
 			OnErrorMethod		m_onErrorMethod;
 			OnCompleteMethod	m_onCompleteMethod;
 			OnSubscribeMethod	m_onSubscribeMethod;
-			size_t				m_remaining = 0;
+			std::size_t			m_remaining = 0;
 			bool				m_autoRequest = false;
 		};
 
