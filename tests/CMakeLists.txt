@@ -39,3 +39,8 @@ set_property(TARGET ReCpp-test PROPERTY CXX_STANDARD 20)
 target_include_directories(ReCpp-test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(ReCpp-test ReCpp gtest gmock)
+
+add_custom_command(TARGET ReCpp-test POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    $<TARGET_FILE:gtest> $<TARGET_FILE_DIR:ReCpp-test>
+)

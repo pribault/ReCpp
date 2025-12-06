@@ -5,6 +5,7 @@
 
 // stl
 #include <memory>
+#include <thread>
 
 namespace recpp::async
 {

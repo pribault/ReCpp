@@ -24,11 +24,11 @@ using namespace std;
 
 namespace
 {
-	constexpr auto			sleepDuration = chrono::milliseconds(10);
-	constexpr int			defaultValue = 42;
-	constexpr auto			delayTolerance = chrono::milliseconds(1);
-	constexpr auto			delayDuration = chrono::milliseconds(10);
-	constexpr string_view	runtimeErrorMessage = "unexpected error!";
+	constexpr auto		  sleepDuration = chrono::milliseconds(10);
+	constexpr int		  defaultValue = 42;
+	constexpr auto		  delayTolerance = chrono::milliseconds(1);
+	constexpr auto		  delayDuration = chrono::milliseconds(10);
+	constexpr string_view runtimeErrorMessage = "unexpected error!";
 } // namespace
 
 class CompletableComplete : public testing::Test
