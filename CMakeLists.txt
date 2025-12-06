@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.15)
 
 add_subdirectory(rscpp)
 
@@ -133,10 +133,20 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	target_link_options(ReCpp PUBLIC "-latomic")
 endif()
 
+set(RECPP_COMPILATION_FLAGS ${RSCPP_COMPILATION_FLAGS})
+
 if(WIN32)
-	target_compile_options(ReCpp PUBLIC /WX)
+	set(RECPP_COMPILATION_FLAGS
+		/W4
+		/WX
+		/wd4503
+		/wd4702
+		/bigobj
+	)
 elseif(UNIX)
-	target_compile_options(ReCpp PUBLIC -Werror)
+	set(RECPP_COMPILATION_FLAGS
+		-Wall -Werror
+	)
 endif()
 
 set_property(TARGET ReCpp PROPERTY CXX_STANDARD 17)
