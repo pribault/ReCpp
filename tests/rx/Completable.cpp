@@ -83,7 +83,7 @@ protected:
 		return Completable::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Completable errorTwice()
@@ -91,8 +91,8 @@ protected:
 		return Completable::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Completable errorAfterComplete()
@@ -101,7 +101,7 @@ protected:
 			[](auto &subscriber)
 			{
 				subscriber.onComplete();
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Completable completeAfterError()
@@ -110,7 +110,7 @@ protected:
 			[](auto &subscriber)
 			{
 				subscriber.onComplete();
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 };
@@ -260,7 +260,7 @@ TEST_F(CompletableDefer, checkOnErrorIsEmited)
 	Completable::defer(
 		[]()
 		{
-			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Completable::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.subscribe([]() {},
 				   [&gotError](const auto &exception)
@@ -285,7 +285,7 @@ class CompletableError : public testing::Test
 
 TEST_F(CompletableError, checkOnCompleteIsNotEmited)
 {
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribe(
 			[]()
 			{
@@ -296,7 +296,7 @@ TEST_F(CompletableError, checkOnCompleteIsNotEmited)
 TEST_F(CompletableError, checkOnErrorIsEmited)
 {
 	bool gotError = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribe([]() {},
 				   [&gotError](const auto &exception)
 				   {
@@ -351,7 +351,7 @@ protected:
 		Observable<Completable> completableList = Observable<Completable>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onNext(Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))));
+				subscriber.onNext(Completable::error(runtime_error(runtimeErrorMessage.data())));
 				subscriber.onComplete();
 			});
 		return Completable::merge(completableList);
@@ -432,7 +432,7 @@ TEST_F(CompletableDoOnComplete, checkOnCompleteIsEmited)
 
 TEST_F(CompletableDoOnComplete, checkOnCompleteIsNotEmitedOnError)
 {
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnComplete(
 			[]()
 			{
@@ -448,7 +448,7 @@ class CompletableDoOnError : public testing::Test
 TEST_F(CompletableDoOnError, checkOnErrorIsEmited)
 {
 	bool gotError = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnError(
 			[&gotError](const auto &exception)
 			{
@@ -499,7 +499,7 @@ TEST_F(CompletableDoOnTerminate, checkOnTerminateIsEmitedOnComplete)
 TEST_F(CompletableDoOnTerminate, checkOnTerminateIsEmitedOnError)
 {
 	bool terminated = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnTerminate(
 			[&terminated]()
 			{
@@ -531,7 +531,7 @@ TEST_F(CompletableTap, checkOnCompleteIsEmited)
 
 TEST_F(CompletableTap, checkOnCompleteIsNotEmitedOnError)
 {
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap(
 			[]()
 			{
@@ -544,7 +544,7 @@ TEST_F(CompletableTap, checkOnCompleteIsNotEmitedOnError)
 TEST_F(CompletableTap, checkOnErrorIsEmited)
 {
 	bool gotError = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([]() {},
 			 [&gotError](const auto &exception)
 			 {
@@ -612,7 +612,7 @@ TEST_F(CompletableObserveOn, checkDoOnCompleteCalledOnWorkerThread)
 TEST_F(CompletableObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool gotError = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.observeOn(*m_worker)
 		.doOnError(
 			[this, &gotError](const auto &exception)
@@ -672,7 +672,7 @@ TEST_F(CompletableSubscribeOn, checkDoOnCompleteCalledOnWorkerThread)
 TEST_F(CompletableSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool gotError = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribeOn(*m_worker)
 		.doOnError(
 			[this, &gotError](const auto &exception)
@@ -760,7 +760,7 @@ TEST_F(CompletableAndThen, checkNextObservableIsCalledOnComplete)
 TEST_F(CompletableAndThen, checkAndThenIsNotCalledOnError)
 {
 	bool deferCalled = false;
-	Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
 		.andThen(Completable::defer(
 			[&deferCalled]()
 			{
@@ -808,7 +808,7 @@ TEST_F(CompletableDelay, checkOnErrorDelay)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Completable::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, true)
 		.subscribe([]() {},
@@ -832,7 +832,7 @@ TEST_F(CompletableDelay, checkNoErrorDelayMode)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Completable::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe([]() {},

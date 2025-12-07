@@ -93,6 +93,7 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/MaybeSubscriber.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/ObservableSubscriber.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/SingleSubscriber.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/inl/CompletableSubscriber.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/inl/DefaultSubscriber.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/inl/MaybeSubscriber.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/subscribers/inl/ObservableSubscriber.inl

@@ -19,6 +19,8 @@
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/SingleSubscriber.h>
 
+#include <exception>
+
 template <typename T>
 recpp::rx::Single<T> recpp::rx::Single<T>::create(const std::function<void(recpp::subscribers::SingleSubscriber<T> &)> &method)
 {
@@ -35,6 +37,13 @@ template <typename T>
 recpp::rx::Single<T> recpp::rx::Single<T>::error(const std::exception_ptr &error)
 {
 	return Single<T>(std::make_shared<recpp::publishers::ErrorPublisher<T>>(error));
+}
+
+template <typename T>
+template <typename E>
+recpp::rx::Single<T> recpp::rx::Single<T>::error(E error)
+{
+	return Single<T>::error(std::make_exception_ptr(error));
 }
 
 template <typename T>

@@ -58,7 +58,7 @@ public:
 		return Single<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Single<int> twoErrors()
@@ -66,8 +66,8 @@ public:
 		return Single<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Single<int> errorAfterValue()
@@ -76,7 +76,7 @@ public:
 			[](auto &subscriber)
 			{
 				subscriber.onNext(defaultValue);
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Single<int> valueAfterError()
@@ -84,7 +84,7 @@ public:
 		return Single<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 				subscriber.onNext(defaultValue);
 			});
 	}
@@ -205,7 +205,7 @@ protected:
 		return Single<int>::defer(
 			[]()
 			{
-				return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Single<int>::error(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 };
@@ -248,7 +248,7 @@ class SingleError : public testing::Test
 protected:
 	static Single<int> errored()
 	{
-		return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		return Single<int>::error(runtime_error(runtimeErrorMessage.data()));
 	}
 };
 
@@ -384,7 +384,7 @@ TEST_F(SingleMap, checkNoErrorIsEmited)
 TEST_F(SingleMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -404,7 +404,7 @@ TEST_F(SingleMap, checkErrorsAreForwarded)
 
 TEST_F(SingleMap, checkDoNotEmitValueOnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe(
 			[](const auto)
@@ -453,7 +453,7 @@ TEST_F(SingleFlatMap, checkNoErrorIsEmited)
 TEST_F(SingleFlatMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -477,7 +477,7 @@ TEST_F(SingleFlatMap, checkErrorsAreForwarded)
 
 TEST_F(SingleFlatMap, checkDoNotEmitValueOnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -497,7 +497,7 @@ TEST_F(SingleFlatMap, checkCanEmitErrors)
 		.flatMap<float>(
 			[](const auto)
 			{
-				return Single<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Single<float>::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -554,7 +554,7 @@ TEST_F(SingleFlatMapCompletable, checkNoErrorIsEmited)
 TEST_F(SingleFlatMapCompletable, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMapCompletable(
 			[](int)
 			{
@@ -582,7 +582,7 @@ TEST_F(SingleFlatMapCompletable, checkDoNotCompleteOnError)
 		.flatMapCompletable(
 			[](int)
 			{
-				return Completable::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Completable::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe(
 			[]()
@@ -651,7 +651,7 @@ TEST_F(SingleFlatMapMaybe, checkNoErrorIsEmitedWithoutValue)
 TEST_F(SingleFlatMapMaybe, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMapMaybe<float>(
 			[](const auto)
 			{
@@ -675,7 +675,7 @@ TEST_F(SingleFlatMapMaybe, checkErrorsAreForwarded)
 
 TEST_F(SingleFlatMapMaybe, checkDoNotEmitValueOnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMapMaybe<float>(
 			[](const auto)
 			{
@@ -695,7 +695,7 @@ TEST_F(SingleFlatMapMaybe, checkCanEmitErrors)
 		.flatMapMaybe<float>(
 			[](const auto)
 			{
-				return Maybe<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Maybe<float>::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -755,7 +755,7 @@ TEST_F(SingleFlatMapObservable, checkNoErrorIsEmited)
 TEST_F(SingleFlatMapObservable, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMapObservable<int>(
 			[](const auto)
 			{
@@ -779,7 +779,7 @@ TEST_F(SingleFlatMapObservable, checkErrorsAreForwarded)
 
 TEST_F(SingleFlatMapObservable, checkDoNotEmitValueOnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMapObservable<int>(
 			[](const auto)
 			{
@@ -799,7 +799,7 @@ TEST_F(SingleFlatMapObservable, checkCanEmitErrors)
 		.flatMapObservable<int>(
 			[](const auto)
 			{
-				return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Observable<int>::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -848,7 +848,7 @@ TEST_F(SingleIgnoreElement, checkNoErrorIsEmited)
 TEST_F(SingleIgnoreElement, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElement()
 		.subscribe([]() {},
 				   [&gotError](const auto &exception)
@@ -868,7 +868,7 @@ TEST_F(SingleIgnoreElement, checkErrorsAreForwarded)
 
 TEST_F(SingleIgnoreElement, checkDoNotCompleteOnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElement()
 		.subscribe(
 			[]()
@@ -895,7 +895,7 @@ TEST_F(SingleDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(SingleDoOnError, checkDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnError(
 			[&gotError](const auto &exception)
 			{
@@ -933,7 +933,7 @@ TEST_F(SingleDoOnSuccess, checkDoOnSuccessIsCalled)
 
 TEST_F(SingleDoOnSuccess, checkDoOnSuccessIsNotCalledInCaseOfAnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnSuccess(
 			[](const auto value)
 			{
@@ -962,7 +962,7 @@ TEST_F(SingleDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 TEST_F(SingleDoOnTerminate, checkDoOnTerminateIsCalledOnError)
 {
 	bool terminated = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnTerminate(
 			[&terminated]()
 			{
@@ -990,7 +990,7 @@ TEST_F(SingleTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(SingleTap, checkTapDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([](const auto) {},
 			 [&gotError](const auto &exception)
 			 {
@@ -1025,7 +1025,7 @@ TEST_F(SingleTap, checkTapDoOnNextIsCalled)
 
 TEST_F(SingleTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 {
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap(
 			[](const auto)
 			{
@@ -1074,7 +1074,7 @@ TEST_F(SingleObserveOn, checkDoOnSuccessCalledOnWorkerThread)
 TEST_F(SingleObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.observeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1135,7 +1135,7 @@ TEST_F(SingleSubscribeOn, checkDoOnSuccessCalledOnWorkerThread)
 TEST_F(SingleSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1192,7 +1192,7 @@ TEST_F(SingleDelay, checkOnErrorDelay)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Single<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, true)
 		.subscribe([](const auto) {},
@@ -1216,7 +1216,7 @@ TEST_F(SingleDelay, checkNoErrorDelayMode)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Single<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Single<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe([](const auto) {},

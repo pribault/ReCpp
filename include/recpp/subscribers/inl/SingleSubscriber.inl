@@ -1,5 +1,7 @@
 #pragma once
 
+#include <exception>
+
 template <typename T>
 recpp::subscribers::SingleSubscriber<T>::SingleSubscriber(const rscpp::Subscriber<T> &subscriber)
 	: m_subscriber(subscriber)
@@ -25,4 +27,11 @@ void recpp::subscribers::SingleSubscriber<T>::onError(const std::exception_ptr &
 		m_ended = true;
 		m_subscriber.onError(error);
 	}
+}
+
+template <typename T>
+template <typename E>
+void recpp::subscribers::SingleSubscriber<T>::onError(E error)
+{
+	onError(std::make_exception_ptr(error));
 }

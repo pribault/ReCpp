@@ -90,6 +90,15 @@ namespace recpp::rx
 		static Single<T> error(const std::exception_ptr &error);
 
 		/**
+		 * @brief Construct a new {@link Single} instance that will emit the given error when subscribed to.
+		 *
+		 * @param error The error to emit.
+		 * @return The new {@link Single} instance.
+		 */
+		template <typename E>
+		static Single<T> error(E error);
+
+		/**
 		 * @brief Construct a new {@link Single} instance that will emit the given value when subscribed to.
 		 *
 		 * @param value The value to emit.

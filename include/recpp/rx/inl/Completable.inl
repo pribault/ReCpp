@@ -6,6 +6,14 @@
 #include <recpp/rx/Observable.h>
 #include <recpp/rx/Single.h>
 
+#include <exception>
+
+template <typename E>
+recpp::rx::Completable recpp::rx::Completable::error(E error)
+{
+	return Completable::error(std::make_exception_ptr(error));
+}
+
 template <typename T>
 recpp::rx::Maybe<T> recpp::rx::Completable::andThen(const recpp::rx::Maybe<T> &maybe)
 {

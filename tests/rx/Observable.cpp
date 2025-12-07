@@ -92,7 +92,7 @@ protected:
 		return Observable<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Observable<int> valueAfterError()
@@ -100,7 +100,7 @@ protected:
 		return Observable<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 				subscriber.onNext(42);
 			});
 	}
@@ -109,8 +109,8 @@ protected:
 		return Observable<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Observable<int> completeAfterError()
@@ -118,7 +118,7 @@ protected:
 		return Observable<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 				subscriber.onComplete();
 			});
 	}
@@ -244,7 +244,7 @@ protected:
 		return Observable<int>::defer(
 			[]()
 			{
-				return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Observable<int>::error(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 };
@@ -353,7 +353,7 @@ class ObservableError : public testing::Test
 protected:
 	static Observable<int> errored()
 	{
-		return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		return Observable<int>::error(runtime_error(runtimeErrorMessage.data()));
 	}
 };
 
@@ -549,7 +549,7 @@ protected:
 			[](auto &subscriber)
 			{
 				subscriber.onNext(Observable<int>::range(defaultValues));
-				subscriber.onNext(Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))));
+				subscriber.onNext(Observable<int>::error(runtime_error(runtimeErrorMessage.data())));
 				subscriber.onNext(Observable<int>::range(defaultValues));
 				subscriber.onComplete();
 			});
@@ -700,7 +700,7 @@ TEST_F(ObservableFilter, checkNoErrorIsEmited)
 TEST_F(ObservableFilter, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.filter(&isOdd)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -720,7 +720,7 @@ TEST_F(ObservableFilter, checkErrorsAreForwarded)
 
 TEST_F(ObservableFilter, checkDoNotCompleteOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.filter(&isOdd)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
@@ -760,7 +760,7 @@ TEST_F(ObservableIgnoreElements, checkNoErrorIsEmited)
 TEST_F(ObservableIgnoreElements, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElements()
 		.subscribe([]() {},
 				   [&gotError](const auto &exception)
@@ -780,7 +780,7 @@ TEST_F(ObservableIgnoreElements, checkErrorsAreForwarded)
 
 TEST_F(ObservableIgnoreElements, checkDoNotCompleteOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElements()
 		.subscribe(
 			[]()
@@ -828,7 +828,7 @@ TEST_F(ObservableMap, checkNoErrorIsEmited)
 TEST_F(ObservableMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -849,7 +849,7 @@ TEST_F(ObservableMap, checkErrorsAreForwarded)
 
 TEST_F(ObservableMap, checkDoNotCompleteOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
@@ -912,7 +912,7 @@ TEST_F(ObservableFlatMap, checkNoErrorIsEmited)
 TEST_F(ObservableFlatMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -936,7 +936,7 @@ TEST_F(ObservableFlatMap, checkErrorsAreForwarded)
 
 TEST_F(ObservableFlatMap, checkDoNotCompleteOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -956,7 +956,7 @@ TEST_F(ObservableFlatMap, checkCanEmitErrors)
 		.flatMap<float>(
 			[](const auto)
 			{
-				return Observable<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Observable<float>::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -994,7 +994,7 @@ TEST_F(ObservableDoOnComplete, checkDoOnCompleteIsCalledOnce)
 
 TEST_F(ObservableDoOnComplete, checkDoOnCompleteIsNotCalledOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnComplete(
 			[]()
 			{
@@ -1021,7 +1021,7 @@ TEST_F(ObservableDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(ObservableDoOnError, checkDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnError(
 			[&gotError](const auto &exception)
 			{
@@ -1064,7 +1064,7 @@ TEST_F(ObservableDoOnNext, checkDoOnNextIsCalledForEachValue)
 
 TEST_F(ObservableDoOnNext, checkDoOnNextIsNotCalledInCaseOfAnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnNext(
 			[](const auto value)
 			{
@@ -1093,7 +1093,7 @@ TEST_F(ObservableDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 TEST_F(ObservableDoOnTerminate, checkDoOnTerminateIsCalledOnError)
 {
 	bool terminated = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnTerminate(
 			[&terminated]()
 			{
@@ -1123,7 +1123,7 @@ TEST_F(ObservableTap, checkTapDoOnCompleteIsCalledOnce)
 
 TEST_F(ObservableTap, checkTapDoOnCompleteIsNotCalledOnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([](const auto) {}, [](const auto &) {},
 			 []()
 			 {
@@ -1147,7 +1147,7 @@ TEST_F(ObservableTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(ObservableTap, checkTapDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([](const auto) {},
 			 [&gotError](const auto &exception)
 			 {
@@ -1188,7 +1188,7 @@ TEST_F(ObservableTap, checkTapDoOnNextIsCalledForEachValue)
 
 TEST_F(ObservableTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 {
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap(
 			[](const auto value)
 			{
@@ -1237,7 +1237,7 @@ TEST_F(ObservableObserveOn, checkDoOnNextCalledOnWorkerThread)
 TEST_F(ObservableObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.observeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1314,7 +1314,7 @@ TEST_F(ObservableSubscribeOn, checkDoOnNextCalledOnWorkerThread)
 TEST_F(ObservableSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1387,7 +1387,7 @@ TEST_F(ObservableDelay, checkOnErrorDelay)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Observable<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, true)
 		.subscribe([](const auto) {},
@@ -1411,7 +1411,7 @@ TEST_F(ObservableDelay, checkNoErrorDelayMode)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Observable<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe([](const auto) {},
@@ -1485,7 +1485,7 @@ TEST_F(ObservableDefaultIfEmpty, checkDefaultValueIsEmitedIfEmpty)
 TEST_F(ObservableDefaultIfEmpty, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.defaultIfEmpty(otherValue)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1538,7 +1538,7 @@ TEST_F(ObservableAllOf, checkCanReturnFalse)
 TEST_F(ObservableAllOf, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.allOf(&isEven)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1591,7 +1591,7 @@ TEST_F(ObservableAnyOf, checkCanReturnFalse)
 TEST_F(ObservableAnyOf, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.anyOf(&isEven)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1644,7 +1644,7 @@ TEST_F(ObservableNoneOf, checkCanReturnFalse)
 TEST_F(ObservableNoneOf, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.noneOf(&isEven)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1725,7 +1725,7 @@ TEST_F(ObservableReduce, checkWithOperationAndInitValue)
 TEST_F(ObservableReduce, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.reduce()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1778,7 +1778,7 @@ TEST_F(ObservableMax, checkWithComparator)
 TEST_F(ObservableMax, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.max()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1831,7 +1831,7 @@ TEST_F(ObservableMin, checkWithComparator)
 TEST_F(ObservableMin, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.min()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1870,7 +1870,7 @@ TEST_F(ObservableCount, checkFindsCorrectCount)
 TEST_F(ObservableCount, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.count()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1927,7 +1927,7 @@ TEST_F(ObservableElementAt, checkIsEmptyForOutOfRangeIndex)
 TEST_F(ObservableElementAt, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.elementAt(1)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -1984,7 +1984,7 @@ TEST_F(ObservableFirst, checkIsEmptyForEmptyObservable)
 TEST_F(ObservableFirst, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.first()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -2041,7 +2041,7 @@ TEST_F(ObservableLast, checkIsEmptyForEmptyObservable)
 TEST_F(ObservableLast, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Observable<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.first()
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
