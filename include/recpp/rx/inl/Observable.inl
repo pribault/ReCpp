@@ -34,6 +34,8 @@
 #include <recpp/subscribers/DefaultSubscriber.h>
 #include <recpp/subscribers/ObservableSubscriber.h>
 
+#include <exception>
+
 template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::create(const std::function<void(recpp::subscribers::ObservableSubscriber<T> &)> &method)
 {
@@ -56,6 +58,13 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::error(const std::exception_ptr &error)
 {
 	return Observable<T>(std::make_shared<recpp::publishers::ErrorPublisher<T>>(error));
+}
+
+template <typename T>
+template <typename E>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::error(E error)
+{
+	return Observable<T>::error(std::make_exception_ptr(error));
 }
 
 template <typename T>

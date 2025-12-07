@@ -61,7 +61,7 @@ Completable standardResourcesLoad(Context &context, const filesystem::path &path
 			error_code error;
 			const auto dirIterator = filesystem::directory_iterator(path, error);
 			if (error)
-				return Completable::error(make_exception_ptr(runtime_error(error.message())));
+				return Completable::error(runtime_error(error.message()));
 
 			for (const auto &entry : dirIterator)
 			{
@@ -77,7 +77,7 @@ Completable standardResourcesLoad(Context &context, const filesystem::path &path
 				if (!parseFromStream(builder, stream, &root, &errs))
 				{
 					cout << errs << endl;
-					return Completable::error(make_exception_ptr(runtime_error(errs)));
+					return Completable::error(runtime_error(errs));
 				}
 			}
 			return Completable::complete();
@@ -93,7 +93,7 @@ Completable rxResourcesLoad(Context &context, const filesystem::path &path)
 			const auto dirIterator = filesystem::directory_iterator(path, error);
 			if (error)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(error.message())));
+				subscriber.onError(runtime_error(error.message()));
 				return;
 			}
 
@@ -114,7 +114,7 @@ Completable rxResourcesLoad(Context &context, const filesystem::path &path)
 										  if (!parseFromStream(builder, stream, &root, &errs))
 										  {
 											  cout << errs << endl;
-											  return Completable::error(make_exception_ptr(runtime_error(errs)));
+											  return Completable::error(runtime_error(errs));
 										  }
 										  return Completable::complete();
 									  })

@@ -97,6 +97,15 @@ namespace recpp::rx
 		static Observable<T> error(const std::exception_ptr &error);
 
 		/**
+		 * @brief Construct a new {@link Observable} instance that will emit the given error when subscribed to.
+		 *
+		 * @param error The error to emit.
+		 * @return The new {@link Observable} instance.
+		 */
+		template <typename E>
+		static Observable<T> error(E error);
+
+		/**
 		 * @brief Construct a new {@link Observable} instance that will emit the given value when subscribed to.
 		 *
 		 * @param value The value to emit.

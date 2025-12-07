@@ -73,7 +73,7 @@ protected:
 		return Maybe<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Maybe<int> valueAfterError()
@@ -81,7 +81,7 @@ protected:
 		return Maybe<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 				subscriber.onNext(42);
 			});
 	}
@@ -90,8 +90,8 @@ protected:
 		return Maybe<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 	static Maybe<int> completeAfterError()
@@ -99,7 +99,7 @@ protected:
 		return Maybe<int>::create(
 			[](auto &subscriber)
 			{
-				subscriber.onError(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onError(runtime_error(runtimeErrorMessage.data()));
 				subscriber.onComplete();
 			});
 	}
@@ -226,7 +226,7 @@ protected:
 		return Maybe<int>::defer(
 			[]()
 			{
-				return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Maybe<int>::error(runtime_error(runtimeErrorMessage.data()));
 			});
 	}
 };
@@ -336,7 +336,7 @@ class MaybeError : public testing::Test
 protected:
 	static Maybe<int> errored()
 	{
-		return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+		return Maybe<int>::error(runtime_error(runtimeErrorMessage.data()));
 	}
 };
 
@@ -496,7 +496,7 @@ TEST_F(MaybeMap, checkNoErrorIsEmited)
 TEST_F(MaybeMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -517,7 +517,7 @@ TEST_F(MaybeMap, checkErrorsAreForwarded)
 
 TEST_F(MaybeMap, checkDoNotCompleteOnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.map<float>(&divideByTen)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
@@ -575,7 +575,7 @@ TEST_F(MaybeFlatMap, checkNoErrorIsEmited)
 TEST_F(MaybeFlatMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -599,7 +599,7 @@ TEST_F(MaybeFlatMap, checkErrorsAreForwarded)
 
 TEST_F(MaybeFlatMap, checkDoNotCompleteOnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.flatMap<float>(
 			[](const auto)
 			{
@@ -619,7 +619,7 @@ TEST_F(MaybeFlatMap, checkCanEmitErrors)
 		.flatMap<float>(
 			[](const auto)
 			{
-				return Maybe<float>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+				return Maybe<float>::error(runtime_error(runtimeErrorMessage.data()));
 			})
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
@@ -668,7 +668,7 @@ TEST_F(MaybeIgnoreElement, checkNoErrorIsEmited)
 TEST_F(MaybeIgnoreElement, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElement()
 		.subscribe([]() {},
 				   [&gotError](const auto &exception)
@@ -688,7 +688,7 @@ TEST_F(MaybeIgnoreElement, checkErrorsAreForwarded)
 
 TEST_F(MaybeIgnoreElement, checkDoNotCompleteOnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.ignoreElement()
 		.subscribe(
 			[]()
@@ -717,7 +717,7 @@ TEST_F(MaybeDoOnComplete, checkDoOnCompleteIsCalledOnce)
 
 TEST_F(MaybeDoOnComplete, checkDoOnCompleteIsNotCalledOnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnComplete(
 			[]()
 			{
@@ -744,7 +744,7 @@ TEST_F(MaybeDoOnError, checkDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(MaybeDoOnError, checkDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnError(
 			[&gotError](const auto &exception)
 			{
@@ -779,7 +779,7 @@ TEST_F(MaybeDoOnNext, checkDoOnNextIsCalledForEachValue)
 
 TEST_F(MaybeDoOnNext, checkDoOnNextIsNotCalledInCaseOfAnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnNext(
 			[](const auto value)
 			{
@@ -808,7 +808,7 @@ TEST_F(MaybeDoOnTerminate, checkDoOnTerminateIsCalledAfterComplete)
 TEST_F(MaybeDoOnTerminate, checkDoOnTerminateIsCalledOnError)
 {
 	bool terminated = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.doOnTerminate(
 			[&terminated]()
 			{
@@ -838,7 +838,7 @@ TEST_F(MaybeTap, checkTapDoOnCompleteIsCalledOnce)
 
 TEST_F(MaybeTap, checkTapDoOnCompleteIsNotCalledOnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([](const auto) {}, [](const auto &) {},
 			 []()
 			 {
@@ -862,7 +862,7 @@ TEST_F(MaybeTap, checkTapDoOnErrorIsNotCalledWhenNoErrorIsEmited)
 TEST_F(MaybeTap, checkTapDoOnErrorIsCalledOnError)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap([](const auto) {},
 			 [&gotError](const auto &exception)
 			 {
@@ -895,7 +895,7 @@ TEST_F(MaybeTap, checkTapDoOnNextIsCalled)
 
 TEST_F(MaybeTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 {
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.tap(
 			[](const auto value)
 			{
@@ -944,7 +944,7 @@ TEST_F(MaybeObserveOn, checkDoOnNextCalledOnWorkerThread)
 TEST_F(MaybeObserveOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.observeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1021,7 +1021,7 @@ TEST_F(MaybeSubscribeOn, checkDoOnNextCalledOnWorkerThread)
 TEST_F(MaybeSubscribeOn, checkDoOnErrorCalledOnWorkerThread)
 {
 	bool doOnErrorCalled = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.subscribeOn(*m_worker)
 		.doOnError(
 			[this, &doOnErrorCalled](const auto &exception)
@@ -1094,7 +1094,7 @@ TEST_F(MaybeDelay, checkOnErrorDelay)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Maybe<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, true)
 		.subscribe([](const auto) {},
@@ -1118,7 +1118,7 @@ TEST_F(MaybeDelay, checkNoErrorDelayMode)
 		[&start]()
 		{
 			start = recpp::async::Scheduler::Clock::now();
-			return Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data())));
+			return Maybe<int>::error(runtime_error(runtimeErrorMessage.data()));
 		}) //
 		.delay(*m_eventLoop, delayDuration, false)
 		.subscribe([](const auto) {},
@@ -1192,7 +1192,7 @@ TEST_F(MaybeSwitchIfEmpty, checkDefaultValueIsEmitedIfEmpty)
 TEST_F(MaybeSwitchIfEmpty, checkErrorsAreForwarded)
 {
 	bool gotError = false;
-	Maybe<int>::error(make_exception_ptr(runtime_error(runtimeErrorMessage.data()))) //
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.switchIfEmpty(otherValue)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)

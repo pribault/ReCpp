@@ -38,6 +38,14 @@ namespace recpp::subscribers
 		void onError(const std::exception_ptr &error);
 
 		/**
+		 * @brief Emits the given error to the {@link rscpp::Subscriber} if it has not already been emitted.
+		 *
+		 * @param error The error to emit.
+		 */
+		template <typename E>
+		void onError(E error);
+
+		/**
 		 * @brief Emits a completion signal to the {@link rscpp::Subscriber} if it has not already been emitted.
 		 */
 		void onComplete();

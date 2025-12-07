@@ -88,6 +88,15 @@ namespace recpp::rx
 		static Completable error(const std::exception_ptr &error);
 
 		/**
+		 * @brief Construct a new {@link Completable} instance that will emit the given error when subscribed to.
+		 *
+		 * @param error The error to emit.
+		 * @return The new {@link Completable} instance.
+		 */
+		template <typename E>
+		static Completable error(E error);
+
+		/**
 		 * @brief Construct a new {@link Completable} instance that will never emit a signal when subscribed to.
 		 *
 		 * @return The new {@link Completable} instance.
