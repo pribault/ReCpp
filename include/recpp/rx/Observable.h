@@ -410,7 +410,7 @@ namespace recpp::rx
 
 	protected:
 		using rscpp::Publisher<T>::subscribe;
-		
+
 		/**
 		 * @brief Construct a new {@link Observable} instance with the given private implementation.
 		 *
