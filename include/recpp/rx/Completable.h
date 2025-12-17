@@ -219,6 +219,8 @@ namespace recpp::rx
 		Completable delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
 
 	protected:
+		using rscpp::Publisher<int>::subscribe;
+
 		/**
 		 * @brief Construct a new {@link Completable} instance with the given private implementation.
 		 *
