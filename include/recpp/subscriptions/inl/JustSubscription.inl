@@ -16,6 +16,7 @@ recpp::subscriptions::JustSubscription<T>::Impl::Impl(const rscpp::Subscriber<T>
 template <typename T>
 void recpp::subscriptions::JustSubscription<T>::Impl::request(std::size_t count)
 {
+	(void)count;
 	if (m_completed)
 		return;
 	m_completed = true;
