@@ -248,6 +248,8 @@ namespace recpp::rx
 		Single<T> delay(async::Scheduler &scheduler, const std::chrono::duration<Rep, Period> &delay, bool delayError);
 
 	protected:
+		using rscpp::Publisher<T>::subscribe;
+
 		/**
 		 * @brief Construct a new {@link Single} instance with the given private implementation.
 		 *

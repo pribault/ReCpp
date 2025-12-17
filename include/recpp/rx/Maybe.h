@@ -238,6 +238,8 @@ namespace recpp::rx
 		Maybe<T> switchIfEmpty(const T &defaultValue);
 
 	protected:
+		using rscpp::Publisher<T>::subscribe;
+
 		/**
 		 * @brief Construct a new {@link Maybe} instance with the given private implementation.
 		 *
