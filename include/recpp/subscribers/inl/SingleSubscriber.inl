@@ -16,6 +16,7 @@ void recpp::subscribers::SingleSubscriber<T>::onNext(const T &value)
 		m_ended = true;
 		m_subscriber.onNext(value);
 		m_subscriber.onComplete();
+		m_subscriber = {};
 	}
 }
 

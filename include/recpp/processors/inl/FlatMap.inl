@@ -36,7 +36,10 @@ void recpp::processors::FlatMap<T, R>::Impl::onNext(const T &value)
 															   {
 																   m_runningPublishers--;
 																   if (!m_runningPublishers && m_completed)
+																   {
 																	   m_subscriber.onComplete();
+																	   m_subscriber = {};
+																	}
 															   });
 	result.subscribe(subscriber);
 }
@@ -52,7 +55,10 @@ void recpp::processors::FlatMap<T, R>::Impl::onComplete()
 {
 	m_completed = true;
 	if (!m_runningPublishers)
+	{
 		m_subscriber.onComplete();
+		m_subscriber = {};
+	}
 }
 
 template <typename T, typename R>

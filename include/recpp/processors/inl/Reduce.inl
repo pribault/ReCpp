@@ -42,6 +42,7 @@ void recpp::processors::Reduce<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_current);
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T, typename R>

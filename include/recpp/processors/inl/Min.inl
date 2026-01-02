@@ -42,6 +42,7 @@ void recpp::processors::Min<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_min ? *m_min : T{});
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T, typename R>

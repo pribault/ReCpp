@@ -16,6 +16,7 @@ void recpp::subscribers::MaybeSubscriber<T>::onNext(const T &value)
 		m_ended = true;
 		m_subscriber.onNext(value);
 		m_subscriber.onComplete();
+		m_subscriber = {};
 	}
 }
 
@@ -43,5 +44,6 @@ void recpp::subscribers::MaybeSubscriber<T>::onComplete()
 	{
 		m_ended = true;
 		m_subscriber.onComplete();
+		m_subscriber = {};
 	}
 }

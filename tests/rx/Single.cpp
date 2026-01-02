@@ -360,7 +360,7 @@ TEST_F(SingleMap, checkEmitedValue)
 {
 	bool completed = false;
 	Single<int>::just(defaultValue) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe(
 			[&completed](const auto value)
 			{
@@ -373,7 +373,7 @@ TEST_F(SingleMap, checkEmitedValue)
 TEST_F(SingleMap, checkNoErrorIsEmited)
 {
 	Single<int>::just(defaultValue) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [](const auto &)
 				   {
@@ -385,7 +385,7 @@ TEST_F(SingleMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
 	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
 				   {
@@ -405,7 +405,7 @@ TEST_F(SingleMap, checkErrorsAreForwarded)
 TEST_F(SingleMap, checkDoNotEmitValueOnError)
 {
 	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe(
 			[](const auto)
 			{
