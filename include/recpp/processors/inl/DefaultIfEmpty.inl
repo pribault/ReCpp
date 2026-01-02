@@ -42,6 +42,7 @@ void recpp::processors::DefaultIfEmpty<T>::Impl::onComplete()
 	if (!m_gotValues)
 		m_subscriber.onNext(m_defaultValue);
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T>

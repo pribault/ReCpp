@@ -799,7 +799,7 @@ TEST_F(ObservableMap, checkEmitedValues)
 	const vector<float> expected = {0.1f, 0.2f, 0.3f};
 	vector<float>		values;
 	Observable<int>::range(defaultValues) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe(
 			[&values](const auto value)
 			{
@@ -817,7 +817,7 @@ TEST_F(ObservableMap, checkEmitedValues)
 TEST_F(ObservableMap, checkNoErrorIsEmited)
 {
 	Observable<int>::range(defaultValues) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [](const auto &)
 				   {
@@ -829,7 +829,7 @@ TEST_F(ObservableMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
 	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
 				   {
@@ -850,7 +850,7 @@ TEST_F(ObservableMap, checkErrorsAreForwarded)
 TEST_F(ObservableMap, checkDoNotCompleteOnError)
 {
 	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
 				   {

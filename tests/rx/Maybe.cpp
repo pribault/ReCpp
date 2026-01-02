@@ -474,7 +474,7 @@ class MaybeMap : public testing::Test
 TEST_F(MaybeMap, checkEmitedValues)
 {
 	Maybe<int>::just(defaultValue) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe(
 			[](const auto value)
 			{
@@ -485,7 +485,7 @@ TEST_F(MaybeMap, checkEmitedValues)
 TEST_F(MaybeMap, checkNoErrorIsEmited)
 {
 	Maybe<int>::just(defaultValue) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [](const auto &)
 				   {
@@ -497,7 +497,7 @@ TEST_F(MaybeMap, checkErrorsAreForwarded)
 {
 	bool gotError = false;
 	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {},
 				   [&gotError](const auto &exception)
 				   {
@@ -518,7 +518,7 @@ TEST_F(MaybeMap, checkErrorsAreForwarded)
 TEST_F(MaybeMap, checkDoNotCompleteOnError)
 {
 	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
-		.map<float>(&divideByTen)
+		.template map<float>(&divideByTen)
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
 				   {

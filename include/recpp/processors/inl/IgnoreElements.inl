@@ -52,6 +52,7 @@ template <typename T, typename R>
 void recpp::processors::IgnoreElements<T, R>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T, typename R>

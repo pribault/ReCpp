@@ -39,5 +39,6 @@ void recpp::subscribers::ObservableSubscriber<T>::onComplete()
 	{
 		m_ended = true;
 		m_subscriber.onComplete();
+		m_subscriber = {};
 	}
 }

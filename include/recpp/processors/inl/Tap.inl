@@ -49,6 +49,7 @@ void recpp::processors::Tap<T>::Impl::onComplete()
 	if (m_onCompleteMethod)
 		m_onCompleteMethod();
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T>

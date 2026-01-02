@@ -41,6 +41,7 @@ template <typename T>
 void recpp::processors::SubscribeOn<T>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscriber = {};
 }
 
 template <typename T>
