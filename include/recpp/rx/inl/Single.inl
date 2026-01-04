@@ -12,6 +12,7 @@
 #include <recpp/publishers/DeferPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
+#include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/rx/Completable.h>
 #include <recpp/rx/Maybe.h>
@@ -56,6 +57,13 @@ template <typename T>
 recpp::rx::Single<T> recpp::rx::Single<T>::never()
 {
 	return Single<T>(std::make_shared<recpp::publishers::NeverPublisher<T>>());
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Single<T>::merge(recpp::rx::Observable<recpp::rx::Single<T>>						  &singleSource,
+													 const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler)
+{
+	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Single<T>>>(singleSource, scheduler));
 }
 
 template <typename T>

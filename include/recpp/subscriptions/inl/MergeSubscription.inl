@@ -147,7 +147,7 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::removePublisher(std::s
 		const auto index = std::distance(std::begin(m_subscriptions), it);
 		if (m_currentIndex > index)
 			m_currentIndex--;
-		else if (m_currentIndex == m_subscriptions.size() - 1)
+		else if (m_currentIndex >= m_subscriptions.size() - 1)
 			m_currentIndex = 0;
 		m_subscriptions.erase(it);
 	}
@@ -165,8 +165,8 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::tryRequest()
 
 		m_requested--;
 		auto subscription = m_subscriptions[m_currentIndex].second;
-		subscription.request(1);
 		if (!m_subscriptions.empty())
 			m_currentIndex = (m_currentIndex + 1) % m_subscriptions.size();
+		subscription.request(1);
 	}
 }

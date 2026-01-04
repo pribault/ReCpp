@@ -114,6 +114,16 @@ namespace recpp::rx
 		static Single<T> never();
 
 		/**
+		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Single} instances.
+		 *
+		 * @param singleSource The source providing the {@link Single} instances to merge.
+		 * @param scheduler The optional scheduler to merge values on.
+		 * @return The new {@link Observable} instance.
+		 */
+		static Observable<T> merge(Observable<Single<T>>												&singleSource,
+								   const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler = std::nullopt);
+
+		/**
 		 * @brief Subscribe to this {@link Single} with the given methods.
 		 *
 		 * @param onSuccess The method to call when the {@link Single} emits a value.

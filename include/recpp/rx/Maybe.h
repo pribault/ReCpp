@@ -121,6 +121,16 @@ namespace recpp::rx
 		static Maybe<T> never();
 
 		/**
+		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Maybe} instances.
+		 *
+		 * @param maybeSource The source providing the {@link Maybe} instances to merge.
+		 * @param scheduler The optional scheduler to merge values on.
+		 * @return The new {@link Observable} instance.
+		 */
+		static Observable<T> merge(Observable<Maybe<T>>													&maybeSource,
+								   const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler = std::nullopt);
+
+		/**
 		 * @brief Subscribe to this {@link Maybe} with the given methods.
 		 *
 		 * @param onNext The method to call when the {@link Maybe} emits a value.
