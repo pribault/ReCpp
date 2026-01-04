@@ -19,6 +19,7 @@
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/Reduce.h>
 #include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/Take.h>
 #include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
@@ -124,6 +125,12 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::filter(const std::function<bool(const T & /* value */)> &method)
 {
 	return Observable<T>(std::make_shared<processors::Filter<T>>(*this, method));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::take(std::size_t count)
+{
+	return Observable<T>(std::make_shared<processors::Take<T>>(*this, count));
 }
 
 template <typename T>

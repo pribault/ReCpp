@@ -189,6 +189,14 @@ namespace recpp::rx
 		Observable<T> filter(const std::function<bool(const T & /* value */)> &method);
 
 		/**
+		 * @brief Emits only the first count items emitted.
+		 *
+		 * @param count The maximum number of items to emit.
+		 * @return The new {@link Observable} instance.
+		 */
+		Observable<T> take(std::size_t count);
+
+		/**
 		 * Convert this {@link Observable} into a {@link Completable} by discarding all contained value.
 		 *
 		 * @return The new {@link Completable} instance.
