@@ -21,7 +21,6 @@ void recpp::subscriptions::EmptySubscription<T>::Impl::request(std::size_t count
 	{
 		m_completed = true;
 		m_subscriber.onComplete();
-		m_subscriber = {};
 	}
 }
 
@@ -32,6 +31,5 @@ void recpp::subscriptions::EmptySubscription<T>::Impl::cancel()
 	{
 		m_completed = true;
 		m_subscriber.onComplete();
-		m_subscriber = {};
 	}
 }

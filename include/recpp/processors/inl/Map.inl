@@ -40,7 +40,6 @@ template <typename T, typename R>
 void recpp::processors::Map<T, R>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T, typename R>

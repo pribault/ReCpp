@@ -45,7 +45,6 @@ void recpp::processors::ElementAt<T>::Impl::onComplete()
 	if (m_result)
 		m_subscriber.onNext(*m_result);
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T>

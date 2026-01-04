@@ -61,6 +61,7 @@ void recpp::subscribers::DefaultSubscriber<T>::Impl::onError(const std::exceptio
 {
 	if (m_onErrorMethod)
 		m_onErrorMethod(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -68,4 +69,5 @@ void recpp::subscribers::DefaultSubscriber<T>::Impl::onComplete()
 {
 	if (m_onCompleteMethod)
 		m_onCompleteMethod();
+	m_subscription = {};
 }

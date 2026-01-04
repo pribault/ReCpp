@@ -22,12 +22,10 @@ void recpp::subscriptions::JustSubscription<T>::Impl::request(std::size_t count)
 	m_completed = true;
 	m_subscriber.onNext(m_value);
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T>
 void recpp::subscriptions::JustSubscription<T>::Impl::cancel()
 {
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }

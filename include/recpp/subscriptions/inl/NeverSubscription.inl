@@ -22,5 +22,4 @@ template <typename T>
 void recpp::subscriptions::NeverSubscription<T>::Impl::cancel()
 {
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }

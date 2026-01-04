@@ -39,7 +39,6 @@ void recpp::processors::Count<T>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_count);
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T>

@@ -46,13 +46,14 @@ template <typename T, typename R>
 void recpp::processors::IgnoreElements<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
 void recpp::processors::IgnoreElements<T, R>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
-	m_subscriber = {};
+	m_subscription = {};
 }
 
 template <typename T, typename R>

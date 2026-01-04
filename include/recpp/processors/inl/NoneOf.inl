@@ -44,7 +44,6 @@ void recpp::processors::NoneOf<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(!m_gotTrue);
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T, typename R>
