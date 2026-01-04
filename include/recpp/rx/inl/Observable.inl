@@ -20,6 +20,7 @@
 #include <recpp/processors/Reduce.h>
 #include <recpp/processors/SubscribeOn.h>
 #include <recpp/processors/Take.h>
+#include <recpp/processors/TakeWhile.h>
 #include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
@@ -131,6 +132,22 @@ template <typename T>
 recpp::rx::Observable<T> recpp::rx::Observable<T>::take(std::size_t count)
 {
 	return Observable<T>(std::make_shared<processors::Take<T>>(*this, count));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::takeWhile(const std::function<bool(const T & /* value */)> &predicate)
+{
+	return Observable<T>(std::make_shared<processors::TakeWhile<T>>(*this, predicate));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::takeUntil(const std::function<bool(const T & /* value */)> &stopPredicate)
+{
+	return Observable<T>(std::make_shared<processors::TakeWhile<T>>(*this,
+																	[stopPredicate](const auto &value)
+																	{
+																		return !stopPredicate(value);
+																	}));
 }
 
 template <typename T>
