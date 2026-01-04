@@ -14,6 +14,7 @@
 #include <recpp/publishers/EmptyPublisher.h>
 #include <recpp/publishers/ErrorPublisher.h>
 #include <recpp/publishers/JustPublisher.h>
+#include <recpp/publishers/MergePublisher.h>
 #include <recpp/publishers/NeverPublisher.h>
 #include <recpp/rx/Completable.h>
 #include <recpp/subscribers/DefaultSubscriber.h>
@@ -62,6 +63,13 @@ template <typename T>
 recpp::rx::Maybe<T> recpp::rx::Maybe<T>::never()
 {
 	return Maybe<T>(std::make_shared<recpp::publishers::NeverPublisher<T>>());
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Maybe<T>::merge(recpp::rx::Observable<recpp::rx::Maybe<T>>							 &maybeSource,
+													const std::optional<std::reference_wrapper<recpp::async::Scheduler>> &scheduler)
+{
+	return Observable<T>(std::make_shared<recpp::publishers::MergePublisher<T, Maybe<T>>>(maybeSource, scheduler));
 }
 
 template <typename T>

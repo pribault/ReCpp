@@ -817,6 +817,102 @@ TEST_F(SingleFlatMapObservable, checkCanEmitErrors)
 	EXPECT_TRUE(gotError);
 }
 
+class SingleMerge : public testing::Test
+{
+protected:
+	static Observable<Single<int>> observableOfSingle()
+	{
+		return Observable<Single<int>>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Single<int>::just(defaultValues[0]));
+				subscriber.onNext(Single<int>::just(defaultValues[1]));
+				subscriber.onNext(Single<int>::just(defaultValues[2]));
+				subscriber.onComplete();
+			});
+	}
+	static Observable<Single<int>> observableOfSingleWithError()
+	{
+		return Observable<Single<int>>::create(
+			[](auto &subscriber)
+			{
+				subscriber.onNext(Single<int>::just(defaultValues[0]));
+				subscriber.onNext(Single<int>::error(runtime_error(runtimeErrorMessage.data())));
+				subscriber.onNext(Single<int>::just(defaultValues[2]));
+				subscriber.onComplete();
+			});
+	}
+};
+
+TEST_F(SingleMerge, checkEmitedValues)
+{
+	vector<int> result;
+	bool		completed = false;
+	auto		source = observableOfSingle();
+	Single<int>::merge(source) //
+		.subscribe(
+			[&result](const auto value)
+			{
+				result.push_back(value);
+			},
+			[](const auto &) {},
+			[&completed, &result]()
+			{
+				completed = true;
+				EXPECT_EQ(result, defaultValues);
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleMerge, checkOnCompleteIsEmited)
+{
+	bool completed = false;
+	auto source = observableOfSingle();
+	Single<int>::merge(source) //
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   [&completed]()
+				   {
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleMerge, checkNoErrorIsEmited)
+{
+	auto source = observableOfSingle();
+	Single<int>::merge(source) //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleMerge, checkErrorCanBeEmited)
+{
+	bool gotError = false;
+	auto source = observableOfSingleWithError();
+	Single<int>::merge(source) //
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   },
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+	EXPECT_TRUE(gotError);
+}
+
 class SingleIgnoreElement : public testing::Test
 {
 };
