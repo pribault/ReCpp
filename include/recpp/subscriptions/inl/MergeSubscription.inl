@@ -86,10 +86,7 @@ recpp::subscriptions::MergeSubscription<T, P>::Impl::Impl(const rscpp::Subscribe
 			{
 				m_completed = true;
 				if (!m_canceled)
-				{
 					m_subscriber.onComplete();
-					m_subscriber = {};
-				}
 			}
 		});
 	publisherSource.subscribe(sourceSubscriber);
@@ -133,10 +130,7 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::onPublisherComplete(st
 	{
 		m_completed = true;
 		if (!m_canceled)
-		{
 			m_subscriber.onComplete();
-			m_subscriber = {};
-		}
 	}
 }
 

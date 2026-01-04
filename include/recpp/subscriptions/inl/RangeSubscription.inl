@@ -25,7 +25,6 @@ void recpp::subscriptions::RangeSubscription<T, I>::Impl::request(std::size_t co
 		{
 			m_completed = true;
 			m_subscriber.onComplete();
-			m_subscriber = {};
 			break;
 		}
 		const auto it = m_current++;
@@ -38,5 +37,4 @@ void recpp::subscriptions::RangeSubscription<T, I>::Impl::cancel()
 {
 	m_canceled = true;
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }

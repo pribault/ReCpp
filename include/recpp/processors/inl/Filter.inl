@@ -43,7 +43,6 @@ template <typename T>
 void recpp::processors::Filter<T>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
-	m_subscriber = {};
 }
 
 template <typename T>
