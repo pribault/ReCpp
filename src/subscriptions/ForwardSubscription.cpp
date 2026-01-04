@@ -22,4 +22,5 @@ void ForwardSubscription::Impl::request(size_t count)
 void ForwardSubscription::Impl::cancel()
 {
 	m_subscription.cancel();
+	m_subscription = {};
 }

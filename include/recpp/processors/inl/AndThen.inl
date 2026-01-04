@@ -47,12 +47,14 @@ template <typename T, typename R>
 void recpp::processors::AndThen<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
 void recpp::processors::AndThen<T, R>::Impl::onComplete()
 {
 	m_dest.subscribe(m_subscriber);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
