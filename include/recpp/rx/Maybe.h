@@ -123,7 +123,7 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Maybe} instances.
 		 *
-		 * @param completableSource The source providing the {@link Maybe} instances to merge.
+		 * @param maybeSource The source providing the {@link Maybe} instances to merge.
 		 * @param scheduler The optional scheduler to merge values on.
 		 * @return The new {@link Observable} instance.
 		 */

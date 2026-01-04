@@ -116,7 +116,7 @@ namespace recpp::rx
 		/**
 		 * @brief Construct a new {@link Observable} instance resulting of the merge of the given {@link Single} instances.
 		 *
-		 * @param completableSource The source providing the {@link Single} instances to merge.
+		 * @param singleSource The source providing the {@link Single} instances to merge.
 		 * @param scheduler The optional scheduler to merge values on.
 		 * @return The new {@link Observable} instance.
 		 */
