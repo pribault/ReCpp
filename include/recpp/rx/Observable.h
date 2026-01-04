@@ -197,6 +197,22 @@ namespace recpp::rx
 		Observable<T> take(std::size_t count);
 
 		/**
+		 * @brief Emits items as long as each item satisfies the given predicate.
+		 *
+		 * @param predicate The predicate the items must satisfy.
+		 * @return The new {@link Observable} instance.
+		 */
+		Observable<T> takeWhile(const std::function<bool(const T & /* value */)> &predicate);
+
+		/**
+		 * @brief Emits items until one item satisfies the given predicate.
+		 *
+		 * @param stopPredicate The stop predicate.
+		 * @return The new {@link Observable} instance.
+		 */
+		Observable<T> takeUntil(const std::function<bool(const T & /* value */)> &stopPredicate);
+
+		/**
 		 * Convert this {@link Observable} into a {@link Completable} by discarding all contained value.
 		 *
 		 * @return The new {@link Completable} instance.

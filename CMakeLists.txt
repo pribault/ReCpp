@@ -41,6 +41,8 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/ObserveOn.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Reduce.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/SubscribeOn.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Take.h
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/TakeWhile.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/Tap.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AllOf.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/AndThen.inl
@@ -61,6 +63,8 @@ set(SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/ObserveOn.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Reduce.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/SubscribeOn.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Take.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/TakeWhile.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/processors/inl/Tap.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/CreatePublisher.h
 	${CMAKE_CURRENT_SOURCE_DIR}/include/recpp/publishers/DeferPublisher.h

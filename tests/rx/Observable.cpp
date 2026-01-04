@@ -732,9 +732,9 @@ TEST_F(ObservableFilter, checkDoNotCompleteOnError)
 class ObservableTake : public EventLoopBasedTest
 {
 protected:
-	Observable<int> infiniteObservable()
+	Observable<int> takeObservable()
 	{
-		return Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop);
+		return Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop).take(3);
 	}
 };
 
@@ -743,8 +743,7 @@ TEST_F(ObservableTake, checkEmitedValues)
 	bool			  completed = false;
 	const vector<int> expected = {0, 1, 2};
 	vector<int>		  values;
-	infiniteObservable() //
-		.take(3)
+	takeObservable() //
 		.subscribe(
 			[&values](const auto value)
 			{
@@ -763,8 +762,7 @@ TEST_F(ObservableTake, checkEmitedValues)
 
 TEST_F(ObservableTake, checkNoErrorIsEmited)
 {
-	infiniteObservable() //
-		.take(3)
+	takeObservable() //
 		.subscribe([](const auto) {},
 				   [](const auto &)
 				   {
@@ -802,6 +800,188 @@ TEST_F(ObservableTake, checkDoNotCompleteOnError)
 {
 	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
 		.take(3)
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableTakeWhile : public EventLoopBasedTest
+{
+protected:
+	Observable<int> takeWhileObservable()
+	{
+		return Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop)
+			.takeWhile(
+				[](const auto value)
+				{
+					return value < 3;
+				});
+	}
+};
+
+TEST_F(ObservableTakeWhile, checkEmitedValues)
+{
+	bool			  completed = false;
+	const vector<int> expected = {0, 1, 2};
+	vector<int>		  values;
+	takeWhileObservable() //
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {},
+			[this, &values, &expected, &completed]()
+			{
+				EXPECT_EQ(values, expected);
+				completed = true;
+				m_eventLoop->stop();
+			});
+	m_eventLoop->run();
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableTakeWhile, checkNoErrorIsEmited)
+{
+	takeWhileObservable() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   [this]()
+				   {
+					   m_eventLoop->stop();
+				   });
+	m_eventLoop->run();
+}
+
+TEST_F(ObservableTakeWhile, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.takeWhile(
+			[](const auto value)
+			{
+				return value < 3;
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableTakeWhile, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.takeWhile(
+			[](const auto value)
+			{
+				return value < 3;
+			})
+		.subscribe([](const auto) {}, [](const auto &) {},
+				   []()
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+class ObservableTakeUntil : public EventLoopBasedTest
+{
+protected:
+	Observable<int> takeUntilObservable()
+	{
+		return Observable<int>::interval(chrono::milliseconds(1), *m_eventLoop)
+			.takeUntil(
+				[](const auto value)
+				{
+					return value > 2;
+				});
+	}
+};
+
+TEST_F(ObservableTakeUntil, checkEmitedValues)
+{
+	bool			  completed = false;
+	const vector<int> expected = {0, 1, 2};
+	vector<int>		  values;
+	takeUntilObservable() //
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			},
+			[](const auto &) {},
+			[this, &values, &expected, &completed]()
+			{
+				EXPECT_EQ(values, expected);
+				completed = true;
+				m_eventLoop->stop();
+			});
+	m_eventLoop->run();
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableTakeUntil, checkNoErrorIsEmited)
+{
+	takeUntilObservable() //
+		.subscribe([](const auto) {},
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   },
+				   [this]()
+				   {
+					   m_eventLoop->stop();
+				   });
+	m_eventLoop->run();
+}
+
+TEST_F(ObservableTakeUntil, checkErrorsAreForwarded)
+{
+	bool gotError = false;
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.takeWhile(
+			[](const auto value)
+			{
+				return value < 3;
+			})
+		.subscribe([](const auto) {},
+				   [&gotError](const auto &exception)
+				   {
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(exception);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
+TEST_F(ObservableTakeUntil, checkDoNotCompleteOnError)
+{
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.takeWhile(
+			[](const auto value)
+			{
+				return value < 3;
+			})
 		.subscribe([](const auto) {}, [](const auto &) {},
 				   []()
 				   {
