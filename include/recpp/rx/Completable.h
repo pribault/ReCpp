@@ -155,6 +155,14 @@ namespace recpp::rx
 		Completable tap(const OnCompleteMethod &onCompleteMethod, const OnErrorMethod &onErrorMethod);
 
 		/**
+		 * @brief Switch to another {@link Completable} in case this one emits an error.
+		 *
+		 * @param fallbackCompletable The {@link Completable} to use in case this one emits an error.
+		 * @return The new {@link Completable} instance.
+		 */
+		Completable switchOnError(const Completable &fallbackCompletable);
+
+		/**
 		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
 		 * @param scheduler The {@link async::Scheduler} to observe on.

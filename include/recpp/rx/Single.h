@@ -229,6 +229,14 @@ namespace recpp::rx
 		Single<T> tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod);
 
 		/**
+		 * @brief Switch to another {@link Single} in case this one emits an error.
+		 *
+		 * @param fallbackSingle The {@link Single} to use in case this one emits an error.
+		 * @return The new {@link Single} instance.
+		 */
+		Single<T> switchOnError(const Single<T> &fallbackSingle);
+
+		/**
 		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
 		 * @param scheduler The {@link async::Scheduler} to observe on.

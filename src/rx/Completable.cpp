@@ -85,6 +85,11 @@ Completable Completable::tap(const Completable::OnCompleteMethod &onCompleteMeth
 	return Completable(make_shared<Tap<int>>(*this, nullptr, onErrorMethod, onCompleteMethod));
 }
 
+Completable Completable::switchOnError(const Completable &fallbackCompletable)
+{
+	return Completable(make_shared<SwitchOnError<int>>(*this, fallbackCompletable));
+}
+
 Completable Completable::observeOn(Scheduler &scheduler)
 {
 	return Completable(make_shared<ObserveOn<int>>(*this, scheduler));

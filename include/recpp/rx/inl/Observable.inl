@@ -19,6 +19,7 @@
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/Reduce.h>
 #include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/SwitchOnError.h>
 #include <recpp/processors/Take.h>
 #include <recpp/processors/TakeWhile.h>
 #include <recpp/processors/Tap.h>
@@ -205,6 +206,12 @@ recpp::rx::Observable<T> recpp::rx::Observable<T>::tap(const OnNextMethod &onNex
 													   const OnCompleteMethod &onCompleteMethod)
 {
 	return Observable<T>(std::make_shared<processors::Tap<T>>(*this, onNextMethod, onErrorMethod, onCompleteMethod));
+}
+
+template <typename T>
+recpp::rx::Observable<T> recpp::rx::Observable<T>::switchOnError(const Observable<T> &fallbackObservable)
+{
+	return Observable<T>(std::make_shared<processors::SwitchOnError<T>>(*this, fallbackObservable));
 }
 
 template <typename T>

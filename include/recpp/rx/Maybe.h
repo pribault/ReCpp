@@ -211,6 +211,14 @@ namespace recpp::rx
 		Maybe<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
 		/**
+		 * @brief Switch to another {@link Maybe} in case this one emits an error.
+		 *
+		 * @param fallbackMaybe The {@link Maybe} to use in case this one emits an error.
+		 * @return The new {@link Maybe} instance.
+		 */
+		Maybe<T> switchOnError(const Maybe<T> &fallbackMaybe);
+
+		/**
 		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
 		 * @param scheduler The {@link async::Scheduler} to observe on.

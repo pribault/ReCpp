@@ -284,6 +284,14 @@ namespace recpp::rx
 		Observable<T> tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod);
 
 		/**
+		 * @brief Switch to another {@link Observable} in case this one emits an error.
+		 *
+		 * @param fallbackObservable The {@link Observable} to use in case this one emits an error.
+		 * @return The new {@link Observable} instance.
+		 */
+		Observable<T> switchOnError(const Observable<T> &fallbackObservable);
+
+		/**
 		 * @brief Forwards all emissions on the given {@link async::Scheduler}.
 		 *
 		 * @param scheduler The {@link async::Scheduler} to observe on.
