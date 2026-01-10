@@ -1458,6 +1458,106 @@ TEST_F(ObservableTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 		.subscribe();
 }
 
+class ObservableSwitchOnError : public testing::Test
+{
+};
+
+TEST_F(ObservableSwitchOnError, checkForwardsValues)
+{
+	vector<int> values;
+	Observable<int>::range(defaultValues) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(
+			[&values](const auto value)
+			{
+				values.push_back(value);
+			});
+	EXPECT_EQ(values, defaultValues);
+}
+
+TEST_F(ObservableSwitchOnError, checkCompletes)
+{
+	auto completed = false;
+	Observable<int>::range(defaultValues) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(nullptr, nullptr,
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableSwitchOnError, checkNoError)
+{
+	Observable<int>::range(defaultValues) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(ObservableSwitchOnError, checkSwitchWithValue)
+{
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			});
+}
+
+TEST_F(ObservableSwitchOnError, checkSwitchCompletes)
+{
+	auto completed = false;
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(nullptr, nullptr,
+				   [&completed]()
+				   {
+					   EXPECT_FALSE(completed);
+					   completed = true;
+				   });
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(ObservableSwitchOnError, checkSwitchNoError)
+{
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Observable<int>::just(defaultValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(ObservableSwitchOnError, checkForwardsError)
+{
+	auto gotError = false;
+	Observable<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Observable<int>::error(runtime_error(runtimeErrorMessage.data())))
+		.subscribe(nullptr,
+				   [&gotError](const auto &error)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(error);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
 class ObservableObserveOn : public WorkerThreadBasedTest
 {
 };

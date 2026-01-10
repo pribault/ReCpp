@@ -1002,6 +1002,104 @@ TEST_F(MaybeTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 		.subscribe();
 }
 
+class MaybeSwitchOnError : public testing::Test
+{
+};
+
+TEST_F(MaybeSwitchOnError, checkForwardsValues)
+{
+	Maybe<int>::just(defaultValue) //
+		.switchOnError(Maybe<int>::just(otherValue))
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			});
+}
+
+TEST_F(MaybeSwitchOnError, checkCompletes)
+{
+	auto completed = false;
+	Maybe<int>::just(defaultValue) //
+		.switchOnError(Maybe<int>::just(otherValue))
+		.subscribe(
+			[&completed](const auto)
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeSwitchOnError, checkNoError)
+{
+	Maybe<int>::just(defaultValue) //
+		.switchOnError(Maybe<int>::just(otherValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(MaybeSwitchOnError, checkSwitchWithValue)
+{
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Maybe<int>::just(defaultValue))
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			});
+}
+
+TEST_F(MaybeSwitchOnError, checkSwitchCompletes)
+{
+	auto completed = false;
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Maybe<int>::just(defaultValue))
+		.subscribe(
+			[&completed](const auto)
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(MaybeSwitchOnError, checkSwitchNoError)
+{
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Maybe<int>::just(defaultValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(MaybeSwitchOnError, checkForwardsError)
+{
+	auto gotError = false;
+	Maybe<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Maybe<int>::error(runtime_error(runtimeErrorMessage.data())))
+		.subscribe(nullptr,
+				   [&gotError](const auto &error)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(error);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
 class MaybeObserveOn : public WorkerThreadBasedTest
 {
 };

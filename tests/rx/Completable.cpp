@@ -574,6 +574,82 @@ TEST_F(CompletableTap, checkOnErrorIsNotEmitedOnComplete)
 		.subscribe();
 }
 
+class CompletableSwitchOnError : public testing::Test
+{
+};
+
+TEST_F(CompletableSwitchOnError, checkCompletes)
+{
+	auto completed = false;
+	Completable::complete()
+		.switchOnError(Completable::complete())
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(CompletableSwitchOnError, checkNoError)
+{
+	Completable::complete()
+		.switchOnError(Completable::complete())
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(CompletableSwitchOnError, checkSwitchCompletes)
+{
+	auto completed = false;
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Completable::complete())
+		.subscribe(
+			[&completed]()
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(CompletableSwitchOnError, checkSwitchNoError)
+{
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Completable::complete())
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(CompletableSwitchOnError, checkForwardsError)
+{
+	auto gotError = false;
+	Completable::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Completable::error(runtime_error(runtimeErrorMessage.data())))
+		.subscribe(nullptr,
+				   [&gotError](const auto &error)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(error);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
+}
+
 class CompletableObserveOn : public WorkerThreadBasedTest
 {
 };
