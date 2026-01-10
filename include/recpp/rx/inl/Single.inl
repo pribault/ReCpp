@@ -7,6 +7,7 @@
 #include <recpp/processors/Map.h>
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/SwitchOnError.h>
 #include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
@@ -136,6 +137,12 @@ template <typename T>
 recpp::rx::Single<T> recpp::rx::Single<T>::tap(const OnSuccessMethod &onSuccessMethod, const OnErrorMethod &onErrorMethod)
 {
 	return Single<T>(std::make_shared<processors::Tap<T>>(*this, onSuccessMethod, onErrorMethod, nullptr));
+}
+
+template <typename T>
+recpp::rx::Single<T> recpp::rx::Single<T>::switchOnError(const Single<T> &fallbackSingle)
+{
+	return Single<T>(std::make_shared<processors::SwitchOnError<T>>(*this, fallbackSingle));
 }
 
 template <typename T>

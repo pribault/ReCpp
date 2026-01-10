@@ -8,6 +8,7 @@
 #include <recpp/processors/Map.h>
 #include <recpp/processors/ObserveOn.h>
 #include <recpp/processors/SubscribeOn.h>
+#include <recpp/processors/SwitchOnError.h>
 #include <recpp/processors/Tap.h>
 #include <recpp/publishers/CreatePublisher.h>
 #include <recpp/publishers/DeferPublisher.h>
@@ -133,6 +134,12 @@ template <typename T>
 recpp::rx::Maybe<T> recpp::rx::Maybe<T>::tap(const OnNextMethod &onNextMethod, const OnErrorMethod &onErrorMethod, const OnCompleteMethod &onCompleteMethod)
 {
 	return Maybe<T>(std::make_shared<processors::Tap<T>>(*this, onNextMethod, onErrorMethod, onCompleteMethod));
+}
+
+template <typename T>
+recpp::rx::Maybe<T> recpp::rx::Maybe<T>::switchOnError(const Maybe<T> &fallbackMaybe)
+{
+	return Maybe<T>(std::make_shared<processors::SwitchOnError<T>>(*this, fallbackMaybe));
 }
 
 template <typename T>

@@ -21,6 +21,7 @@ using namespace std;
 namespace
 {
 	constexpr int		  defaultValue = 42;
+	constexpr int		  otherValue = 66;
 	const vector<int>	  defaultValues = {1, 2, 3};
 	constexpr auto		  sleepDuration = chrono::milliseconds(10);
 	constexpr auto		  delayTolerance = chrono::milliseconds(1);
@@ -1129,6 +1130,104 @@ TEST_F(SingleTap, checkTapDoOnNextIsNotCalledInCaseOfAnError)
 			},
 			[](const auto &) {})
 		.subscribe();
+}
+
+class SingleSwitchOnError : public testing::Test
+{
+};
+
+TEST_F(SingleSwitchOnError, checkForwardsValues)
+{
+	Single<int>::just(defaultValue) //
+		.switchOnError(Single<int>::just(otherValue))
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			});
+}
+
+TEST_F(SingleSwitchOnError, checkCompletes)
+{
+	auto completed = false;
+	Single<int>::just(defaultValue) //
+		.switchOnError(Single<int>::just(otherValue))
+		.subscribe(
+			[&completed](const auto)
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleSwitchOnError, checkNoError)
+{
+	Single<int>::just(defaultValue) //
+		.switchOnError(Single<int>::just(otherValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleSwitchOnError, checkSwitchWithValue)
+{
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Single<int>::just(defaultValue))
+		.subscribe(
+			[](const auto value)
+			{
+				EXPECT_EQ(value, defaultValue);
+			});
+}
+
+TEST_F(SingleSwitchOnError, checkSwitchCompletes)
+{
+	auto completed = false;
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Single<int>::just(defaultValue))
+		.subscribe(
+			[&completed](const auto)
+			{
+				EXPECT_FALSE(completed);
+				completed = true;
+			});
+	EXPECT_TRUE(completed);
+}
+
+TEST_F(SingleSwitchOnError, checkSwitchNoError)
+{
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Single<int>::just(defaultValue))
+		.subscribe(nullptr,
+				   [](const auto &)
+				   {
+					   ADD_FAILURE();
+				   });
+}
+
+TEST_F(SingleSwitchOnError, checkForwardsError)
+{
+	auto gotError = false;
+	Single<int>::error(runtime_error(runtimeErrorMessage.data())) //
+		.switchOnError(Single<int>::error(runtime_error(runtimeErrorMessage.data())))
+		.subscribe(nullptr,
+				   [&gotError](const auto &error)
+				   {
+					   EXPECT_FALSE(gotError);
+					   gotError = true;
+					   try
+					   {
+						   rethrow_exception(error);
+					   }
+					   catch (runtime_error &runtimeError)
+					   {
+						   EXPECT_THAT(runtimeError.what(), testing::StrEq(runtimeErrorMessage));
+					   }
+				   });
+	EXPECT_TRUE(gotError);
 }
 
 class SingleObserveOn : public WorkerThreadBasedTest
