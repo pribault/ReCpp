@@ -11,7 +11,8 @@ namespace recpp::processors
 {
 	/**
 	 * @class SwitchOnError SwitchOnError.h <recpp/processors/SwitchOnError.h>
-	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and switch to another {@link rscpp::Publisher} if the first one emits an error.
+	 * @brief {@link rscpp::Processor} that will subscribe to a given {@link rscpp::Publisher} and switch to another {@link rscpp::Publisher} if the first one
+	 * emits an error.
 	 *
 	 * @tparam T The type of element signaled to the {@link rscpp::Subscriber} and signaled from the {@link rscpp::Publisher}.
 	 */
@@ -46,7 +47,8 @@ namespace recpp::processors
 		 * @brief Construct a new {@link SwitchOnError} instance.
 		 *
 		 * @param publisher The source {@link rscpp::Publisher} the {@link SwitchOnError} {@link rscpp::Processor} subscribes to.
-		 * @param fallbackPublisher The second {@link rscpp::Publisher} the {@link SwitchOnError} {@link rscpp::Processor} subscribes to in case the first one emits an error.
+		 * @param fallbackPublisher The second {@link rscpp::Publisher} the {@link SwitchOnError} {@link rscpp::Processor} subscribes to in case the first one
+		 * emits an error.
 		 */
 		explicit SwitchOnError(const rscpp::Publisher<T> &publisher, const rscpp::Publisher<T> &fallbackPublisher);
 	};
