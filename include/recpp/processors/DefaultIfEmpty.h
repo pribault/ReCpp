@@ -35,6 +35,7 @@ namespace recpp::processors
 			rscpp::Processor<T, T> &m_parent;
 			rscpp::Publisher<T>		m_publisher;
 			rscpp::Subscriber<T>	m_subscriber;
+			rscpp::Subscription		m_subscription;
 			T						m_defaultValue;
 			bool					m_gotValues = false;
 		};

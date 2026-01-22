@@ -19,8 +19,8 @@ recpp::processors::DefaultIfEmpty<T>::Impl::Impl(rscpp::Processor<T, T> &parent,
 template <typename T>
 void recpp::processors::DefaultIfEmpty<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T>
@@ -34,6 +34,7 @@ template <typename T>
 void recpp::processors::DefaultIfEmpty<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -42,6 +43,7 @@ void recpp::processors::DefaultIfEmpty<T>::Impl::onComplete()
 	if (!m_gotValues)
 		m_subscriber.onNext(m_defaultValue);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

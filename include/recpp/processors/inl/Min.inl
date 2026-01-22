@@ -35,6 +35,7 @@ template <typename T, typename R>
 void recpp::processors::Min<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
@@ -42,6 +43,7 @@ void recpp::processors::Min<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_min ? *m_min : T{});
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T, typename R>

@@ -21,8 +21,8 @@ recpp::processors::SubscribeOn<T>::Impl::Impl(rscpp::Processor<T, T> &parent, co
 template <typename T>
 void recpp::processors::SubscribeOn<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T>
@@ -35,12 +35,14 @@ template <typename T>
 void recpp::processors::SubscribeOn<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
 void recpp::processors::SubscribeOn<T>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>
@@ -49,5 +51,9 @@ void recpp::processors::SubscribeOn<T>::Impl::subscribe(rscpp::Subscriber<T> &su
 	m_subscriber = subscriber;
 	auto publisher = m_publisher;
 	auto parent = m_parent;
-	m_scheduler.schedule(recpp::async::Schedulable([publisher, parent]() mutable { publisher.subscribe(parent); }));
+	m_scheduler.schedule(recpp::async::Schedulable(
+		[publisher, parent]() mutable
+		{
+			publisher.subscribe(parent);
+		}));
 }

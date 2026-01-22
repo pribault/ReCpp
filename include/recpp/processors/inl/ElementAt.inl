@@ -30,6 +30,7 @@ void recpp::processors::ElementAt<T>::Impl::onNext(const T &value)
 	{
 		m_result = value;
 		m_subscription.cancel();
+		m_subscription = {};
 	}
 }
 
@@ -37,6 +38,7 @@ template <typename T>
 void recpp::processors::ElementAt<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -45,6 +47,7 @@ void recpp::processors::ElementAt<T>::Impl::onComplete()
 	if (m_result)
 		m_subscriber.onNext(*m_result);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

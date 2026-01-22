@@ -42,6 +42,7 @@ namespace recpp::processors
 			rscpp::Processor<T, T>			  &m_parent;
 			rscpp::Publisher<T>				   m_publisher;
 			rscpp::Subscriber<T>			   m_subscriber;
+			rscpp::Subscription				   m_subscription;
 			recpp::async::Scheduler			  &m_scheduler;
 			std::chrono::duration<Rep, Period> m_delayDuration;
 			bool							   m_delayError = false;

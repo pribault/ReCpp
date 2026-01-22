@@ -34,6 +34,7 @@ namespace recpp::processors
 		private:
 			rscpp::Processor<T, R>				   &m_parent;
 			rscpp::Publisher<T>						m_publisher;
+			rscpp::Subscription						m_subscription;
 			rscpp::Subscriber<R>					m_subscriber;
 			std::function<R(const T & /* value */)> m_method;
 		};

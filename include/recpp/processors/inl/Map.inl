@@ -20,8 +20,8 @@ recpp::processors::Map<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, const r
 template <typename T, typename R>
 void recpp::processors::Map<T, R>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T, typename R>
@@ -34,12 +34,14 @@ template <typename T, typename R>
 void recpp::processors::Map<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
 void recpp::processors::Map<T, R>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T, typename R>

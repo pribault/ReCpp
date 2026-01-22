@@ -39,6 +39,7 @@ namespace recpp::processors
 			rscpp::Processor<T, T> &m_parent;
 			rscpp::Publisher<T>		m_publisher;
 			rscpp::Subscriber<T>	m_subscriber;
+			rscpp::Subscription		m_subscription;
 			OnNextMethod			m_onNextMethod;
 			OnErrorMethod			m_onErrorMethod;
 			OnCompleteMethod		m_onCompleteMethod;

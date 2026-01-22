@@ -39,6 +39,7 @@ namespace recpp::processors
 			rscpp::Processor<T, R>									 &m_parent;
 			rscpp::Publisher<T>										  m_publisher;
 			rscpp::Subscriber<R>									  m_subscriber;
+			rscpp::Subscription										  m_subscription;
 			std::function<rscpp::Publisher<R>(const T & /* value */)> m_method;
 			std::size_t												  m_runningPublishers = 0;
 			bool													  m_completed = false;

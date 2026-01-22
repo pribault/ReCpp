@@ -104,7 +104,10 @@ void recpp::subscriptions::MergeSubscription<T, P>::Impl::cancel()
 {
 	m_canceled = true;
 	for (auto &[publisher, subscription] : m_subscriptions)
+	{
 		subscription.cancel();
+		subscription = {};
+	}
 }
 
 template <typename T, typename P>

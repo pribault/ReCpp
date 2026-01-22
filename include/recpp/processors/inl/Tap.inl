@@ -23,8 +23,8 @@ recpp::processors::Tap<T>::Impl::Impl(rscpp::Processor<T, T> &parent, const rscp
 template <typename T>
 void recpp::processors::Tap<T>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T>
@@ -41,6 +41,7 @@ void recpp::processors::Tap<T>::Impl::onError(const std::exception_ptr &error)
 	if (m_onErrorMethod)
 		m_onErrorMethod(error);
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -49,6 +50,7 @@ void recpp::processors::Tap<T>::Impl::onComplete()
 	if (m_onCompleteMethod)
 		m_onCompleteMethod();
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

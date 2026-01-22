@@ -21,8 +21,8 @@ recpp::processors::FlatMap<T, R>::Impl::Impl(rscpp::Processor<T, R> &parent, con
 template <typename T, typename R>
 void recpp::processors::FlatMap<T, R>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T, typename R>
@@ -30,14 +30,24 @@ void recpp::processors::FlatMap<T, R>::Impl::onNext(const T &value)
 {
 	auto result = m_method(value);
 	m_runningPublishers++;
-	auto subscriber = recpp::subscribers::DefaultSubscriber<R>([this](const R &value) { m_subscriber.onNext(value); },
-															   [this](const std::exception_ptr &error) { m_subscriber.onError(error); },
-															   [this]()
-															   {
-																   m_runningPublishers--;
-																   if (!m_runningPublishers && m_completed)
-																	   m_subscriber.onComplete();
-															   });
+	auto subscriber = recpp::subscribers::DefaultSubscriber<R>(
+		[this](const R &value)
+		{
+			m_subscriber.onNext(value);
+		},
+		[this](const std::exception_ptr &error)
+		{
+			m_subscriber.onError(error);
+		},
+		[this]()
+		{
+			m_runningPublishers--;
+			if (!m_runningPublishers && m_completed)
+			{
+				m_subscriber.onComplete();
+				m_subscription = {};
+			}
+		});
 	result.subscribe(subscriber);
 }
 
@@ -45,6 +55,7 @@ template <typename T, typename R>
 void recpp::processors::FlatMap<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
@@ -52,7 +63,10 @@ void recpp::processors::FlatMap<T, R>::Impl::onComplete()
 {
 	m_completed = true;
 	if (!m_runningPublishers)
+	{
 		m_subscriber.onComplete();
+		m_subscription = {};
+	}
 }
 
 template <typename T, typename R>

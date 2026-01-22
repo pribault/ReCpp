@@ -29,6 +29,7 @@ void FilterSubscription::Impl::request(size_t count)
 void FilterSubscription::Impl::cancel()
 {
 	m_subscription.cancel();
+	m_subscription = {};
 }
 
 void FilterSubscription::Impl::onNext(bool filtered)

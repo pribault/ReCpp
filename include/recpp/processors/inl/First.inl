@@ -27,12 +27,14 @@ void recpp::processors::First<T>::Impl::onNext(const T &value)
 {
 	m_result.store(value);
 	m_subscription.cancel();
+	m_subscription = {};
 }
 
 template <typename T>
 void recpp::processors::First<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -42,6 +44,7 @@ void recpp::processors::First<T>::Impl::onComplete()
 	if (result)
 		m_subscriber.onNext(*result);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

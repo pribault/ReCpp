@@ -25,8 +25,8 @@ recpp::processors::Delay<T, Rep, Period>::Impl::Impl(rscpp::Processor<T, T> &par
 template <typename T, typename Rep, typename Period>
 void recpp::processors::Delay<T, Rep, Period>::Impl::onSubscribe(rscpp::Subscription &subscription)
 {
-	auto forwardSubscription = recpp::subscriptions::ForwardSubscription(subscription);
-	m_subscriber.onSubscribe(forwardSubscription);
+	m_subscription = recpp::subscriptions::ForwardSubscription(subscription);
+	m_subscriber.onSubscribe(m_subscription);
 }
 
 template <typename T, typename Rep, typename Period>
@@ -46,15 +46,17 @@ void recpp::processors::Delay<T, Rep, Period>::Impl::onError(const std::exceptio
 	auto subscriber = m_subscriber;
 	if (m_delayError)
 		m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable(
-												  [subscriber, error]() mutable
+												  [this, subscriber, error]() mutable
 												  {
 													  subscriber.onError(error);
+													  m_subscription = {};
 												  }));
 	else
 		m_scheduler.schedule(recpp::async::Schedulable(
-			[subscriber, error]() mutable
+			[this, subscriber, error]() mutable
 			{
 				subscriber.onError(error);
+				m_subscription = {};
 			}));
 }
 
@@ -63,9 +65,10 @@ void recpp::processors::Delay<T, Rep, Period>::Impl::onComplete()
 {
 	auto subscriber = m_subscriber;
 	m_scheduler.schedule(m_delayDuration, recpp::async::Schedulable(
-											  [subscriber]() mutable
+											  [this, subscriber]() mutable
 											  {
 												  subscriber.onComplete();
+												  m_subscription = {};
 											  }));
 }
 
