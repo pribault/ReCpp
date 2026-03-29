@@ -30,6 +30,7 @@ void recpp::processors::NoneOf<T, R>::Impl::onNext(const T &value)
 	{
 		m_gotTrue = true;
 		m_subscription.cancel();
+		m_subscription = {};
 	}
 }
 
@@ -37,6 +38,7 @@ template <typename T, typename R>
 void recpp::processors::NoneOf<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
@@ -44,6 +46,7 @@ void recpp::processors::NoneOf<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(!m_gotTrue);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T, typename R>

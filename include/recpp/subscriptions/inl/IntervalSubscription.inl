@@ -5,6 +5,7 @@ recpp::subscriptions::IntervalSubscription<T>::IntervalSubscription(const rscpp:
 																	const recpp::async::Scheduler::Duration &period, recpp::async::Scheduler &scheduler)
 	: rscpp::Subscription(std::make_shared<Impl>(subscriber, start, period, scheduler))
 {
+	std::static_pointer_cast<Impl>(d_ptr)->setParent(*this);
 }
 
 template <typename T>
@@ -32,6 +33,12 @@ void recpp::subscriptions::IntervalSubscription<T>::Impl::cancel()
 }
 
 template <typename T>
+void recpp::subscriptions::IntervalSubscription<T>::Impl::setParent(rscpp::Subscription &parent)
+{
+	m_parent = parent;
+}
+
+template <typename T>
 void recpp::subscriptions::IntervalSubscription<T>::Impl::tryRequest(const std::optional<recpp::async::Scheduler::TimePoint> &prevPoint, T value)
 {
 	if (!m_requested)
@@ -40,7 +47,8 @@ void recpp::subscriptions::IntervalSubscription<T>::Impl::tryRequest(const std::
 	m_requested--;
 	const auto timePoint = prevPoint.value_or(m_start);
 	m_running = true;
-	m_scheduler.schedule(timePoint, {[this, timePoint, value]()
+	const auto parent = m_parent;
+	m_scheduler.schedule(timePoint, {[this, parent, timePoint, value]()
 									 {
 										 m_running = false;
 										 if (!m_canceled)

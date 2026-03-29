@@ -37,12 +37,14 @@ template <typename T>
 void recpp::processors::Filter<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscriptions = {};
 }
 
 template <typename T>
 void recpp::processors::Filter<T>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscriptions = {};
 }
 
 template <typename T>

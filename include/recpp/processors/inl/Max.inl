@@ -35,6 +35,7 @@ template <typename T, typename R>
 void recpp::processors::Max<T, R>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T, typename R>
@@ -42,6 +43,7 @@ void recpp::processors::Max<T, R>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_max ? *m_max : T{});
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T, typename R>
