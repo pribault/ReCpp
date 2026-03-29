@@ -32,6 +32,7 @@ template <typename T>
 void recpp::processors::Last<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -41,6 +42,7 @@ void recpp::processors::Last<T>::Impl::onComplete()
 	if (result)
 		m_subscriber.onNext(*result);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

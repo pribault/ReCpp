@@ -36,6 +36,7 @@ void recpp::processors::TakeWhile<T>::Impl::onNext(const T &value)
 		for (auto &subscription : m_subscriptions)
 			subscription.cancel();
 		m_subscriber.onComplete();
+		m_subscriptions = {};
 	}
 }
 
@@ -43,12 +44,14 @@ template <typename T>
 void recpp::processors::TakeWhile<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscriptions = {};
 }
 
 template <typename T>
 void recpp::processors::TakeWhile<T>::Impl::onComplete()
 {
 	m_subscriber.onComplete();
+	m_subscriptions = {};
 }
 
 template <typename T>

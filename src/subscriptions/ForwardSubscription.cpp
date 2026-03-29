@@ -21,6 +21,7 @@ void ForwardSubscription::Impl::request(size_t count)
 
 void ForwardSubscription::Impl::cancel()
 {
-	m_subscription.cancel();
+	auto subscription = m_subscription;
 	m_subscription = {};
+	subscription.cancel();
 }

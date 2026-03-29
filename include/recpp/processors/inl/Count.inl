@@ -32,6 +32,7 @@ template <typename T>
 void recpp::processors::Count<T>::Impl::onError(const std::exception_ptr &error)
 {
 	m_subscriber.onError(error);
+	m_subscription = {};
 }
 
 template <typename T>
@@ -39,6 +40,7 @@ void recpp::processors::Count<T>::Impl::onComplete()
 {
 	m_subscriber.onNext(m_count);
 	m_subscriber.onComplete();
+	m_subscription = {};
 }
 
 template <typename T>

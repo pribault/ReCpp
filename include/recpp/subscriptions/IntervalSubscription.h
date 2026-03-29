@@ -40,9 +40,12 @@ namespace recpp::subscriptions
 			void request(std::size_t count) override;
 			void cancel() override;
 
+			void setParent(rscpp::Subscription &parent);
+
 		private:
 			void tryRequest(const std::optional<recpp::async::Scheduler::TimePoint> &prevPoint, T value);
 
+			rscpp::Subscription				   m_parent;
 			rscpp::Subscriber<T>			   m_subscriber;
 			recpp::async::Scheduler::TimePoint m_start;
 			recpp::async::Scheduler::Duration  m_period;
